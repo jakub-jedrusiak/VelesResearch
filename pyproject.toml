@@ -10,6 +10,7 @@ packages = [{include = "VelesResearch"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 numpy = "^1.24.3"
+typeguard = "^4.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

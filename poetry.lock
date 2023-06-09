@@ -211,6 +211,22 @@ testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8-2020", "ini2toml[l
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
+name = "typeguard"
+version = "4.0.0"
+description = "Run-time type checker for Python"
+category = "main"
+optional = false
+python-versions = ">=3.7.4"
+files = [
+    {file = "typeguard-4.0.0-py3-none-any.whl", hash = "sha256:c4a40af0ba8a41077221271b46d0a6d8d46045443e4d887887c69254ca861952"},
+    {file = "typeguard-4.0.0.tar.gz", hash = "sha256:194fb3dbcb06ea9caf7088f3befee014de57961689f9c859ac5239b1ef61d987"},
+]
+
+[package.extras]
+doc = ["packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["mypy (>=1.2.0)", "pytest (>=7)"]
+
+[[package]]
 name = "virtualenv"
 version = "20.23.0"
 description = "Virtual Python Environment builder"
@@ -234,4 +250,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.3)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "3a3ecaa460d968cd8c91c8a6a26df0356358f595a2ca431635578cef897b873d"
+content-hash = "a6378b7e26d31bac776aff83a15d414a3f9c1349db32daa20c46ea292ce18c07"
