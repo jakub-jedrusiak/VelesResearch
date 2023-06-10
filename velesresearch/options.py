@@ -1,15 +1,14 @@
-from typeguard import typechecked
-
-from typing import Optional
+"Options objects definitions"
 
 
-@typechecked
 class QuestionOptions:
+    "Options for Question object"
+
     def __init__(
         self,
         required: bool = False,
         answers_order: str = "none",
-        inherit_answers: Optional[str] = None,
+        inherit_answers: str | None = None,
         comment: bool = False,
         comment_text: str = "Other",
         comment_placeholder: str = "",
@@ -37,10 +36,12 @@ class QuestionOptions:
 
 
 class PageOptions:
+    "Options for Page object"
+
     def __init__(
         self,
         read_only: bool = False,
-        time_limit: Optional[int] = None,
+        time_limit: int | None = None,
         visible: bool = True,
     ):
         self.read_only = read_only
@@ -49,6 +50,8 @@ class PageOptions:
 
 
 class SurveyOptions:
-    def __init__(self, language: str = "en", url_on_complete: Optional[str] = None):
+    "Optrions for Survey object"
+
+    def __init__(self, language: str = "en", url_on_complete: str | None = None):
         self.language = language
         self.url_on_complete = url_on_complete

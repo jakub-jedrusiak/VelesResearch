@@ -1,55 +1,84 @@
-from typeguard import typechecked
-
-from typing import Union, List, Optional
-from json import JSONEncoder
-from numpy import concatenate, array
-from question_types import Question
-from options import *
+"Structural elements of the survey"
+from collections.abc import Sequence
+from json import JSONEncoder, dumps
+import numpy as np
+from .options import QuestionOptions, PageOptions, SurveyOptions
 
 
-@typechecked
-class Page:
+class Question:
+    "General question class"
+
     def __init__(
         self,
         label: str,
-        *questions: Union[Question, List[Question]],
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        options: Optional[PageOptions] = None
+        question_type: str,
+        question_text: str,
+        *answers: str | Sequence[str],
+        options: QuestionOptions | None = None,
+        description: str | None = None,
     ):
         self.label = label
-        self.questions = list(concatenate([questions]).flat)
-        self.title = title
-        self.description = description
+        self.question_type = question_type
+        self.question_text = question_text
+        self.answers = list(np.concatenate([answers]).flat)
         self.options = options
+        self.description = description
+
+    def __str__(self):
+        answers = "  - " + "\n  - ".join(self.answers)
+        return (
+            f"{self.label}:\n  {self.question_text} ({self.question_type})\n{answers}"
+        )
+
+    def __repr__(self):
+        return f"Question({self.label})"
 
 
-@typechecked
-class Survey:
+class Page:
+    "General page class"
+
     def __init__(
         self,
-        *pages: Union[Page, List[Page]],
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        options: Optional[SurveyOptions] = None
+        label: str,
+        *questions: Question | Sequence[Question],
+        title: str | None = None,
+        description: str | None = None,
+        options: PageOptions | None = None,
     ):
-        self.pages = list(concatenate([pages]).flat)
+        self.label = label
+        self.questions = list(np.concatenate([questions]).flat)
         self.title = title
         self.description = description
         self.options = options
 
-    def json(self):
-        from json import dumps
+    def __str__(self):
+        page = f"Page {self.label}:\n"
+        for i in enumerate(self.questions):
+            page += f"  {i[0] + 1}. {i[1].label}\n"
+        return page
 
-        return dumps(obj=self, cls=SurveyEncoder, indent=2)
+
+class Survey:
+    "General survey class"
+
+    def __init__(
+        self,
+        *pages: Page | Sequence[Page],
+        title: str | None = None,
+        description: str | None = None,
+        options: SurveyOptions | None = None,
+    ):
+        self.pages = list(np.concatenate([pages]).flat)
+        self.title = title
+        self.description = description
+        self.options = options
 
     def create(self):
-        from json import dumps
-
+        "Saves survey to survey.json file"
         json = dumps(obj=self, cls=SurveyEncoder, indent=2)
-        f = open("survey.json", "w")
-        f.write(json)
-        f.close()
+        survey_file = open("survey.json", "w", encoding="utf-8")
+        survey_file.write(json)
+        survey_file.close()
 
 
 class SurveyEncoder(JSONEncoder):
@@ -97,7 +126,7 @@ class SurveyEncoder(JSONEncoder):
                 "name": o.label,
                 "type": surveyjs_types[o.question_type],
                 "title": o.question_text,
-                "choices": list(concatenate([o.answers]).flat),
+                "choices": o.answers,
             }
 
             if o.description:
