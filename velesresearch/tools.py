@@ -28,8 +28,8 @@ def questionnaire(
     items: Sequence[str] | str,
     answers: Sequence[str] | str,
     question_type: str = "radio",
-    options: QuestionOptions = None,
-    description: str = None,
+    options: QuestionOptions | None = None,
+    description: str | None = None,
 ) -> list[Question]:
     "Convert whole questionnaire to Question objects list"
     q_list = []
