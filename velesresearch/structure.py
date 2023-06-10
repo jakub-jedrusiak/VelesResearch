@@ -52,9 +52,13 @@ class Page:
         self.options = options
 
         # Exception if there are questions with the same label
-        for question in self.questions:
-            if question.label in [q.label for q in self.questions]:
-                raise ValueError(f"Multiple questions with label '{question.label}'")
+        for question in enumerate(self.questions):
+            if question[1].label in [
+                q.label
+                for q in self.questions[: question[0]]
+                + self.questions[question[0] + 1 :]
+            ]:
+                raise ValueError(f"Multiple questions with label '{question[1].label}'")
 
     def __str__(self):
         page = f"Page {self.label}:\n"
@@ -90,9 +94,11 @@ class Survey:
         self.options = options
 
         # Exception if there are pages with the same label
-        for page in self.pages:
-            if page.label in [p.label for p in self.pages]:
-                raise ValueError(f"Multiple pages with label '{page.label}'")
+        for page in enumerate(self.pages):
+            if page[1].label in [
+                p.label for p in self.pages[: page[0]] + self.pages[page[0] + 1 :]
+            ]:
+                raise ValueError(f"Multiple pages with label '{page[1].label}'")
 
     def create(self):
         "Saves survey to survey.json file"
