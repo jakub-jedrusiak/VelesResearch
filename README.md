@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./figs/Veles-logo-white.svg">
-    <source media="(prefers-color-scheme: light)" srcset="./figs/Veles-logo.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="/figs/Veles-logo-white.svg">
+    <source media="(prefers-color-scheme: light)" srcset="/figs/Veles-logo.svg">
     <img alt="Veles logo, text Veles with Veles' rune instead of V." src="Veles-logo.svg" width=60%>
   </picture>
 </p>
