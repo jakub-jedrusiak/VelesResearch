@@ -63,8 +63,10 @@ def survey(
     title: str | None = None,
     description: str | None = None,
     options: SurveyOptions | None = None,
+    create_file: bool = True,
 ) -> Survey:
     "Create Survey object from pages, create json file"
     survey_obj = Survey(pages, title=title, description=description, options=options)
-    survey_obj.create()
+    if create_file:
+        survey_obj.create()
     return survey_obj
