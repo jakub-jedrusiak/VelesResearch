@@ -1,6 +1,6 @@
 "Test json file"
 import os
-from velesresearch.survey_tools import survey, page, questionnaire
+from velesresearch import survey, page, questionnaire
 
 RSSI_items = """I feel that I am a person of worth, at least on an equal plane with others.
 I feel that I have a number of good qualities.
