@@ -1,7 +1,15 @@
 "Test structure.py module"
 
+
 import pytest
 import velesresearch.structure as st
+
+
+def test_calling():
+    "Test calling all functions"
+    st.Question("q", "radio", "Question 1", "Yes", "No")
+    st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No"))
+    st.Survey(st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No")))
 
 
 def test_unique_labels_questions():
