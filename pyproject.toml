@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "velesresearch"
-version = "0.0.5"
+version = "0.0.6"
 description = "Veles is a free and open source python survey tool for researchers."
 license = "GPL-3.0-or-later"
 authors = ["Jakub Jędrusiak <kuba23031999@gmail.com>"]
