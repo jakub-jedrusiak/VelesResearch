@@ -161,3 +161,6 @@ cython_debug/
 
 # pylint settings
 .pylintrc
+
+# Veles specific
+survey.json
