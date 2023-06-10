@@ -57,6 +57,9 @@ class Page:
             page += f"  {i[0] + 1}. {i[1].label}\n"
         return page
 
+    def __repr__(self):
+        return f"Page({self.label})"
+
 
 class Survey:
     "General survey class"
@@ -79,6 +82,12 @@ class Survey:
         survey_file = open("survey.json", "w", encoding="utf-8")
         survey_file.write(json)
         survey_file.close()
+
+    def __str__(self):
+        survey = "Survey:\n"
+        for i in enumerate(self.pages):
+            survey += f"  {i[0] + 1}. {i[1].label}\n"
+        return survey
 
 
 class SurveyEncoder(JSONEncoder):
