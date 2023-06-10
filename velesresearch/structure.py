@@ -60,6 +60,9 @@ class Page:
     def __repr__(self):
         return f"Page({self.label})"
 
+    def __getitem__(self, index):
+        return self.questions[index]
+
 
 class Survey:
     "General survey class"
@@ -88,6 +91,9 @@ class Survey:
         for i in enumerate(self.pages):
             survey += f"  {i[0] + 1}. {i[1].label}\n"
         return survey
+
+    def __getitem__(self, index):
+        return self.pages[index]
 
 
 class SurveyEncoder(JSONEncoder):
