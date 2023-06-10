@@ -61,7 +61,12 @@ class Page:
         return f"Page({self.label})"
 
     def __getitem__(self, index):
-        return self.questions[index]
+        if isinstance(index, int):
+            return self.questions[index]
+        elif isinstance(index, str):
+            for question in self.questions:
+                if question.label == index:
+                    return question
 
 
 class Survey:
@@ -93,7 +98,12 @@ class Survey:
         return survey
 
     def __getitem__(self, index):
-        return self.pages[index]
+        if isinstance(index, int):
+            return self.pages[index]
+        elif isinstance(index, str):
+            for page in self.pages:
+                if page.label == index:
+                    return page
 
 
 class SurveyEncoder(JSONEncoder):
