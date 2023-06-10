@@ -9,8 +9,9 @@
 
 <!-- badges: start -->
 
-![PyPI](https://img.shields.io/pypi/v/velesresearch)
-![GitHub](https://img.shields.io/github/license/jakub-jedrusiak/VelesResearch)
+[![PyPI](https://img.shields.io/pypi/v/velesresearch)](https://pypi.org/project/velesresearch/)
+[![GitHub](https://img.shields.io/github/license/jakub-jedrusiak/VelesResearch)](https://github.com/jakub-jedrusiak/VelesResearch/blob/main/LICENSE)
+[![codecov](https://codecov.io/gh/jakub-jedrusiak/VelesResearch/branch/main/graph/badge.svg?token=CGc3zeDxFi)](https://codecov.io/gh/jakub-jedrusiak/VelesResearch)
 
 <!-- badges: end -->
 
