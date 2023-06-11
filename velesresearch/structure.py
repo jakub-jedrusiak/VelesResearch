@@ -116,21 +116,47 @@ class SurveyEncoder(JSONEncoder):
     "Create SurveyJS-compliant json from Question object"
 
     def default(self, o):
-        if isinstance(o, Survey):
+        # dictionary for mapping question types to SurveyJS types
+        surveyjs_types = {"radio": "radiogroup", "checkbox": "checkbox"}
+
+        if isinstance(o, Question):
             json = {
-                "title": o.title,
-                "description": o.description,
-                "pages": [self.default(p) for p in o.pages],
+                "name": o.label,
+                "type": surveyjs_types[o.question_type],
+                "title": o.question_text,
+                "choices": o.answers,
             }
 
             if o.options:
+                # dictionary for mapping question options to SurveyJS options
+                surveyjs_question_options = {
+                    "required": ["isRequired", False],
+                    "answers_order": ["choicesOrder", "none"],
+                    "inherit_answers": ["choicesByUrl", None],
+                    "comment": ["hasComment", False],
+                    "comment_text": ["commentText", "Other"],
+                    "comment_placeholder": ["commentPlaceHolder", ""],
+                    "visible": ["visible", True],
+                    "other": ["hasOther", False],
+                    "other_text": ["otherText", "Other"],
+                    "other_placeholder": ["otherPlaceHolder", ""],
+                    "none": ["hasNone", False],
+                    "none_text": ["noneText", "None"],
+                    "clear_button": ["showClearButton", False],
+                }
                 opts = o.options.__dict__
-                if opts["language"] != "en":
-                    json["locale"] = opts["language"]
-                if opts["url_on_complete"]:
-                    json["navigateToUrl"] = opts["url_on_complete"]
+                for key in opts.keys():
+                    if opts[key] != surveyjs_question_options[key][1]:
+                        json[surveyjs_question_options[key][0]] = opts[key]
 
         elif isinstance(o, Page):
+            # dictionary for mapping page options to SurveyJS options
+            surveyjs_page_options = {
+                "read_only": ["readOnly", False],
+                "time_limit": ["maxTimeToFinish", None],
+                "visible": ["visible", True],
+            }
+
             json = {
                 "name": o.label,
                 "elements": [self.default(q) for q in o.questions],
@@ -142,54 +168,27 @@ class SurveyEncoder(JSONEncoder):
                 json["description"] = o.description
             if o.options:
                 opts = o.options.__dict__
-                if opts["read_only"]:
-                    json["readOnly"] = True
-                if opts["time_limit"]:
-                    json["maxTimeToFinish"] = opts["time_limit"]
-                if not opts["visible"]:
-                    json["visible"] = False
+                for key in opts.keys():
+                    if opts[key] != surveyjs_page_options[key][1]:
+                        json[surveyjs_page_options[key][0]] = opts[key]
 
-        else:
-            # SurveyJS types dictionary
-            surveyjs_types = {"radio": "radiogroup", "checkbox": "checkbox"}
-
-            json = {
-                "name": o.label,
-                "type": surveyjs_types[o.question_type],
-                "title": o.question_text,
-                "choices": o.answers,
+        if isinstance(o, Survey):
+            # dictionary for mapping survey options to SurveyJS options
+            surveyjs_survey_options = {
+                "language": ["locale", "en"],
+                "url_on_complete": ["navigateToUrl", None],
             }
 
-            if o.description:
-                json["description"] = o.description
+            json = {
+                "title": o.title,
+                "description": o.description,
+                "pages": [self.default(p) for p in o.pages],
+            }
 
             if o.options:
                 opts = o.options.__dict__
-                if not opts["visible"]:
-                    json["visible"] = False
-                if opts["required"]:
-                    json["isRequired"] = True
-                if opts["answers_order"] != "none":
-                    json["choicesOrder"] = opts["answers_order"]
-                if opts["inherit_answers"]:
-                    json["choicesFromQuestion"] = opts["inherit_answers"]
-                if opts["comment"]:
-                    json["showCommentArea"] = True
-                    if opts["comment_text"]:
-                        json["commentText"] = opts["comment_text"]
-                    if opts["comment_placeholder"]:
-                        json["commentPlaceholder"] = opts["comment_placeholder"]
-                if opts["other"]:
-                    json["showOtherItem"] = True
-                    if opts["other_text"]:
-                        json["otherText"] = opts["other_text"]
-                    if opts["other_placeholder"]:
-                        json["otherPlaceHolder"] = opts["other_placeholder"]
-                if opts["none"]:
-                    json["showNoneItem"] = True
-                    if opts["none_text"]:
-                        json["noneText"] = opts["none_text"]
-                if opts["clear_button"]:
-                    json["showClearButton"] = True
+                for key in opts.keys():
+                    if opts[key] != surveyjs_survey_options[key][1]:
+                        json[surveyjs_survey_options[key][0]] = opts[key]
 
         return json
