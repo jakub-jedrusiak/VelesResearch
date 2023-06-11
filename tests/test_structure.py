@@ -7,38 +7,106 @@ import velesresearch.structure as st
 
 def test_calling():
     "Test calling all functions"
-    st.Question("q", "radio", "Question 1", "Yes", "No")
-    st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No"))
-    st.Survey(st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No")))
+    st.Question(
+        label="q",
+        question_type="radio",
+        question_text="Question 1",
+        answers=["Yes", "No"],
+    )
+    st.Page(
+        label="test",
+        questions=st.Question(
+            label="q",
+            question_type="radio",
+            question_text="Question 1",
+            answers=["Yes", "No"],
+        ),
+    )
+    st.Survey(
+        pages=st.Page(
+            label="test",
+            questions=st.Question(
+                label="q",
+                question_type="radio",
+                question_text="Question 1",
+                answers=["Yes", "No"],
+            ),
+        )
+    )
 
 
 def test_printing():
     "Test printing all classes"
-    print(st.Question("q", "radio", "Question 1", "Yes", "No"))
-    print(st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No")))
     print(
-        st.Survey(st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No")))
+        st.Question(
+            label="q",
+            question_type="radio",
+            question_text="Question 1",
+            answers=["Yes", "No"],
+        )
+    )
+    print(
+        st.Page(
+            label="test",
+            questions=st.Question(
+                label="q",
+                question_type="radio",
+                question_text="Question 1",
+                answers=["Yes", "No"],
+            ),
+        )
+    )
+    print(
+        st.Survey(
+            pages=st.Page(
+                label="test",
+                questions=st.Question(
+                    label="q",
+                    question_type="radio",
+                    question_text="Question 1",
+                    answers=["Yes", "No"],
+                ),
+            )
+        )
     )
 
 
 def test_unique_labels_questions():
     "Test that exception is raised when questions labels in page are not unique"
     with pytest.raises(ValueError):
-        question = st.Question("q", "radio", "Question 1", "Yes", "No")
-        st.Page("test", question, question)
+        question = st.Question(
+            label="q",
+            question_type="radio",
+            question_text="Question 1",
+            answers=["Yes", "No"],
+        )
+        st.Page(label="test", questions=[question, question])
 
 
 def test_unique_labels_pages():
     "Test that exception is raised when pages labels in survey are not unique"
     with pytest.raises(ValueError):
-        question = st.Question("q", "radio", "Question 1", "Yes", "No")
-        page = st.Page("test", question)
-        st.Survey(page, page)
+        question = st.Question(
+            label="q",
+            question_type="radio",
+            question_text="Question 1",
+            answers=["Yes", "No"],
+        )
+        page = st.Page(label="test", questions=question)
+        st.Survey(pages=[page, page])
 
 
 def test_subscripting_page():
     "Test subscripting in Page objects"
-    page = st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No"))
+    page = st.Page(
+        label="test",
+        questions=st.Question(
+            label="q",
+            question_type="radio",
+            question_text="Question 1",
+            answers=["Yes", "No"],
+        ),
+    )
     print(page[0])
     print(page["q"])
 
@@ -46,7 +114,15 @@ def test_subscripting_page():
 def test_subscripting_survey():
     "Test subscripting in Survey objects"
     survey = st.Survey(
-        st.Page("test", st.Question("q", "radio", "Question 1", "Yes", "No"))
+        pages=st.Page(
+            label="test",
+            questions=st.Question(
+                label="q",
+                question_type="radio",
+                question_text="Question 1",
+                answers=["Yes", "No"],
+            ),
+        )
     )
     print(survey[0])
     print(survey["test"])

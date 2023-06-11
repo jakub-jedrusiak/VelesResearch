@@ -1,28 +1,19 @@
 "Structural elements of the survey"
 from collections.abc import Sequence
 from json import JSONEncoder, dumps
+from pydantic import BaseModel, validator
 import numpy as np
 from .options import QuestionOptions, PageOptions, SurveyOptions
 
 
-class Question:
+class Question(BaseModel):
     "General question class"
-
-    def __init__(
-        self,
-        label: str,
-        question_type: str,
-        question_text: str,
-        *answers: str | Sequence[str],
-        options: QuestionOptions | None = None,
-        description: str | None = None,
-    ):
-        self.label = label
-        self.question_type = question_type
-        self.question_text = question_text
-        self.answers = list(np.concatenate([answers]).flat)
-        self.options = options
-        self.description = description
+    label: str
+    question_type: str
+    question_text: str
+    answers: str | Sequence[str]
+    options: QuestionOptions | None = None
+    description: str | None = None
 
     def __str__(self):
         answers = "  - " + "\n  - ".join(self.answers)
@@ -34,31 +25,29 @@ class Question:
         return f"Question({self.label})"
 
 
-class Page:
+class Page(BaseModel):
     "General page class"
+    label: str
+    questions: Question | Sequence[Question]
+    title: str | None = None
+    description: str | None = None
+    options: PageOptions | None = None
 
-    def __init__(
-        self,
-        label: str,
-        *questions: Question | Sequence[Question],
-        title: str | None = None,
-        description: str | None = None,
-        options: PageOptions | None = None,
-    ):
-        self.label = label
-        self.questions = list(np.concatenate([questions]).flat)
-        self.title = title
-        self.description = description
-        self.options = options
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if isinstance(self.questions, Question):
+            self.questions = [self.questions]
 
-        # Exception if there are questions with the same label
-        for question in enumerate(self.questions):
-            if question[1].label in [
-                q.label
-                for q in self.questions[: question[0]]
-                + self.questions[question[0] + 1 :]
-            ]:
-                raise ValueError(f"Multiple questions with label '{question[1].label}'")
+    @validator("questions")
+    def check_labels(cls, questions):
+        "Exception if there are questions with the same label"
+        if not isinstance(questions, Question):
+            labels = []
+            for question in questions:
+                labels.append(question.label)
+            if len(labels) != len(set(labels)):
+                raise ValueError("Questions labels in page must be unique")
+        return questions
 
     def __str__(self):
         page = f"Page {self.label}:\n"
@@ -78,27 +67,28 @@ class Page:
                     return question
 
 
-class Survey:
+class Survey(BaseModel):
     "General survey class"
+    pages: Page | Sequence[Page]
+    title: str | None = None
+    description: str | None = None
+    options: SurveyOptions | None = None
 
-    def __init__(
-        self,
-        *pages: Page | Sequence[Page],
-        title: str | None = None,
-        description: str | None = None,
-        options: SurveyOptions | None = None,
-    ):
-        self.pages = list(np.concatenate([pages]).flat)
-        self.title = title
-        self.description = description
-        self.options = options
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if isinstance(self.pages, Page):
+            self.pages = [self.pages]
 
-        # Exception if there are pages with the same label
-        for page in enumerate(self.pages):
-            if page[1].label in [
-                p.label for p in self.pages[: page[0]] + self.pages[page[0] + 1 :]
-            ]:
-                raise ValueError(f"Multiple pages with label '{page[1].label}'")
+    @validator("pages")
+    def check_labels(cls, pages):
+        "Exception if there are pages with the same label"
+        if not isinstance(pages, Page):
+            labels = []
+            for page in pages:
+                labels.append(page.label)
+            if len(labels) != len(set(labels)):
+                raise ValueError("Pages labels in survey must be unique")
+        return pages
 
     def create(self):
         "Saves survey to survey.json file"

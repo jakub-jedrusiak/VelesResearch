@@ -1,5 +1,7 @@
 "Functions and wrappers for creating survey structure"
 from collections.abc import Sequence
+from pydantic import validate_arguments
+import numpy as np
 from .structure import Question, Page, Survey
 from .options import QuestionOptions, PageOptions, SurveyOptions
 
@@ -13,16 +15,18 @@ def question(
     description: str | None = None,
 ) -> Question:
     "Wrapper around Question class"
+    answers = list(np.concatenate([answers]).flat)
     return Question(
-        label,
-        question_type,
-        question_text,
-        answers,
+        label=label,
+        question_type=question_type,
+        question_text=question_text,
+        answers=answers,
         options=options,
         description=description,
     )
 
 
+@validate_arguments
 def questionnaire(
     label: str,
     items: Sequence[str] | str,
@@ -36,10 +40,10 @@ def questionnaire(
     for i in enumerate(items):
         q_list.append(
             Question(
-                f"{label}_{i[0] + 1}",
-                question_type,
-                i[1],
-                answers,
+                label=f"{label}_{i[0] + 1}",
+                question_type=question_type,
+                question_text=i[1],
+                answers=answers,
                 options=options,
                 description=description,
             )
@@ -55,7 +59,14 @@ def page(
     options: PageOptions | None = None,
 ) -> Page:
     "Wrapper around Page class"
-    return Page(label, questions, title=title, description=description, options=options)
+    questions = list(np.concatenate([questions]).flat)
+    return Page(
+        label=label,
+        questions=questions,
+        title=title,
+        description=description,
+        options=options,
+    )
 
 
 def survey(
@@ -66,7 +77,10 @@ def survey(
     create_file: bool = True,
 ) -> Survey:
     "Create Survey object from pages, create json file"
-    survey_obj = Survey(pages, title=title, description=description, options=options)
+    pages = list(np.concatenate([pages]).flat)
+    survey_obj = Survey(
+        pages=pages, title=title, description=description, options=options
+    )
     if create_file:
         survey_obj.create()
     return survey_obj
