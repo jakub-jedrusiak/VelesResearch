@@ -37,16 +37,25 @@ def test_calling():
 
 def test_printing():
     "Test printing all classes"
-    print(
-        st.Question(
+    q = st.Question(
+        label="q",
+        question_type="radio",
+        question_text="Question 1",
+        answers=["Yes", "No"],
+    )
+
+    p = st.Page(
+        label="test",
+        questions=st.Question(
             label="q",
             question_type="radio",
             question_text="Question 1",
             answers=["Yes", "No"],
-        )
+        ),
     )
-    print(
-        st.Page(
+
+    s = st.Survey(
+        pages=st.Page(
             label="test",
             questions=st.Question(
                 label="q",
@@ -56,19 +65,17 @@ def test_printing():
             ),
         )
     )
-    print(
-        st.Survey(
-            pages=st.Page(
-                label="test",
-                questions=st.Question(
-                    label="q",
-                    question_type="radio",
-                    question_text="Question 1",
-                    answers=["Yes", "No"],
-                ),
-            )
-        )
-    )
+
+    print(q)
+    print(p)
+    print(s)
+    print(p[0])
+    print(s[0])
+    print(p["q"])
+    print(s["test"])
+    print([q, q])
+    print([p, p])
+    print([s, s])
 
 
 def test_unique_labels_questions():
