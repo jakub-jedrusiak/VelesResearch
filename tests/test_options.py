@@ -1,6 +1,8 @@
 "Test options.py module"
 
-from os import remove
+from os import getcwd, mkdir
+from pathlib import Path
+from shutil import rmtree
 import velesresearch.options as opt
 from velesresearch.tools import question, page, survey
 
@@ -19,6 +21,7 @@ def test_survey_opts():
 
     q = question("q1", "radio", "What is life?", "Yes", "No", "42", options=q_opt)
     p = page("p1", q, options=p_opt)
-    s = survey(p, options=s_opt)
-
-    remove("survey.json")
+    mkdir("build_dir")
+    wd = Path(getcwd()) / "build_dir"
+    survey("test", p, options=s_opt, create=wd)
+    rmtree(wd)

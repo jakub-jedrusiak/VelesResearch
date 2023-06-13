@@ -1,5 +1,7 @@
 "Test json file"
 import os
+from pathlib import Path
+from shutil import rmtree
 from velesresearch import survey, page, question
 
 RSSI_items = """I feel that I am a person of worth, at least on an equal plane with others.
@@ -19,14 +21,34 @@ Disagree
 Strongly Disagree"""
 
 
-def test_json_creation():
-    "Test that json file is created"
+def test_creation():
+    "Test that syrvey files are created"
 
-    # Run the survey command
+    os.mkdir("build_dir")
+    wd = Path(os.getcwd()) / "build_dir"
+
     survey(
-        page("RSSI", question("RSSI", RSSI_items.split("\n"), RSSI_scale.split("; ")))
+        "RSSI",
+        page("RSSI", question("RSSI", RSSI_items.split("\n"), RSSI_scale.split("; "))),
+        create=wd,
     )
 
     # Check if the file was created
-    assert os.path.exists("survey.json")
-    os.remove("survey.json")
+
+    for file in [
+        "src",
+        "public",
+        "build",
+        "package.json",
+        "package-lock.json",
+        "node_modules",
+        "src/survey.js",
+        "src/index.js",
+        "src/index.css",
+        "src/SurveyComponent.jsx",
+        "public/index.html",
+        "build/index.html",
+    ]:
+        assert os.path.exists(wd / file)
+
+    rmtree(wd)

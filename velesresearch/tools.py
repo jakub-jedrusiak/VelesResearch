@@ -1,5 +1,6 @@
 "Functions and wrappers for creating survey structure"
 from collections.abc import Sequence
+from pathlib import Path
 from pydantic import validate_arguments
 import numpy as np
 from .structure import Question, Page, Survey
@@ -62,17 +63,24 @@ def page(
 
 
 def survey(
+    label: str,
     *pages: Page | Sequence[Page],
     title: str | None = None,
     description: str | None = None,
     options: SurveyOptions | None = None,
-    create_file: bool = True,
+    create: bool | str | Path = True,
 ) -> Survey:
     "Create Survey object from pages, create json file"
     pages_list = list(np.concatenate([pages]).flat)
     survey_obj = Survey(
-        pages=pages_list, title=title, description=description, options=options
+        label=label,
+        pages=pages_list,
+        title=title,
+        description=description,
+        options=options,
     )
-    if create_file:
+    if create and isinstance(create, bool):
         survey_obj.create()
+    elif isinstance(create, str) or isinstance(create, Path):
+        survey_obj.create(Path(create))
     return survey_obj

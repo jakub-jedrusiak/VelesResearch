@@ -1,5 +1,8 @@
 "Test tools.py module"
 
+import os
+from pathlib import Path
+from shutil import rmtree
 from velesresearch.tools import question, page, survey
 
 
@@ -22,7 +25,12 @@ def test_calling():
         title="Test page",
         description="This is a page",
     )
+
+    os.mkdir("build_dir")
+    wd = Path(os.getcwd()) / "build_dir"
+
     survey(
+        "test",
         page(
             "test",
             question(
@@ -36,10 +44,13 @@ def test_calling():
         ),
         title="Test survey",
         description="This is a survey",
-        create_file=True,
+        create=wd,
     )
 
+    rmtree(wd)
+
     survey(
+        "test",
         page(
             "test",
             question(
@@ -48,5 +59,5 @@ def test_calling():
                 ["Yes", "No"],
             ),
         ),
-        create_file=False,
+        create=False,
     )

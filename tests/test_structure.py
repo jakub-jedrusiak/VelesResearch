@@ -23,6 +23,7 @@ def test_calling():
         ),
     )
     st.Survey(
+        label="test",
         pages=st.Page(
             label="test",
             questions=st.Question(
@@ -31,7 +32,7 @@ def test_calling():
                 question_text="Question 1",
                 answers=["Yes", "No"],
             ),
-        )
+        ),
     )
 
 
@@ -55,6 +56,7 @@ def test_printing():
     )
 
     s = st.Survey(
+        label="test",
         pages=st.Page(
             label="test",
             questions=st.Question(
@@ -63,7 +65,7 @@ def test_printing():
                 question_text="Question 1",
                 answers=["Yes", "No"],
             ),
-        )
+        ),
     )
 
     print(q)
@@ -121,6 +123,7 @@ def test_subscripting_page():
 def test_subscripting_survey():
     "Test subscripting in Survey objects"
     survey = st.Survey(
+        label="test",
         pages=st.Page(
             label="test",
             questions=st.Question(
@@ -129,7 +132,7 @@ def test_subscripting_survey():
                 question_text="Question 1",
                 answers=["Yes", "No"],
             ),
-        )
+        ),
     )
     print(survey[0])
     print(survey["test"])

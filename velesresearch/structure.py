@@ -1,9 +1,13 @@
 "Structural elements of the survey"
+from __future__ import annotations
+from os import getcwd
+from pathlib import Path
 from collections.abc import Sequence
-from json import JSONEncoder, dumps
+from json import JSONEncoder
 from pydantic import BaseModel, validator
 import numpy as np
 from .options import QuestionOptions, PageOptions, SurveyOptions
+from .generator import install_npm_deps, generate_survey, build_survey
 
 
 class Question(BaseModel):
@@ -69,6 +73,7 @@ class Page(BaseModel):
 
 class Survey(BaseModel):
     "General survey class"
+    label: str
     pages: Page | Sequence[Page]
     title: str | None = None
     description: str | None = None
@@ -90,12 +95,11 @@ class Survey(BaseModel):
                 raise ValueError("Pages labels in survey must be unique")
         return pages
 
-    def create(self):
-        "Saves survey to survey.json file"
-        json = dumps(obj=self, cls=SurveyEncoder, indent=2)
-        survey_file = open("survey.json", "w", encoding="utf-8")
-        survey_file.write(json)
-        survey_file.close()
+    def create(self, path: str | Path = getcwd()):
+        "Create survey"
+        install_npm_deps(path=path)
+        generate_survey(self, path=path)
+        build_survey(path=path)
 
     def __str__(self):
         survey = "Survey:\n"
