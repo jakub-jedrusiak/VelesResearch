@@ -31,12 +31,18 @@ def questionnaire(
     label: str,
     items: Sequence[str],
     answers: Sequence[str] | str,
+    split_items: str | None = None,
+    split_answers: str | None = None,
     question_type: str = "radio",
     description: str | None = None,
     options: QuestionOptions | None = None,
 ) -> list[Question]:
     "Convert whole questionnaire to Question objects list"
     q_list = []
+    if split_items:
+        items = items.split(split_items)
+    if split_answers:
+        answers = answers.split(split_answers)
     for i in enumerate(items):
         q_list.append(
             Question(
