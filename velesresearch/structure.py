@@ -9,9 +9,9 @@ from .options import QuestionOptions, PageOptions, SurveyOptions
 class Question(BaseModel):
     "General question class"
     label: str
-    question_type: str
     question_text: str
     answers: str | Sequence[str]
+    question_type: str = "radio"
     options: QuestionOptions | None = None
     description: str | None = None
 

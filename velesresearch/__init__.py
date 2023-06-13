@@ -1,3 +1,3 @@
 "VelesResearch main functionality."
-from .tools import survey, page, questionnaire, question
+from .tools import survey, page, question
 from .options import SurveyOptions, PageOptions, QuestionOptions

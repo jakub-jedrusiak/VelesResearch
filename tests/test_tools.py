@@ -7,7 +7,6 @@ def test_calling():
     "Test calling all functions"
     question(
         "q",
-        "radio",
         "Question 1",
         ["Yes", "No"],
         description="This is a question",
@@ -16,7 +15,6 @@ def test_calling():
         "test",
         question(
             "q",
-            "radio",
             "Question 1",
             ["Yes", "No"],
             description="This is a question",
@@ -29,7 +27,6 @@ def test_calling():
             "test",
             question(
                 "q",
-                "radio",
                 "Question 1",
                 ["Yes", "No"],
                 description="This is a question",
@@ -47,7 +44,6 @@ def test_calling():
             "test",
             question(
                 "q",
-                "radio",
                 "Question 1",
                 ["Yes", "No"],
             ),

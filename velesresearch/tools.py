@@ -6,49 +6,41 @@ from .structure import Question, Page, Survey
 from .options import QuestionOptions, PageOptions, SurveyOptions
 
 
+@validate_arguments
 def question(
     label: str,
-    question_type: str,
-    question_text: str,
+    question_text: str | Sequence[str],
     *answers: str | Sequence[str],
+    question_type: str = "radio",
     description: str | None = None,
     options: QuestionOptions | None = None,
 ) -> Question:
     "Wrapper around Question class"
     answers_list = list(np.concatenate([answers]).flat)
-    return Question(
-        label=label,
-        question_type=question_type,
-        question_text=question_text,
-        answers=answers_list,
-        description=description,
-        options=options,
-    )
-
-
-@validate_arguments
-def questionnaire(
-    label: str,
-    items: Sequence[str],
-    answers: Sequence[str] | str,
-    question_type: str = "radio",
-    description: str | None = None,
-    options: QuestionOptions | None = None,
-) -> list[Question]:
-    "Convert whole questionnaire to Question objects list"
-    q_list = []
-    for i in enumerate(items):
-        q_list.append(
-            Question(
-                label=f"{label}_{i[0] + 1}",
-                question_type=question_type,
-                question_text=i[1],
-                answers=answers,
-                description=description,
-                options=options,
-            )
+    if isinstance(question_text, str):
+        return Question(
+            label=label,
+            question_text=question_text,
+            answers=answers_list,
+            question_type=question_type,
+            description=description,
+            options=options,
         )
-    return q_list
+    else:
+        question_list = list(np.concatenate([question_text]).flat)
+        q_list = []
+        for i in enumerate(question_list):
+            q_list.append(
+                Question(
+                    label=f"{label}_{i[0] + 1}",
+                    question_text=i[1],
+                    answers=answers_list,
+                    question_type=question_type,
+                    description=description,
+                    options=options,
+                )
+            )
+        return q_list
 
 
 def page(
