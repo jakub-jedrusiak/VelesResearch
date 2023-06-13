@@ -28,6 +28,6 @@ class PageOptions(BaseModel):
 
 
 class SurveyOptions(BaseModel):
-    "Optrions for Survey object"
+    "Options for Survey object"
     language: str = "en"
     url_on_complete: str | None = None
