@@ -19,38 +19,59 @@ Veles is a free and open source Python research package, primarly for social sci
 
 Veles is in pre-alpha development, but the goal features are:
 
--   Free and open source.
+- Free and open source.
 
--   Text-based, so automatable and easily modifiable.
+- Text-based, so automatable and easily modifiable.
 
--   Integration with GitHub.
+- Integration with GitHub.
 
--   Ability to use JavaScript and CSS directly.
+- Ability to use JavaScript and CSS directly.
 
--   [Open source documentation](https://jakub-jedrusiak.github.io/veles-docs/).
+- [Open source documentation](https://jakub-jedrusiak.github.io/veles-docs/).
 
--   Python-based, so every Python tools work.
+- Python-based, so every Python tools work.
 
--   Esay to collaborate through git.
+- Esay to collaborate through git.
 
--   VS code extension pack.
+- VS code extension pack.
 
--   Custom redirection in the end (for panels).
+- Custom redirection in the end (for panels).
 
--   PsychoPy integration.
+- PsychoPy integration.
 
--   JavaScript code preview.
+- JavaScript code preview.
 
--   Modifiable themes.
+- Modifiable themes.
 
 # Installation
 
 You can install the current version of Veles with:
+
 ``` bash
 pip install velesresearch
 ```
 
 You can install development version (unstable) with:
+
 ``` bash
 pip install velesresearch@git+https://github.com/jakub-jedrusiak/VelesResearch.git
+```
+
+Note that **`npm` is required** for Veles to work. You can download it from [here](https://nodejs.org/en/download) or use your package manager.
+
+``` bash
+# Ubuntu (and other apt distros)
+sudo apt install npm
+
+# Arch
+sudo pacman -S npm
+
+# winget
+winget install OpenJS.NodeJS.LTS
+
+# Chocolatey
+choco install nodejs-lts
+
+# Homebrew
+brew install node
 ```
