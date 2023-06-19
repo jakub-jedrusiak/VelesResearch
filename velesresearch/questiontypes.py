@@ -4,6 +4,7 @@ from .tools import question
 
 
 def radio(label, question_text, *answers, description=None, options=None):
+    "Wrapper around question function for radio type."
     return question(
         label,
         question_text,
@@ -15,6 +16,7 @@ def radio(label, question_text, *answers, description=None, options=None):
 
 
 def checkbox(label, question_text, *answers, description=None, options=None):
+    "Wrapper around question function for checkbox type."
     return question(
         label,
         question_text,

@@ -28,21 +28,20 @@ def question(
             description=description,
             options=options,
         )
-    else:
-        question_list = list(np.concatenate([question_text]).flat)
-        q_list = []
-        for i in enumerate(question_list):
-            q_list.append(
-                Question(
-                    label=f"{label}_{i[0] + 1}",
-                    question_text=i[1],
-                    answers=answers_list,
-                    question_type=question_type,
-                    description=description,
-                    options=options,
-                )
+    question_list = list(np.concatenate([question_text]).flat)
+    q_list = []
+    for i in enumerate(question_list):
+        q_list.append(
+            Question(
+                label=f"{label}_{i[0] + 1}",
+                question_text=i[1],
+                answers=answers_list,
+                question_type=question_type,
+                description=description,
+                options=options,
             )
-        return q_list
+        )
+    return q_list
 
 
 def page(
@@ -88,6 +87,7 @@ def survey(
 
 
 def option(type: str | None = None, **kwargs):
+    "Create options object for question, page or survey"
     if type is None:
         calling_function = stack()[1].function
     else:

@@ -138,10 +138,10 @@ export default SurveyComponent;"""
         index_css_file.write(index_css)
 
     # SurveyComponent.jsx
-    survey_component_file = open(
+    with open(
         path / "src" / "SurveyComponent.jsx", "w", encoding="utf-8"
-    )
-    survey_component_file.write(SurveyComponent)
+    ) as survey_component_file:
+        survey_component_file.write(SurveyComponent)
 
     # index.html
     with open(path / "public" / "index.html", "w", encoding="utf-8") as index_html_file:
