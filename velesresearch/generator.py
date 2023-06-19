@@ -47,9 +47,9 @@ def install_npm_deps(path: str | Path = os.getcwd()) -> None:
     if isinstance(path, str):
         path = Path(path)
     path = path / "package.json"
-    package_json = open(path, "w", encoding="utf-8")
-    dump(npm_dependencies, package_json)
-    package_json.close()
+    with open(path, "w", encoding="utf-8") as package_json:
+        dump(npm_dependencies, package_json)
+
     NPMPackage(path).install()
 
 
@@ -121,36 +121,31 @@ export default SurveyComponent;"""
     os.makedirs(path / "public", exist_ok=True)
 
     # survey.js
-    survey_js = open(path / "src" / "survey.js", "w", encoding="utf-8")
-    survey_js.write("export const json = ")
-    survey_js.close()
-    survey_js = open(path / "src" / "survey.js", "a", encoding="utf-8")
-    from .structure import SurveyEncoder
+    with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
+        survey_js.write("export const json = ")
 
-    dump(Survey_object, survey_js, cls=SurveyEncoder)
-    survey_js.close()
+    with open(path / "src" / "survey.js", "a", encoding="utf-8") as survey_js:
+        from .structure import SurveyEncoder
+
+        dump(Survey_object, survey_js, cls=SurveyEncoder)
 
     # index.js
-    index_js_file = open(path / "src" / "index.js", "w", encoding="utf-8")
-    index_js_file.write(index_js)
-    index_js_file.close()
+    with open(path / "src" / "index.js", "w", encoding="utf-8") as index_js_file:
+        index_js_file.write(index_js)
 
     # index.css
-    index_css_file = open(path / "src" / "index.css", "w", encoding="utf-8")
-    index_css_file.write(index_css)
-    index_css_file.close()
+    with open(path / "src" / "index.css", "w", encoding="utf-8") as index_css_file:
+        index_css_file.write(index_css)
 
     # SurveyComponent.jsx
     survey_component_file = open(
         path / "src" / "SurveyComponent.jsx", "w", encoding="utf-8"
     )
     survey_component_file.write(SurveyComponent)
-    survey_component_file.close()
 
     # index.html
-    index_html_file = open(path / "public" / "index.html", "w", encoding="utf-8")
-    index_html_file.write(index_html)
-    index_html_file.close()
+    with open(path / "public" / "index.html", "w", encoding="utf-8") as index_html_file:
+        index_html_file.write(index_html)
 
 
 def build_survey(path: str | Path = os.getcwd()) -> None:
