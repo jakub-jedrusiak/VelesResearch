@@ -1,6 +1,7 @@
 "Functions and wrappers for creating survey structure"
 from collections.abc import Sequence
 from pathlib import Path
+from inspect import stack
 from pydantic import validate_arguments
 import numpy as np
 from .structure import Question, Page, Survey
@@ -84,3 +85,18 @@ def survey(
     elif isinstance(create, str) or isinstance(create, Path):
         survey_obj.create(Path(create))
     return survey_obj
+
+
+def option(type: str | None = None, **kwargs):
+    if type is None:
+        calling_function = stack()[1].function
+    else:
+        calling_function = type
+    if calling_function in ["question", "Question"]:
+        return QuestionOptions(**kwargs)
+    elif calling_function in ["page", "Page"]:
+        return PageOptions(**kwargs)
+    elif calling_function in ["survey", "Survey"]:
+        return SurveyOptions(**kwargs)
+    else:
+        raise ValueError('type must be "question", "page" or "survey"')
