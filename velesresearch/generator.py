@@ -1,6 +1,6 @@
 "Functions for generating survey package."
 from __future__ import annotations
-from os import getcwd, mkdir
+import os
 from importlib.metadata import version
 from json import dump
 from pathlib import Path
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .structure import Survey
 
 
-def install_npm_deps(path: str | Path = getcwd()) -> None:
+def install_npm_deps(path: str | Path = os.getcwd()) -> None:
     """Install npm dependencies for VelesResearch."""
 
     npm_dependencies = {
@@ -19,6 +19,8 @@ def install_npm_deps(path: str | Path = getcwd()) -> None:
         "version": version("velesresearch"),
         "private": True,
         "dependencies": {
+            "@json2csv/plainjs": "latest",
+            "file-saver": "latest",
             "json-loader": "latest",
             "react": "latest",
             "react-dom": "latest",
@@ -51,7 +53,7 @@ def install_npm_deps(path: str | Path = getcwd()) -> None:
     NPMPackage(path).install()
 
 
-def generate_survey(Survey_object: "Survey", path: str | Path = getcwd()) -> None:
+def generate_survey(Survey_object: "Survey", path: str | Path = os.getcwd()) -> None:
     "Saves survey to survey.js file"
 
     index_html = f"""<!DOCTYPE html>
@@ -81,11 +83,30 @@ import { Survey } from "survey-react-ui";
 import "survey-core/defaultV2.min.css";
 import "./index.css";
 import { json } from "./survey.js";
+import { Parser } from '@json2csv/plainjs';
+import { saveAs } from "file-saver";
+
+function MakeID(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 
 function SurveyComponent() {
     const survey = new Model(json);
     survey.onComplete.add((sender, options) => {
-        console.log(JSON.stringify(sender.data, null, 3));
+        const result = Object.assign({ id: MakeID(8) }, sender.data);
+        console.log(result)
+        const parser = new Parser({ delimiter: ';' });
+        const csvData = parser.parse(result);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        saveAs(blob, "data.csv");
     });
     return (<Survey model={survey} />);
 }
@@ -96,8 +117,8 @@ export default SurveyComponent;"""
         path = Path(path)
 
     # package.json
-    mkdir(path / "src")
-    mkdir(path / "public")
+    os.makedirs(path / "src", exist_ok=True)
+    os.makedirs(path / "public", exist_ok=True)
 
     # survey.js
     survey_js = open(path / "src" / "survey.js", "w", encoding="utf-8")
@@ -132,7 +153,7 @@ export default SurveyComponent;"""
     index_html_file.close()
 
 
-def build_survey(path: str | Path = getcwd()) -> None:
+def build_survey(path: str | Path = os.getcwd()) -> None:
     """Builds survey package."""
 
     if isinstance(path, str):
