@@ -16,7 +16,7 @@ def question(
     question_type: str = "radio",
     description: str | None = None,
     options: QuestionOptions | None = None,
-) -> Question:
+) -> Question | list[Question]:
     "Wrapper around Question class"
     answers_list = list(np.concatenate([answers]).flat)
     if isinstance(question_text, str):
