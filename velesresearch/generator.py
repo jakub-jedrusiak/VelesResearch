@@ -281,4 +281,4 @@ def build_survey(path: str | Path = os.getcwd()) -> None:
     if isinstance(path, str):
         path = Path(path)
 
-    # NPMPackage(path).run_script("build")
+    NPMPackage(path).run_script("build")

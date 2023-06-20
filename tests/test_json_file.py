@@ -38,16 +38,14 @@ def test_creation():
     for file in [
         "src",
         "public",
-        "build",
+        "dist",
         "package.json",
         "package-lock.json",
         "node_modules",
-        "src/survey.js",
-        "src/index.js",
+        "src/survey.ts",
         "src/index.css",
-        "src/SurveyComponent.jsx",
-        "public/index.html",
-        "build/index.html",
+        "src/SurveyComponent.tsx",
+        "index.html",
     ]:
         assert os.path.exists(wd / file)
 
