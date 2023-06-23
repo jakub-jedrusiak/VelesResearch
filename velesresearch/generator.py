@@ -25,8 +25,9 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
 
     NPMPackage(path).install()
     NPMPackage(path).install(
-        "survey-react-ui", "@json2csv/plainjs", "file-saver", "@types/file-saver"
+        "survey-react-ui", "@json2csv/plainjs", "file-saver", "--save"
     )
+    NPMPackage(path).install("@types/file-saver", "--save-dev")
 
     # App.tsx
     with open(path / "src" / "App.tsx", "w", encoding="utf-8") as app_tsx_file:
