@@ -164,3 +164,4 @@ cython_debug/
 
 # Veles specific
 survey.json
+build_dir/
