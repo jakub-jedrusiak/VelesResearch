@@ -6,8 +6,9 @@ from collections.abc import Sequence
 from json import JSONEncoder
 from pydantic import BaseModel, validator
 import numpy as np
+from pynpm import NPMPackage
 from .options import QuestionOptions, PageOptions, SurveyOptions
-from .generator import install_npm_deps, generate_survey, build_survey
+from .generator import generate_survey
 
 
 class Question(BaseModel):
@@ -95,12 +96,6 @@ class Survey(BaseModel):
                 raise ValueError("Pages labels in survey must be unique")
         return pages
 
-    def create(self, path: str | Path = getcwd()):
-        "Create survey"
-        install_npm_deps(path=path)
-        generate_survey(self, path=path)
-        build_survey(path=path)
-
     def __str__(self):
         survey = "Survey:\n"
         for i in enumerate(self.pages):
@@ -114,6 +109,22 @@ class Survey(BaseModel):
             for page in self.pages:
                 if page.label == index:
                     return page
+
+    def build_survey(self, path: str | Path = getcwd()) -> None:
+        """Builds survey package."""
+
+        if isinstance(path, str):
+            path = Path(path)
+
+        path = path / self.label.casefold()
+
+        NPMPackage(path).run_script("build")
+
+    def create(self, path: str | Path = getcwd(), build: bool = True):
+        "Create survey"
+        generate_survey(self, path=path)
+        if build:
+            self.build_survey(path=path)
 
 
 class SurveyEncoder(JSONEncoder):

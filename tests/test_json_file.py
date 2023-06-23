@@ -47,6 +47,6 @@ def test_creation():
         "src/SurveyComponent.tsx",
         "index.html",
     ]:
-        assert os.path.exists(wd / file)
+        assert os.path.exists(wd / "rssi" / file)
 
     rmtree(wd)
