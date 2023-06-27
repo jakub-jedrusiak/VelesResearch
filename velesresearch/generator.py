@@ -76,7 +76,7 @@ function SurveyComponent() {
     survey.onComplete.add((sender) => {
         const result = Object.assign({ id: MakeID(8) }, sender.data);
         // send data to Django backend
-        fetch(window.location.pathname + "/submit", {
+        fetch(window.location.pathname + "submit/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
