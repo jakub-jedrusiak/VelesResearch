@@ -1,12 +1,14 @@
 "Structural elements of the survey"
 from __future__ import annotations
-from os import getcwd
+import os
 from pathlib import Path
 from collections.abc import Sequence
+import csv
+import tarfile
 from json import JSONEncoder
 from pydantic import BaseModel, validator
 import numpy as np
-from pynpm import NPMPackage
+from pynpm import YarnPackage
 from .options import QuestionOptions, PageOptions, SurveyOptions
 from .generator import generate_survey
 
@@ -110,7 +112,25 @@ class Survey(BaseModel):
                 if page.label == index:
                     return page
 
-    def build_survey(self, path: str | Path = getcwd()) -> None:
+    def unpack(self, labels: bool = False):
+        "Make survey list of Questions"
+        questions = []
+        for page in self.pages:
+            for question in page.questions:
+                questions.append(question)
+        if not labels:
+            return questions
+        labels = []
+        for i in questions:
+            labels.append(i.label)
+        return labels
+
+    def build_survey(
+        self,
+        path: str | Path = os.getcwd(),
+        create_csv: bool = True,
+        create_tar_gz: bool = True,
+    ) -> None:
         """Builds survey package."""
 
         if isinstance(path, str):
@@ -118,9 +138,19 @@ class Survey(BaseModel):
 
         path = path / self.label.casefold()
 
-        NPMPackage(path).run_script("build")
+        YarnPackage(path)._run_npm("build")
 
-    def create(self, path: str | Path = getcwd(), build: bool = True):
+        with open(path / "dist" / "fields.csv", "w", encoding="UTF8") as f:
+            csv.writer(f).writerow(["id"] + self.unpack(labels=True))
+        if create_tar_gz:
+            with tarfile.open(path / f"{self.label}.tar.gz", "w:gz") as tar:
+                for root, dirs, files in os.walk(path / "dist"):
+                    for file_name in files:
+                        tar.add(os.path.join(root, file_name), arcname=file_name)
+
+    def create(
+        self, path: str | Path = os.getcwd(), build: bool = True, fields: bool = True
+    ):
         "Create survey"
         generate_survey(self, path=path)
         if build:

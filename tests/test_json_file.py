@@ -15,14 +15,11 @@ I wish I could have more respect for myself.
 I certainly feel useless at times.
 At times I think I am no good at all."""
 
-RSSI_scale = """Strongly Agree
-Agree
-Disagree
-Strongly Disagree"""
+RSSI_scale = "Strongly Agree; Agree; Disagree; Strongly Disagree"
 
 
 def test_creation():
-    "Test that syrvey files are created"
+    "Test that survey files are created"
 
     os.mkdir("build_dir")
     wd = Path(os.getcwd()) / "build_dir"
@@ -40,12 +37,13 @@ def test_creation():
         "public",
         "dist",
         "package.json",
-        "package-lock.json",
         "node_modules",
         "src/survey.ts",
         "src/index.css",
         "src/SurveyComponent.tsx",
+        "dist/fields.csv",
         "index.html",
+        "RSSI.tar.gz",
     ]:
         assert os.path.exists(wd / "rssi" / file)
 

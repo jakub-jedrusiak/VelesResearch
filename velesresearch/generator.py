@@ -4,7 +4,7 @@ import os
 from json import dump
 from pathlib import Path
 import fileinput
-from pynpm import NPMPackage, YarnPackage
+from pynpm import YarnPackage
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -23,11 +23,11 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
 
     path = path / survey_object.label.casefold()
 
-    NPMPackage(path).install()
-    NPMPackage(path).install(
-        "survey-react-ui", "@json2csv/plainjs", "file-saver", "--save"
+    YarnPackage(path).install()
+    YarnPackage(path)._run_npm(
+        "add", "survey-react-ui", "@json2csv/plainjs", "file-saver"
     )
-    NPMPackage(path).install("@types/file-saver", "--save-dev")
+    YarnPackage(path)._run_npm("add", "@types/file-saver", "--dev")
 
     # App.tsx
     with open(path / "src" / "App.tsx", "w", encoding="utf-8") as app_tsx_file:
@@ -58,8 +58,6 @@ import { Survey } from "survey-react-ui";
 import "survey-core/defaultV2.min.css";
 import "./index.css";
 import { json } from "./survey.ts";
-import { Parser } from '@json2csv/plainjs';
-import { saveAs } from "file-saver";
 
 function MakeID(length: number) {
     let result = '';
@@ -77,11 +75,26 @@ function SurveyComponent() {
     const survey = new Model(json);
     survey.onComplete.add((sender) => {
         const result = Object.assign({ id: MakeID(8) }, sender.data);
-        console.log(result)
-        const parser = new Parser({ delimiter: ';' });
-        const csvData = parser.parse(result);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-        saveAs(blob, "data.csv");
+        // send data to Django backend
+        fetch(window.location.pathname + "/submit", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(result)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     });
     return (<Survey model={survey} />);
 }
@@ -95,8 +108,11 @@ export default SurveyComponent;"""
     with open(path / "src" / "App.css", "w", encoding="utf-8") as app_css:
         app_css.write("")
 
-    os.remove(path / "public" / "vite.svg")
-    os.remove(path / "src" / "assets" / "react.svg")
+    # remove unnecessary files
+    if os.path.exists(path / "public" / "vite.svg"):
+        os.remove(path / "public" / "vite.svg")
+    if os.path.exists(path / "src" / "assets" / "react.svg"):
+        os.remove(path / "src" / "assets" / "react.svg")
 
     index_html = path / "index.html"
     new_line = f"    <title>{survey_object.title}</title>\n"
