@@ -7,7 +7,6 @@ import csv
 import tarfile
 from json import JSONEncoder
 from pydantic import BaseModel, validator
-import numpy as np
 from pynpm import YarnPackage
 from .options import QuestionOptions, PageOptions, SurveyOptions
 from .generator import generate_survey

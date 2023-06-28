@@ -3,9 +3,9 @@ from collections.abc import Sequence
 from pathlib import Path
 from inspect import stack
 from pydantic import validate_arguments
-import numpy as np
 from .structure import Question, Page, Survey
 from .options import QuestionOptions, PageOptions, SurveyOptions
+from .utils import flatten_args
 
 
 @validate_arguments
@@ -18,7 +18,7 @@ def question(
     options: QuestionOptions | None = None,
 ) -> Question | list[Question]:
     "Wrapper around Question class"
-    answers_list = list(np.concatenate([answers]).flat)
+    answers_list = flatten_args(answers)
     if isinstance(question_text, str):
         return Question(
             label=label,
@@ -28,7 +28,7 @@ def question(
             description=description,
             options=options,
         )
-    question_list = list(np.concatenate([question_text]).flat)
+    question_list = flatten_args(question_text)
     q_list = []
     for i in enumerate(question_list):
         q_list.append(
@@ -52,7 +52,7 @@ def page(
     options: PageOptions | None = None,
 ) -> Page:
     "Wrapper around Page class"
-    questions_list = list(np.concatenate([questions]).flat)
+    questions_list = flatten_args(questions)
     return Page(
         label=label,
         questions=questions_list,
@@ -71,7 +71,7 @@ def survey(
     create: bool | str | Path = True,
 ) -> Survey:
     "Create Survey object from pages, create json file"
-    pages_list = list(np.concatenate([pages]).flat)
+    pages_list = flatten_args(pages)
     survey_obj = Survey(
         label=label,
         pages=pages_list,
