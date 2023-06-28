@@ -177,7 +177,8 @@ class SurveyEncoder(JSONEncoder):
                 surveyjs_question_options = {
                     "required": ["isRequired", False],
                     "answers_order": ["choicesOrder", "none"],
-                    "inherit_answers": ["choicesByUrl", None],
+                    "inherit_answers": ["choicesFromQuestion", None],
+                    "inherit_answers_mode": ["choicesFromQuestionMode", "all"],
                     "comment": ["hasComment", False],
                     "comment_text": ["commentText", "Other"],
                     "comment_placeholder": ["commentPlaceHolder", ""],
