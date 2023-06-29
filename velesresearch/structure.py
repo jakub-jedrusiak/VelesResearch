@@ -107,11 +107,11 @@ class Survey(BaseModel):
         if isinstance(index, int):
             return self.pages[index]
         if isinstance(index, str):
-            for page in self.pages:
-                if page.label == index:
-                    return page
+            for given_page in self.pages:
+                if given_page.label == index:
+                    return given_page
 
-    def unpack(self, labels: bool = False):
+    def unpack(self, labels: bool = False) -> list[str] | list[Question]:
         "Make survey list of Questions"
         questions = []
         for page in self.pages:
@@ -119,10 +119,10 @@ class Survey(BaseModel):
                 questions.append(question)
         if not labels:
             return questions
-        labels = []
+        labels_list = []
         for i in questions:
-            labels.append(i.label)
-        return labels
+            labels_list.append(i.label)
+        return labels_list
 
     def build_survey(
         self,
