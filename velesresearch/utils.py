@@ -1,6 +1,3 @@
-import itertools
-
-
 def flatten_args(*args):
     flattened = []
     for arg in args:
