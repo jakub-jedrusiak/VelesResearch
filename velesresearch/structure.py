@@ -203,6 +203,7 @@ class SurveyEncoder(JSONEncoder):
                 "name": o.label,
                 "type": surveyjs_types[o.question_type],
                 "title": o.question_text,
+                "description": o.description,
                 "choices": o.answers,
             }
 
