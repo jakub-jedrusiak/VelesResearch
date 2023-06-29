@@ -1,5 +1,6 @@
 "Structural elements of the survey"
 from __future__ import annotations
+import warnings
 import os
 from pathlib import Path
 from collections.abc import Sequence
@@ -38,6 +39,15 @@ class Question(BaseModel):
         return f"Question({self.label})"
 
     _validate_label = validator("label", allow_reuse=True)(check_labels_for_spaces)
+
+    @validator("question_type")
+    def no_answers_for_yes_no_question(cls, question_type):
+        "Exception if question_type is yes_no and there are answers"
+        if question_type == "yes_no" and cls.answers:
+            warnings.warn(
+                "There should be no answers for yes_no question type", UserWarning
+            )
+        return question_type
 
 
 class Page(BaseModel):
@@ -174,7 +184,17 @@ class SurveyEncoder(JSONEncoder):
 
     def default(self, o):
         # dictionary for mapping question types to SurveyJS types
-        surveyjs_types = {"radio": "radiogroup", "checkbox": "checkbox"}
+        # "veles_argument_name": "surveyjs_argument_name
+        surveyjs_types = {
+            "radio": "radiogroup",
+            "checkbox": "checkbox",
+            "text": "text",
+            "text_long": "comment",
+            "dropdown": "dropdown",
+            "dropdown_multi": "tagbox",
+            "yes_no": "boolean",
+            "ranking": "ranking",
+        }
 
         if isinstance(o, Question):
             json = {
