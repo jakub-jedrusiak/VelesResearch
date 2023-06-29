@@ -41,13 +41,15 @@ class Question(BaseModel):
     _validate_label = validator("label", allow_reuse=True)(check_labels_for_spaces)
 
     @validator("question_type")
-    def no_answers_for_yes_no_question(cls, question_type):
+    def no_answers_for_yes_no_question(cls, value, values, config, field):
         "Exception if question_type is yes_no and there are answers"
-        if question_type == "yes_no" and cls.answers:
-            warnings.warn(
-                "There should be no answers for yes_no question type", UserWarning
-            )
-        return question_type
+        if value == "yes_no" and "answers" in values:
+            answers = values["answers"]
+            if answers:
+                warnings.warn(
+                    "There should be no answers for yes_no question type", UserWarning
+                )
+        return value
 
 
 class Page(BaseModel):
