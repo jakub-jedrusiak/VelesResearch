@@ -12,6 +12,13 @@ from .options import QuestionOptions, PageOptions, SurveyOptions
 from .generator import generate_survey
 
 
+def check_labels_for_spaces(cls, label):
+    "Checks if label contains spaces"
+    if " " in label:
+        raise ValueError("Label should not contain spaces")
+    return label
+
+
 class Question(BaseModel):
     "General question class"
     label: str
@@ -29,6 +36,8 @@ class Question(BaseModel):
 
     def __repr__(self):
         return f"Question({self.label})"
+
+    _validate_label = validator("label", allow_reuse=True)(check_labels_for_spaces)
 
 
 class Page(BaseModel):
@@ -71,6 +80,8 @@ class Page(BaseModel):
             for question in self.questions:
                 if question.label == index:
                     return question
+
+    _validate_label = validator("label", allow_reuse=True)(check_labels_for_spaces)
 
 
 class Survey(BaseModel):
@@ -154,6 +165,8 @@ class Survey(BaseModel):
         generate_survey(self, path=path)
         if build:
             self.build_survey(path=path)
+
+    _validate_label = validator("label", allow_reuse=True)(check_labels_for_spaces)
 
 
 class SurveyEncoder(JSONEncoder):
