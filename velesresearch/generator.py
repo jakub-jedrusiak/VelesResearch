@@ -17,9 +17,12 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
     if isinstance(path, str):
         path = Path(path)
 
-    YarnPackage(path)._run_npm(
-        "create", "vite", f"{survey_object.label.casefold()}", "--template react-ts"
-    )
+    if not os.path.exists(path / survey_object.label.casefold()) and not os.path.exists(
+        path / survey_object.label.casefold() / "vite.config.ts"
+    ):
+        YarnPackage(path)._run_npm(
+            "create", "vite", f"{survey_object.label.casefold()}", "--template react-ts"
+        )
 
     path = path / survey_object.label.casefold()
 
