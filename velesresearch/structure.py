@@ -217,7 +217,7 @@ class SurveyEncoder(JSONEncoder):
                     if opts[key] != surveyjs_page_options[key][1]:
                         json[surveyjs_page_options[key][0]] = opts[key]
 
-        if isinstance(o, Survey):
+        elif isinstance(o, Survey):
             # dictionary for mapping survey options to SurveyJS options
             surveyjs_survey_options = {
                 "language": ["locale", "en"],
@@ -235,5 +235,8 @@ class SurveyEncoder(JSONEncoder):
                 for key in opts.keys():
                     if opts[key] != surveyjs_survey_options[key][1]:
                         json[surveyjs_survey_options[key][0]] = opts[key]
-
+        else:
+            raise TypeError(
+                f"Object of type {type(o)} is not JSON serializable by this encoder"
+            )
         return json
