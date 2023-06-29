@@ -173,6 +173,7 @@ class SurveyEncoder(JSONEncoder):
 
             if o.options:
                 # dictionary for mapping question options to SurveyJS options
+                # "veles_argument_name": ["surveyjs_argument_name", default_value]
                 surveyjs_question_options = {
                     "required": ["isRequired", False],
                     "answers_order": ["choicesOrder", "none"],
@@ -195,13 +196,6 @@ class SurveyEncoder(JSONEncoder):
                         json[surveyjs_question_options[key][0]] = opts[key]
 
         elif isinstance(o, Page):
-            # dictionary for mapping page options to SurveyJS options
-            surveyjs_page_options = {
-                "read_only": ["readOnly", False],
-                "time_limit": ["maxTimeToFinish", None],
-                "visible": ["visible", True],
-            }
-
             json = {
                 "name": o.label,
                 "elements": [self.default(q) for q in o.questions],
@@ -212,18 +206,19 @@ class SurveyEncoder(JSONEncoder):
             if o.description:
                 json["description"] = o.description
             if o.options:
+                # dictionary for mapping page options to SurveyJS options
+                # "veles_argument_name": ["surveyjs_argument_name", default_value]
+                surveyjs_page_options = {
+                    "read_only": ["readOnly", False],
+                    "time_limit": ["maxTimeToFinish", None],
+                    "visible": ["visible", True],
+                }
                 opts = o.options.__dict__
                 for key in opts.keys():
                     if opts[key] != surveyjs_page_options[key][1]:
                         json[surveyjs_page_options[key][0]] = opts[key]
 
         elif isinstance(o, Survey):
-            # dictionary for mapping survey options to SurveyJS options
-            surveyjs_survey_options = {
-                "language": ["locale", "en"],
-                "url_on_complete": ["navigateToUrl", None],
-            }
-
             json = {
                 "title": o.title,
                 "description": o.description,
@@ -231,6 +226,12 @@ class SurveyEncoder(JSONEncoder):
             }
 
             if o.options:
+                # dictionary for mapping survey options to SurveyJS options
+                # "veles_argument_name": ["surveyjs_argument_name", default_value]
+                surveyjs_survey_options = {
+                    "language": ["locale", "en"],
+                    "url_on_complete": ["navigateToUrl", None],
+                }
                 opts = o.options.__dict__
                 for key in opts.keys():
                     if opts[key] != surveyjs_survey_options[key][1]:
