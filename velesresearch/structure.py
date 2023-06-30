@@ -150,7 +150,6 @@ class Survey(BaseModel):
     def build_survey(
         self,
         path: str | Path = os.getcwd(),
-        create_csv: bool = True,
         create_tar_gz: bool = True,
     ) -> None:
         """Builds survey package."""
@@ -162,17 +161,13 @@ class Survey(BaseModel):
 
         YarnPackage(path)._run_npm("build")
 
-        with open(path / "dist" / "fields.csv", "w", encoding="UTF8") as f:
-            csv.writer(f).writerow(["id"] + self.unpack(labels=True))
         if create_tar_gz:
             with tarfile.open(path / f"{self.label}.tar.gz", "w:gz") as tar:
-                for root, dirs, files in os.walk(path / "dist"):
+                for root, dirs, files in os.walk(path / "build"):
                     for file_name in files:
                         tar.add(os.path.join(root, file_name), arcname=file_name)
 
-    def create(
-        self, path: str | Path = os.getcwd(), build: bool = True, fields: bool = True
-    ):
+    def create(self, path: str | Path = os.getcwd(), build: bool = True):
         "Create survey"
         generate_survey(self, path=path)
         if build:

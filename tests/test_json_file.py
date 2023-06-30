@@ -35,14 +35,12 @@ def test_creation():
     for file in [
         "src",
         "public",
-        "dist",
+        "build",
         "package.json",
         "node_modules",
-        "src/survey.ts",
-        "src/index.css",
-        "src/SurveyComponent.tsx",
-        "dist/fields.csv",
-        "index.html",
+        "src/survey.js",
+        "src/SurveyComponent.jsx",
+        "public/index.html",
         "RSSI.tar.gz",
     ]:
         assert os.path.exists(wd / "rssi" / file)
