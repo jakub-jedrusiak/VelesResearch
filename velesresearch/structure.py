@@ -163,9 +163,7 @@ class Survey(BaseModel):
 
         if create_tar_gz:
             with tarfile.open(path / f"{self.label}.tar.gz", "w:gz") as tar:
-                for root, dirs, files in os.walk(path / "build"):
-                    for file_name in files:
-                        tar.add(os.path.join(root, file_name), arcname=file_name)
+                tar.add(path / "build" / "main.js", arcname="main.js")
 
     def create(self, path: str | Path = os.getcwd(), build: bool = True):
         "Create survey"
