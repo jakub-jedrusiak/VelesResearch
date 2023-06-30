@@ -27,7 +27,7 @@ Veles is in pre-alpha development, but the goal features are:
 
 - Ability to use JavaScript and CSS directly.
 
-- [Open source documentation](https://jakub-jedrusiak.github.io/veles-docs/).
+- [Open source documentation](https://docs.velesresearch.org/).
 
 - Python-based, so every Python tools work.
 
