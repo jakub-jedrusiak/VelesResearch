@@ -13,7 +13,7 @@ module.exports = {
       template: path.join(__dirname, "public", "index.html"),
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: "src/images", to: "images" }],
+      patterns: [{ from: "public/images", to: "images" }],
     }),
   ],
   devServer: {
