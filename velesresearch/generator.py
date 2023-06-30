@@ -21,7 +21,9 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
 
     if not os.path.exists(path / "package.json"):
         template = str(files("velesresearch.website_template"))
-        shutil.copytree(template, path, ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(
+            template, path, ignore=shutil.ignore_patterns("__pycache__", "__init__.py")
+        )
 
     if not os.path.exists(path / "node_modules"):
         YarnPackage(path).install()
