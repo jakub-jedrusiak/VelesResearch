@@ -12,7 +12,7 @@ from .utils import flatten_args
 def question(
     label: str,
     question_text: str | Sequence[str],
-    *answers: str | Sequence[str],
+    *answers: str | Sequence[str] | None,
     question_type: str = "radio",
     description: str | None = None,
     options: QuestionOptions | None = None,

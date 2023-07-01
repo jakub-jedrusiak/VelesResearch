@@ -25,7 +25,7 @@ class Question(BaseModel):
     "General question class"
     label: str
     question_text: str
-    answers: str | Sequence[str] | None
+    answers: str | Sequence[str] | None = None
     question_type: str = "radio"
     options: QuestionOptions | None = None
     description: str | None = None
