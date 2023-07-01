@@ -11,7 +11,7 @@ with APA-style citation of the questionnaire and info what it measures. See the 
 I'd be greatful if you could also write a documentation for the questionnaire.
 See the repo: https://github.com/jakub-jedrusiak/VelesDocs
 """
-from velesresearch.tools import question, QuestionOptions
+from velesresearch import question, info, QuestionOptions
 
 
 def rse(
@@ -42,7 +42,12 @@ At times I think I am no good at all.""".split(
 
     RSE_scale = "Strongly Agree; Agree; Disagree; Strongly Disagree".split("; ")
 
-    return question(
+    RSE_instruction = info(
+        "RSE_instruction",
+        "**Instructions**<br>Below is a list of statements dealing with your general feelings about yourself. Please indicate how strongly you agree or disagree with each statement.",
+    )
+
+    RSE = question(
         label,
         RSE_items,
         RSE_scale,
@@ -50,3 +55,5 @@ At times I think I am no good at all.""".split(
         description=description,
         options=options,
     )
+
+    return [RSE_instruction] + RSE
