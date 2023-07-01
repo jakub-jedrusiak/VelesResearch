@@ -1,9 +1,12 @@
 "Wrappers for different question types."
 
 from .tools import question
+from .structure import Question
 
 
-def radio(label, question_text, *answers, description=None, options=None):
+def radio(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for radio type."
     return question(
         label,
@@ -15,7 +18,9 @@ def radio(label, question_text, *answers, description=None, options=None):
     )
 
 
-def checkbox(label, question_text, *answers, description=None, options=None):
+def checkbox(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for checkbox type."
     return question(
         label,
@@ -27,7 +32,9 @@ def checkbox(label, question_text, *answers, description=None, options=None):
     )
 
 
-def text(label, question_text, *answers, description=None, options=None):
+def text(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for text type."
     return question(
         label,
@@ -39,7 +46,9 @@ def text(label, question_text, *answers, description=None, options=None):
     )
 
 
-def text_long(label, question_text, *answers, description=None, options=None):
+def text_long(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for text_long type."
     return question(
         label,
@@ -51,7 +60,9 @@ def text_long(label, question_text, *answers, description=None, options=None):
     )
 
 
-def dropdown(label, question_text, *answers, description=None, options=None):
+def dropdown(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for dropdown type."
     return question(
         label,
@@ -63,7 +74,9 @@ def dropdown(label, question_text, *answers, description=None, options=None):
     )
 
 
-def dropdown_multi(label, question_text, *answers, description=None, options=None):
+def dropdown_multi(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for dropdown_multi type."
     return question(
         label,
@@ -75,7 +88,9 @@ def dropdown_multi(label, question_text, *answers, description=None, options=Non
     )
 
 
-def yes_no(label, question_text, description=None, options=None):
+def yes_no(
+    label, question_text, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for yes_no type."
     return question(
         label,
@@ -86,7 +101,9 @@ def yes_no(label, question_text, description=None, options=None):
     )
 
 
-def ranking(label, question_text, *answers, description=None, options=None):
+def ranking(
+    label, question_text, *answers, description=None, options=None
+) -> Question | list[Question]:
     "Wrapper around question function for ranking type."
     return question(
         label,
@@ -101,3 +118,31 @@ def ranking(label, question_text, *answers, description=None, options=None):
 def info(label: str, text: str) -> Question:
     "Wrapper around question function for info type."
     return question(label, text, question_type="info")
+
+
+def matrix(
+    label, columns, *rows, description=None, options=None
+) -> Question | list[Question]:
+    "Wrapper around question function for matrix type."
+    return question(
+        label,
+        columns,
+        rows,
+        question_type="matrix",
+        description=description,
+        options=options,
+    )
+
+
+def matrix_dymamic(
+    label, columns, *rows, description=None, options=None
+) -> Question | list[Question]:
+    "Wrapper around question function for matrix_dymamic type."
+    return question(
+        label,
+        columns,
+        rows,
+        question_type="matrix_dynamic",
+        description=description,
+        options=options,
+    )

@@ -10,4 +10,5 @@ from .questiontypes import (
     dropdown_multi,
     yes_no,
     ranking,
+    info,
 )
