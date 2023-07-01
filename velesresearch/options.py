@@ -19,6 +19,9 @@ class QuestionOptions(BaseModel):
     none: bool = False
     none_text: str = "None"
     clear_button: bool = False
+    visible_if: str | None = None
+    editable_if: str | None = None
+    requied_if: str | None = None
 
 
 class PageOptions(BaseModel):

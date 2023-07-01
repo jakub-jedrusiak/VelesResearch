@@ -225,6 +225,9 @@ class SurveyEncoder(JSONEncoder):
                     "none": ["hasNone", False],
                     "none_text": ["noneText", "None"],
                     "clear_button": ["showClearButton", False],
+                    "visible_if": ["visibleIf", None],
+                    "editable_if": ["enableIf", None],
+                    "requied_if": ["requiredIf", None],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
