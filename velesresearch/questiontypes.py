@@ -96,3 +96,8 @@ def ranking(label, question_text, *answers, description=None, options=None):
         description=description,
         options=options
     )
+
+
+def info(label: str, text: str) -> Question:
+    "Wrapper around question function for info type."
+    return question(label, text, question_type="info")

@@ -6,6 +6,7 @@ from pathlib import Path
 from collections.abc import Sequence
 import csv
 import tarfile
+import markdown
 from json import JSONEncoder
 from pydantic import BaseModel, validator
 from pynpm import YarnPackage
@@ -24,7 +25,7 @@ class Question(BaseModel):
     "General question class"
     label: str
     question_text: str
-    answers: str | Sequence[str]
+    answers: str | Sequence[str] | None
     question_type: str = "radio"
     options: QuestionOptions | None = None
     description: str | None = None
@@ -43,11 +44,11 @@ class Question(BaseModel):
     @validator("question_type")
     def no_answers_for_yes_no_question(cls, value, values, config, field):
         "Exception if question_type is yes_no and there are answers"
-        if value == "yes_no" and "answers" in values:
+        if value in ["yes_no", "info"] and "answers" in values:
             answers = values["answers"]
             if answers:
                 warnings.warn(
-                    "There should be no answers for yes_no question type", UserWarning
+                    f"There should be no answers for {value} question type", UserWarning
                 )
         return value
 
@@ -191,7 +192,13 @@ class SurveyEncoder(JSONEncoder):
             "ranking": "ranking",
         }
 
-        if isinstance(o, Question):
+        if isinstance(o, Question) and o.question_type == "info":
+            json = {
+                "name": o.label,
+                "type": "html",
+                "html": markdown.markdown(o.question_text),
+            }
+        elif isinstance(o, Question):
             json = {
                 "name": o.label,
                 "type": surveyjs_types[o.question_type],
