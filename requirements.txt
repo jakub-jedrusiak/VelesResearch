@@ -1,3 +1,4 @@
-pydantic==1.10.9 ; python_version >= "3.11" and python_version < "4.0"
+markdown==3.4.3 ; python_version >= "3.11" and python_version < "4.0"
+pydantic==1.10.10 ; python_version >= "3.11" and python_version < "4.0"
 pynpm==0.1.2 ; python_version >= "3.11" and python_version < "4.0"
 typing-extensions==4.7.0 ; python_version >= "3.11" and python_version < "4.0"
