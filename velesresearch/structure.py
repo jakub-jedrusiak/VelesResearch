@@ -213,6 +213,7 @@ class SurveyEncoder(JSONEncoder):
                 surveyjs_question_options = {
                     "required": ["isRequired", False],
                     "answers_order": ["choicesOrder", "none"],
+                    "placeholder": ["placeholder", None],
                     "inherit_answers": ["choicesFromQuestion", None],
                     "inherit_answers_mode": ["choicesFromQuestionMode", "all"],
                     "comment": ["hasComment", False],

@@ -7,6 +7,7 @@ class QuestionOptions(BaseModel):
     "Options for Question object"
     required: bool = False
     answers_order: str = "none"
+    placeholder: str | None = None
     inherit_answers: str | None = None
     inherit_answers_mode: str | None = None
     comment: bool = False
