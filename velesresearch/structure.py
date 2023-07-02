@@ -276,6 +276,7 @@ class SurveyEncoder(JSONEncoder):
                     "timer_mode": ["showTimerPanelMode", "all"],
                     "url_on_complete": ["navigateToUrl", None],
                     "allow_previous": ["showPrevButton", True],
+                    "clear_invivsible_values": ["clearInvisibleValues", "onComplete"],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():

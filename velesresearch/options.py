@@ -41,3 +41,4 @@ class SurveyOptions(BaseModel):
     timer_mode: str | None = None
     url_on_complete: str | None = None
     allow_previous: bool = True
+    clear_invivsible_values: str | bool = "onComplete"
