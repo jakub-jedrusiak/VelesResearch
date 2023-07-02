@@ -37,4 +37,5 @@ class SurveyOptions(BaseModel):
     "Options for Survey object"
     language: str = "en"
     timer_position: str | None = None
+    timer_mode: str | None = None
     url_on_complete: str | None = None

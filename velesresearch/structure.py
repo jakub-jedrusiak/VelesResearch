@@ -272,6 +272,7 @@ class SurveyEncoder(JSONEncoder):
                 surveyjs_survey_options = {
                     "language": ["locale", "en"],
                     "timer_position": ["showTimerPanel", None],
+                    "timer_mode": ["showTimerPanelMode", "all"],
                     "url_on_complete": ["navigateToUrl", None],
                 }
                 opts = o.options.__dict__
