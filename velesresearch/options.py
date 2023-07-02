@@ -31,6 +31,7 @@ class PageOptions(BaseModel):
     read_only: bool = False
     time_limit: int | None = None
     visible: bool = True
+    navigation_visibility: str = "show"
 
 
 class SurveyOptions(BaseModel):
@@ -39,3 +40,4 @@ class SurveyOptions(BaseModel):
     timer_position: str | None = None
     timer_mode: str | None = None
     url_on_complete: str | None = None
+    allow_previous: bool = True

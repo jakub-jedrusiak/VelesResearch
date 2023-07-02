@@ -253,6 +253,7 @@ class SurveyEncoder(JSONEncoder):
                     "read_only": ["readOnly", False],
                     "time_limit": ["maxTimeToFinish", None],
                     "visible": ["visible", True],
+                    "navigation_visibility": ["navigationButtonsVisibility", "show"],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
@@ -274,6 +275,7 @@ class SurveyEncoder(JSONEncoder):
                     "timer_position": ["showTimerPanel", None],
                     "timer_mode": ["showTimerPanelMode", "all"],
                     "url_on_complete": ["navigateToUrl", None],
+                    "allow_previous": ["showPrevButton", True],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
