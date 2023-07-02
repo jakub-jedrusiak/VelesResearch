@@ -271,6 +271,7 @@ class SurveyEncoder(JSONEncoder):
                 # "veles_argument_name": ["surveyjs_argument_name", default_value]
                 surveyjs_survey_options = {
                     "language": ["locale", "en"],
+                    "timer_position": ["showTimerPanel", None],
                     "url_on_complete": ["navigateToUrl", None],
                 }
                 opts = o.options.__dict__
