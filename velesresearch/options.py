@@ -23,6 +23,7 @@ class QuestionOptions(BaseModel):
     visible_if: str | None = None
     editable_if: str | None = None
     requied_if: str | None = None
+    show_number: bool = True
 
 
 class PageOptions(BaseModel):

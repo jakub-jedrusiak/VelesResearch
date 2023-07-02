@@ -229,6 +229,7 @@ class SurveyEncoder(JSONEncoder):
                     "visible_if": ["visibleIf", None],
                     "editable_if": ["enableIf", None],
                     "requied_if": ["requiredIf", None],
+                    "show_number": ["showNumber", True],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
