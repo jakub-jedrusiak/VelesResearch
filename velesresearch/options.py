@@ -9,7 +9,7 @@ class QuestionOptions(BaseModel):
     answers_order: str = "none"
     placeholder: str | None = None
     inherit_answers: str | None = None
-    inherit_answers_mode: str | None = None
+    inherit_answers_mode: str = "all"
     comment: bool = False
     comment_text: str = "Other"
     comment_placeholder: str = ""
@@ -31,13 +31,13 @@ class PageOptions(BaseModel):
     read_only: bool = False
     time_limit: int | None = None
     visible: bool = True
-    navigation_visibility: str = "show"
+    navigation_visibility: str = "inherit"
 
 
 class SurveyOptions(BaseModel):
     "Options for Survey object"
     language: str = "en"
-    timer_position: str | None = None
+    timer_position: str = "none"
     timer_mode: str | None = None
     url_on_complete: str | None = None
     allow_previous: bool = True
