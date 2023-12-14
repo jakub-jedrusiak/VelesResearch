@@ -11,4 +11,5 @@ from .questiontypes import (
     yes_no,
     ranking,
     info,
+    slider,
 )

@@ -3,6 +3,11 @@ import { Survey } from "survey-react-ui";
 import "survey-core/survey.i18n";
 import "survey-core/defaultV2.min.css";
 import { json } from "./survey.js";
+import * as SurveyCore from "survey-core";
+import { nouislider } from "surveyjs-widgets";
+import "nouislider/distribute/nouislider.css";
+
+nouislider(SurveyCore);
 
 function MakeID(length) {
   let result = "";

@@ -1,6 +1,7 @@
 "Options objects definitions"
 
 from pydantic import BaseModel
+from collections.abc import Sequence
 
 
 class QuestionOptions(BaseModel):
@@ -24,6 +25,10 @@ class QuestionOptions(BaseModel):
     editable_if: str | None = None
     requied_if: str | None = None
     hide_number: bool = False
+    range_min: int = 0
+    range_max: int = 100
+    pips_values: Sequence[int] = [0, 100]
+    pips_text: Sequence[str] = ["0", "100"]
 
 
 class PageOptions(BaseModel):

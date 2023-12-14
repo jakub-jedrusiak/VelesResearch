@@ -1,7 +1,7 @@
 "Wrappers for different question types."
 
 from .tools import question
-from .structure import Question
+from .structure import Question, QuestionOptions
 
 
 def radio(
@@ -118,6 +118,35 @@ def ranking(
 def info(label: str, text: str) -> Question:
     "Wrapper around question function for info type."
     return question(label, text, question_type="info")
+
+
+def slider(
+    label: str,
+    question_text,
+    range_min=0,
+    range_max=100,
+    pips_values=[0, 100],
+    pips_text=["0", "100"],
+    description=None,
+    options=None,
+) -> Question | list[Question]:
+    "Wrapper around question function for slider type."
+    if len(pips_text) != len(pips_values):
+        raise ValueError("Length of pips_text and pips_values must be equal.")
+    if not options:
+        options = QuestionOptions()
+    setattr(options, "range_min", range_min)
+    setattr(options, "range_max", range_max)
+    setattr(options, "pips_values", pips_values)
+    setattr(options, "pips_text", pips_text)
+
+    return question(
+        label,
+        question_text,
+        question_type="slider",
+        description=description,
+        options=options,
+    )
 
 
 def matrix(

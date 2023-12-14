@@ -180,7 +180,7 @@ class SurveyEncoder(JSONEncoder):
 
     def default(self, o):
         # dictionary for mapping question types to SurveyJS types
-        # "veles_argument_name": "surveyjs_argument_name
+        # "veles_argument_name": "surveyjs_argument_name"
         surveyjs_types = {
             "radio": "radiogroup",
             "checkbox": "checkbox",
@@ -190,6 +190,7 @@ class SurveyEncoder(JSONEncoder):
             "dropdown_multi": "tagbox",
             "yes_no": "boolean",
             "ranking": "ranking",
+            "slider": "nouislider",
         }
 
         if isinstance(o, Question) and o.question_type == "info":
@@ -230,10 +231,29 @@ class SurveyEncoder(JSONEncoder):
                     "editable_if": ["enableIf", None],
                     "requied_if": ["requiredIf", None],
                     "hide_number": ["hideNumber", False],
+                    "range_min": ["rangeMin", 0],
+                    "range_max": ["rangeMax", 100],
+                    "pips_values": ["pipsValues", [0, 100]],
+                    "pips_text": ["pipsText", ["0", "100"]],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
-                    if opts[key] != surveyjs_question_options[key][1]:
+                    # slider options
+                    if key == "pips_text":
+                        pips_text = []
+                        for pip_text in enumerate(opts["pips_text"]):
+                            pips_text.append(
+                                {
+                                    "value": opts["pips_values"][pip_text[0]],
+                                    "text": pip_text[1],
+                                }
+                            )
+                        json["pipsText"] = pips_text
+                        continue
+                    if (
+                        opts[key] != surveyjs_question_options[key][1]
+                        or key == "pips_text"
+                    ):
                         json[surveyjs_question_options[key][0]] = opts[key]
 
         elif isinstance(o, Page):
