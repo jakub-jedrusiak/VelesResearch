@@ -1,5 +1,6 @@
 import { Model } from "survey-core";
 import { Survey } from "survey-react-ui";
+import "survey-core/survey.i18n";
 import "survey-core/defaultV2.min.css";
 import { json } from "./survey.js";
 
