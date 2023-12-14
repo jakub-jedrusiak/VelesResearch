@@ -233,8 +233,8 @@ class SurveyEncoder(JSONEncoder):
                     "hide_number": ["hideNumber", False],
                     "range_min": ["rangeMin", 0],
                     "range_max": ["rangeMax", 100],
-                    "pips_values": ["pipsValues", [0, 100]],
-                    "pips_text": ["pipsText", ["0", "100"]],
+                    "pips_values": ["pipsValues", [0, 25, 50, 75, 100]],
+                    "pips_text": ["pipsText", ["0", "25", "50", "75", "100"]],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
