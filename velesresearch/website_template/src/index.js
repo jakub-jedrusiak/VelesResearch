@@ -3,4 +3,8 @@ import SurveyComponent from "./SurveyComponent";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<SurveyComponent />);
+root.render(
+  <StrictMode>
+    <SurveyComponent />
+  </StrictMode>
+);
