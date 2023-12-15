@@ -29,6 +29,13 @@ class QuestionOptions(BaseModel):
     range_max: int = 100
     pips_values: Sequence[int] = [0, 100]
     pips_text: Sequence[str] = ["0", "100"]
+    allow_add_rows: bool = True
+    allow_remove_rows: bool = True
+    allow_rows_drag_and_drop: bool = False
+    row_count: int = 1
+    min_row_count: int = 0
+    max_row_count: int = 1000
+    add_row_text: str = "Add row"
 
 
 class PageOptions(BaseModel):

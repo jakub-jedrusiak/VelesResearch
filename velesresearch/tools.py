@@ -1,5 +1,6 @@
 "Functions and wrappers for creating survey structure"
 from collections.abc import Sequence
+from typing import Any
 from pathlib import Path
 from inspect import stack
 from pydantic import validate_arguments
@@ -12,7 +13,7 @@ from .utils import flatten_args
 def question(
     label: str,
     question_text: str | Sequence[str],
-    *answers: str | Sequence[str] | None,
+    *answers: Any | None,
     question_type: str = "radio",
     description: str | None = None,
     options: QuestionOptions | None = None,

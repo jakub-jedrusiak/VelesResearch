@@ -12,4 +12,5 @@ from .questiontypes import (
     ranking,
     info,
     slider,
+    matrix_dynamic,
 )

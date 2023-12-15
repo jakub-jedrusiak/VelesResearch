@@ -163,14 +163,14 @@ def matrix(
     )
 
 
-def matrix_dymamic(
-    label, columns, *rows, description=None, options=None
+def matrix_dynamic(
+    label, question_text, columns, description=None, options=None
 ) -> Question | list[Question]:
     "Wrapper around question function for matrix_dymamic type."
     return question(
         label,
+        question_text,
         columns,
-        rows,
         question_type="matrix_dynamic",
         description=description,
         options=options,

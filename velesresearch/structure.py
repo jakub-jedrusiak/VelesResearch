@@ -4,6 +4,7 @@ import warnings
 import os
 from pathlib import Path
 from collections.abc import Sequence
+from typing import Any
 import csv
 import tarfile
 import markdown
@@ -25,7 +26,7 @@ class Question(BaseModel):
     "General question class"
     label: str
     question_text: str
-    answers: str | Sequence[str] | None = None
+    answers: Any | None = None
     question_type: str = "radio"
     options: QuestionOptions | None = None
     description: str | None = None
@@ -191,6 +192,7 @@ class SurveyEncoder(JSONEncoder):
             "yes_no": "boolean",
             "ranking": "ranking",
             "slider": "nouislider",
+            "matrix_dynamic": "matrixdynamic",
         }
 
         # dictionary for mapping question options to SurveyJS options
@@ -219,6 +221,13 @@ class SurveyEncoder(JSONEncoder):
             "range_max": ["rangeMax", 100],
             "pips_values": ["pipsValues", [0, 25, 50, 75, 100]],
             "pips_text": ["pipsText", ["0", "25", "50", "75", "100"]],
+            "allow_add_rows": ["allowAddRows", True],
+            "allow_remove_rows": ["allowRemoveRows", True],
+            "allow_rows_drag_and_drop": ["allowRowsDragAndDrop", False],
+            "row_count": ["rowCount", 1],
+            "min_row_count": ["minRowCount", 0],
+            "max_row_count": ["maxRowCount", 1000],
+            "add_row_text": ["addRowText", "Add row"],
         }
 
         if isinstance(o, Question) and o.question_type == "info":
@@ -242,8 +251,30 @@ class SurveyEncoder(JSONEncoder):
                 "type": surveyjs_types[o.question_type],
                 "title": o.question_text,
                 "description": o.description,
-                "choices": o.answers,
             }
+
+            if o.question_type == "matrix_dynamic":
+                if isinstance(o.answers, Question):
+                    columns = [
+                        {
+                            "name": o.answers.label,
+                            "title": o.answers.question_text,
+                            "cellType": surveyjs_types[o.answers.question_type],
+                        }
+                    ]
+                else:
+                    columns = []
+                    for question in o.answers:
+                        columns.append(
+                            {
+                                "name": question.label,
+                                "title": question.question_text,
+                                "cellType": surveyjs_types[question.question_type],
+                            }
+                        )
+                json.update({"columns": columns})
+            elif o.question_type != "info":
+                json.update({"choices": o.answers})
 
             if o.options:
                 opts = o.options.__dict__
