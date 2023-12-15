@@ -280,7 +280,7 @@ class SurveyEncoder(JSONEncoder):
                 opts = o.options.__dict__
                 for key in opts.keys():
                     # slider options
-                    if key == "pips_text":
+                    if key == "pips_text" and opts["pips_text"]:
                         pips_text = []
                         for pip_text in enumerate(opts["pips_text"]):
                             pips_text.append(
@@ -293,7 +293,7 @@ class SurveyEncoder(JSONEncoder):
                         continue
                     if (
                         opts[key] != surveyjs_question_options[key][1]
-                        or key == "pips_text"
+                        and key != "pips_text"
                     ):
                         json[surveyjs_question_options[key][0]] = opts[key]
 

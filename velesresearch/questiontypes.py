@@ -135,6 +135,8 @@ def slider(
         raise ValueError("Length of pips_text and pips_values must be equal.")
     if not options:
         options = QuestionOptions()
+    else:
+        options = options.copy()
     setattr(options, "range_min", range_min)
     setattr(options, "range_max", range_max)
     setattr(options, "pips_values", pips_values)
