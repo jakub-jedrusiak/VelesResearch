@@ -193,12 +193,49 @@ class SurveyEncoder(JSONEncoder):
             "slider": "nouislider",
         }
 
+        # dictionary for mapping question options to SurveyJS options
+        # "veles_argument_name": ["surveyjs_argument_name", default_value]
+        surveyjs_question_options = {
+            "required": ["isRequired", False],
+            "answers_order": ["choicesOrder", "none"],
+            "placeholder": ["placeholder", None],
+            "inherit_answers": ["choicesFromQuestion", None],
+            "inherit_answers_mode": ["choicesFromQuestionMode", "all"],
+            "comment": ["hasComment", False],
+            "comment_text": ["commentText", "Other"],
+            "comment_placeholder": ["commentPlaceHolder", ""],
+            "visible": ["visible", True],
+            "other": ["hasOther", False],
+            "other_text": ["otherText", "Other"],
+            "other_placeholder": ["otherPlaceHolder", ""],
+            "none": ["hasNone", False],
+            "none_text": ["noneText", "None"],
+            "clear_button": ["showClearButton", False],
+            "visible_if": ["visibleIf", None],
+            "editable_if": ["enableIf", None],
+            "requied_if": ["requiredIf", None],
+            "hide_number": ["hideNumber", False],
+            "range_min": ["rangeMin", 0],
+            "range_max": ["rangeMax", 100],
+            "pips_values": ["pipsValues", [0, 25, 50, 75, 100]],
+            "pips_text": ["pipsText", ["0", "25", "50", "75", "100"]],
+        }
+
         if isinstance(o, Question) and o.question_type == "info":
             json = {
                 "name": o.label,
                 "type": "html",
                 "html": markdown.markdown(o.question_text),
             }
+            if o.options:
+                opts = o.options.__dict__
+                for key in [
+                    value
+                    for value in opts.keys()
+                    if value in ["visible_if", "editable_if", "requied_if"]
+                ]:
+                    if opts[key] != surveyjs_question_options[key][1]:
+                        json[surveyjs_question_options[key][0]] = opts[key]
         elif isinstance(o, Question):
             json = {
                 "name": o.label,
@@ -209,33 +246,6 @@ class SurveyEncoder(JSONEncoder):
             }
 
             if o.options:
-                # dictionary for mapping question options to SurveyJS options
-                # "veles_argument_name": ["surveyjs_argument_name", default_value]
-                surveyjs_question_options = {
-                    "required": ["isRequired", False],
-                    "answers_order": ["choicesOrder", "none"],
-                    "placeholder": ["placeholder", None],
-                    "inherit_answers": ["choicesFromQuestion", None],
-                    "inherit_answers_mode": ["choicesFromQuestionMode", "all"],
-                    "comment": ["hasComment", False],
-                    "comment_text": ["commentText", "Other"],
-                    "comment_placeholder": ["commentPlaceHolder", ""],
-                    "visible": ["visible", True],
-                    "other": ["hasOther", False],
-                    "other_text": ["otherText", "Other"],
-                    "other_placeholder": ["otherPlaceHolder", ""],
-                    "none": ["hasNone", False],
-                    "none_text": ["noneText", "None"],
-                    "clear_button": ["showClearButton", False],
-                    "visible_if": ["visibleIf", None],
-                    "editable_if": ["enableIf", None],
-                    "requied_if": ["requiredIf", None],
-                    "hide_number": ["hideNumber", False],
-                    "range_min": ["rangeMin", 0],
-                    "range_max": ["rangeMax", 100],
-                    "pips_values": ["pipsValues", [0, 25, 50, 75, 100]],
-                    "pips_text": ["pipsText", ["0", "25", "50", "75", "100"]],
-                }
                 opts = o.options.__dict__
                 for key in opts.keys():
                     # slider options

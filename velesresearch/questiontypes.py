@@ -115,9 +115,9 @@ def ranking(
     )
 
 
-def info(label: str, text: str) -> Question:
+def info(label: str, text: str, options=None) -> Question:
     "Wrapper around question function for info type."
-    return question(label, text, question_type="info")
+    return question(label, text, question_type="info", options=options)
 
 
 def slider(
