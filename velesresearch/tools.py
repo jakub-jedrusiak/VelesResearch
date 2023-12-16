@@ -70,6 +70,7 @@ def survey(
     description: str | None = None,
     options: SurveyOptions | None = None,
     create: bool | str | Path = True,
+    build: bool = True,
 ) -> Survey:
     "Create Survey object from pages, create json file"
     pages_list = flatten_args(pages)
@@ -81,9 +82,9 @@ def survey(
         options=options,
     )
     if create and isinstance(create, bool):
-        survey_obj.create()
+        survey_obj.create(build=build)
     elif isinstance(create, str) or isinstance(create, Path):
-        survey_obj.create(Path(create))
+        survey_obj.create(Path(create), build=build)
     return survey_obj
 
 
