@@ -54,3 +54,4 @@ class SurveyOptions(BaseModel):
     url_on_complete: str | None = None
     allow_previous: bool = True
     clear_invivsible_values: str | bool = "none"
+    start_page: bool = False

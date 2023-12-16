@@ -338,6 +338,7 @@ class SurveyEncoder(JSONEncoder):
                     "url_on_complete": ["navigateToUrl", None],
                     "allow_previous": ["showPrevButton", True],
                     "clear_invivsible_values": ["clearInvisibleValues", "onComplete"],
+                    "start_page": ["firstPageIsStarted", False],
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
