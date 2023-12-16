@@ -44,6 +44,9 @@ class PageOptions(BaseModel):
     time_limit: int | None = None
     visible: bool = True
     navigation_visibility: str = "inherit"
+    visible_if: str | None = None
+    editable_if: str | None = None
+    requied_if: str | None = None
 
 
 class SurveyOptions(BaseModel):
