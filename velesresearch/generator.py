@@ -42,9 +42,13 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
 
     # config.js
     with open(path / "src" / "config.js", "r", encoding="utf-8") as config_js:
+        if survey_object.dict().get("options"):
+            number_of_groups = survey_object.options.number_of_groups
+        else:
+            number_of_groups = 1
         config_js_data = config_js.read()
         config_js_data = config_js_data.replace(
-            r"{% numberOfGroups %}", str(survey_object.options.number_of_groups)
+            r"{% numberOfGroups %}", str(number_of_groups)
         )
     with open(path / "src" / "config.js", "w", encoding="utf-8") as config_js:
         config_js.write(config_js_data)
