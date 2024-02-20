@@ -6,6 +6,7 @@ import { json } from "./survey.js";
 import * as SurveyCore from "survey-core";
 import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
+import * as config from "./config.js";
 
 nouislider(SurveyCore);
 
@@ -22,8 +23,15 @@ function MakeID(length) {
   return result;
 }
 
+function groupNumber(max) {
+  return Math.floor(Math.random() * max + 1);
+}
+
 function SurveyComponent() {
   const survey = new Model(json);
+
+  survey.setVariable("group", groupNumber(config.numberOfGroups));
+
   survey.onComplete.add((sender) => {
     const result = Object.assign({ id: MakeID(8) }, sender.data);
     // send data to Django backend

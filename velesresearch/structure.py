@@ -345,7 +345,10 @@ class SurveyEncoder(JSONEncoder):
                 }
                 opts = o.options.__dict__
                 for key in opts.keys():
-                    if opts[key] != surveyjs_survey_options[key][1]:
+                    if (
+                        surveyjs_survey_options.get(key)
+                        and opts[key] != surveyjs_survey_options[key][1]
+                    ):
                         json[surveyjs_survey_options[key][0]] = opts[key]
         else:
             raise TypeError(

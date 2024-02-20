@@ -40,6 +40,16 @@ def generate_survey(survey_object: "Survey", path: str | Path = os.getcwd()) -> 
     index_html = path / "public" / "index.html"
     new_line = f"    <title>{survey_object.title}</title>\n"
 
+    # config.js
+    with open(path / "src" / "config.js", "r", encoding="utf-8") as config_js:
+        config_js_data = config_js.read()
+        config_js_data = config_js_data.replace(
+            r"{% numberOfGroups %}", str(survey_object.options.number_of_groups)
+        )
+    with open(path / "src" / "config.js", "w", encoding="utf-8") as config_js:
+        config_js.write(config_js_data)
+
+    # index.html
     # use fileinput to modify the file
     for line in fileinput.input(index_html, inplace=True):
         if "<title>" in line and "</title>" in line:

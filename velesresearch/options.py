@@ -52,6 +52,7 @@ class PageOptions(BaseModel):
 class SurveyOptions(BaseModel):
     "Options for Survey object"
     language: str = "en"
+    number_of_groups: int = 1
     timer_position: str = "none"
     timer_mode: str | None = None
     url_on_complete: str | None = None
