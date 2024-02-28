@@ -274,7 +274,7 @@ class SurveyEncoder(JSONEncoder):
                             }
                         )
                 json.update({"columns": columns})
-            elif o.question_type != "info":
+            elif o.question_type not in ["info", "text", "text_long", "yes_no"]:
                 json.update({"choices": o.answers})
 
             if o.options:
