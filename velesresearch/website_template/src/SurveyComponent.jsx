@@ -34,7 +34,11 @@ function SurveyComponent() {
 
   survey.onComplete.add((sender) => {
     const result = Object.assign(
-      { id: MakeID(8), date_completed: new Date() },
+      {
+        id: MakeID(8),
+        group: survey.getVariable("group"),
+        date_completed: new Date(),
+      },
       sender.data
     );
     // send data to Django backend
