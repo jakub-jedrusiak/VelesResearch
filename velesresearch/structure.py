@@ -104,6 +104,7 @@ class Survey(BaseModel):
     pages: Page | Sequence[Page]
     title: str | None = None
     description: str | None = None
+    end_page: str | None = None
     options: SurveyOptions | None = None
 
     def __init__(self, **kwargs):
@@ -328,6 +329,7 @@ class SurveyEncoder(JSONEncoder):
             json = {
                 "title": o.title,
                 "description": o.description,
+                "completedHtml": o.end_page,
                 "pages": [self.default(p) for p in o.pages],
             }
 
