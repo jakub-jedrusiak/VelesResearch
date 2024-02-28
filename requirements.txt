@@ -1,4 +1,4 @@
 markdown==3.5.2 ; python_version >= "3.11" and python_version < "4.0"
 pydantic==1.10.14 ; python_version >= "3.11" and python_version < "4.0"
 pynpm==0.1.2 ; python_version >= "3.11" and python_version < "4.0"
-typing-extensions==4.9.0 ; python_version >= "3.11" and python_version < "4.0"
+typing-extensions==4.10.0 ; python_version >= "3.11" and python_version < "4.0"
