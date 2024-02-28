@@ -281,7 +281,7 @@ class SurveyEncoder(JSONEncoder):
                 opts = o.options.__dict__
                 for key in opts.keys():
                     # slider options
-                    if key == "pips_text" and opts["pips_text"]:
+                    if key == "pips_text" and opts["pips_text"] and o.type == "slider":
                         pips_text = []
                         for pip_text in enumerate(opts["pips_text"]):
                             pips_text.append(
@@ -296,6 +296,11 @@ class SurveyEncoder(JSONEncoder):
                         opts[key] != surveyjs_question_options[key][1]
                         and key != "pips_text"
                     ):
+                        if (
+                            key in ["pips_values", "range_min", "range_max"]
+                            and o.type != "slider"
+                        ):
+                            continue
                         json[surveyjs_question_options[key][0]] = opts[key]
 
         elif isinstance(o, Page):
