@@ -68,6 +68,7 @@ def survey(
     *pages: Page | Sequence[Page],
     title: str | None = None,
     description: str | None = None,
+    end_page: str | None = None,
     options: SurveyOptions | None = None,
     create: bool | str | Path = True,
     build: bool = True,
@@ -79,6 +80,7 @@ def survey(
         pages=pages_list,
         title=title,
         description=description,
+        end_page=end_page,
         options=options,
     )
     if create and isinstance(create, bool):
