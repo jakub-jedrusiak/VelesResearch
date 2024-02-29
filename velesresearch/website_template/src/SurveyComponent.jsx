@@ -29,6 +29,7 @@ function groupNumber(max) {
 
 function SurveyComponent() {
   const survey = new Model(json);
+  const date_started = new Date();
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
 
@@ -37,6 +38,7 @@ function SurveyComponent() {
       {
         id: MakeID(8),
         group: survey.getVariable("group"),
+        date_started: date_started,
         date_completed: new Date(),
       },
       sender.data
