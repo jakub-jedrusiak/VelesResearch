@@ -30,6 +30,7 @@ class Question(BaseModel):
     question_type: str = "radio"
     options: QuestionOptions | None = None
     description: str | None = None
+    add_code: dict | None = None
 
     def __str__(self):
         answers = "  - " + "\n  - ".join(self.answers)
@@ -61,6 +62,7 @@ class Page(BaseModel):
     title: str | None = None
     description: str | None = None
     options: PageOptions | None = None
+    add_code: dict | None = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -106,6 +108,7 @@ class Survey(BaseModel):
     description: str | None = None
     end_page: str | None = None
     options: SurveyOptions | None = None
+    add_code: dict | None = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -371,4 +374,6 @@ class SurveyEncoder(JSONEncoder):
             raise TypeError(
                 f"Object of type {type(o)} is not JSON serializable by this encoder"
             )
+        if o.add_code:
+            json = json | o.add_code
         return json

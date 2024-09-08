@@ -5,7 +5,7 @@ from .structure import Question, QuestionOptions
 
 
 def radio(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for radio type."
     return question(
@@ -14,12 +14,13 @@ def radio(
         *answers,
         question_type="radio",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def checkbox(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for checkbox type."
     return question(
@@ -28,12 +29,13 @@ def checkbox(
         *answers,
         question_type="checkbox",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def text(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for text type."
     return question(
@@ -42,12 +44,13 @@ def text(
         *answers,
         question_type="text",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def text_long(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for text_long type."
     return question(
@@ -56,12 +59,13 @@ def text_long(
         *answers,
         question_type="text_long",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def dropdown(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for dropdown type."
     return question(
@@ -70,12 +74,13 @@ def dropdown(
         *answers,
         question_type="dropdown",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def dropdown_multi(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for dropdown_multi type."
     return question(
@@ -84,12 +89,13 @@ def dropdown_multi(
         *answers,
         question_type="dropdown_multi",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
 def yes_no(
-    label, question_text, description=None, options=None
+    label, question_text, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for yes_no type."
     return question(
@@ -98,11 +104,12 @@ def yes_no(
         question_type="yes_no",
         description=description,
         options=options,
+        add_code=add_code,
     )
 
 
 def ranking(
-    label, question_text, *answers, description=None, options=None
+    label, question_text, *answers, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for ranking type."
     return question(
@@ -111,11 +118,12 @@ def ranking(
         *answers,
         question_type="ranking",
         description=description,
-        options=options
+        options=options,
+        add_code=add_code,
     )
 
 
-def info(label: str, text: str, options=None) -> Question:
+def info(label: str, text: str, options=None, add_code=None) -> Question:
     "Wrapper around question function for info type."
     return question(label, text, question_type="info", options=options)
 
@@ -129,6 +137,7 @@ def slider(
     pips_text=["0", "100"],
     description=None,
     options=None,
+    add_code=None,
 ) -> Question | list[Question]:
     "Wrapper around question function for slider type."
     if len(pips_text) != len(pips_values):
@@ -148,11 +157,12 @@ def slider(
         question_type="slider",
         description=description,
         options=options,
+        add_code=add_code,
     )
 
 
 def matrix(
-    label, columns, *rows, description=None, options=None
+    label, columns, *rows, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for matrix type."
     return question(
@@ -162,11 +172,12 @@ def matrix(
         question_type="matrix",
         description=description,
         options=options,
+        add_code=add_code,
     )
 
 
 def matrix_dynamic(
-    label, question_text, columns, description=None, options=None
+    label, question_text, columns, description=None, options=None, add_code=None
 ) -> Question | list[Question]:
     "Wrapper around question function for matrix_dymamic type."
     return question(
@@ -176,4 +187,5 @@ def matrix_dynamic(
         question_type="matrix_dynamic",
         description=description,
         options=options,
+        add_code=add_code,
     )
