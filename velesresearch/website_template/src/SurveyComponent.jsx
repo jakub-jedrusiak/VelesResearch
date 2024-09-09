@@ -31,6 +31,8 @@ function SurveyComponent() {
   const survey = new Model(json);
   const date_started = new Date();
 
+  document.html.lang = survey.locale;
+
   survey.setVariable("group", groupNumber(config.numberOfGroups));
 
   survey.onComplete.add((sender) => {
