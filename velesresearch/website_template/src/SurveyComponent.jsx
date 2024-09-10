@@ -7,6 +7,7 @@ import * as SurveyCore from "survey-core";
 import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
 import * as config from "./config.js";
+import CSRFToken from "./csrf.js";
 
 nouislider(SurveyCore);
 
@@ -59,9 +60,12 @@ function SurveyComponent() {
     // send data to Django backend
     fetch(window.location.pathname + "submit/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: Object.assign(
+        {
+          "Content-Type": "application/json",
+        },
+        CSRFToken()
+      ),
       body: JSON.stringify(result),
     })
       .then((response) => {
