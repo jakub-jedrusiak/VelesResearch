@@ -31,20 +31,31 @@ function SurveyComponent() {
   const survey = new Model(json);
   const date_started = new Date();
 
-  document.html.lang = survey.locale;
+  document.documentElement.lang = survey.locale;
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
+  survey.setVariable("date_started", date_started.toISOString());
 
   survey.onComplete.add((sender) => {
+    const date_completed = new Date();
+    survey.setVariable("date_completed", date_completed.toISOString());
+
+    const variables = {};
+    for (const variable in survey.getVariableNames()) {
+      variables[variable] = survey.getVariable(variable);
+    }
+
+    const URLparams = Object.fromEntries(new URLSearchParams(window.location.search));
+
     const result = Object.assign(
       {
-        id: MakeID(8),
-        group: survey.getVariable("group"),
-        date_started: date_started,
-        date_completed: new Date(),
+        id: MakeID(8)
       },
-      sender.data
+      sender.data,
+      URLparams,
+      variables
     );
+
     // send data to Django backend
     fetch(window.location.pathname + "submit/", {
       method: "POST",
