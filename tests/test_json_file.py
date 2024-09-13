@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 from shutil import rmtree
-from velesresearch import survey, page, question
+from velesresearch import survey, page, radio
 
 RSSI_items = """I feel that I am a person of worth, at least on an equal plane with others.
 I feel that I have a number of good qualities.
@@ -25,9 +25,10 @@ def test_creation():
     wd = Path(os.getcwd()) / "build_dir"
 
     survey(
-        "RSSI",
-        page("RSSI", question("RSSI", RSSI_items.split("\n"), RSSI_scale.split("; "))),
-        create=wd,
+        page("RSSI", radio("RSSI", RSSI_items.split("\n"), RSSI_scale.split("; "))),
+        path=wd,
+        buildForPublication=True,
+        folderName="rssi",
     )
 
     # Check if the file was created
@@ -41,7 +42,6 @@ def test_creation():
         "src/survey.js",
         "src/SurveyComponent.jsx",
         "public/index.html",
-        "RSSI.tar.gz",
     ]:
         assert os.path.exists(wd / "rssi" / file)
 

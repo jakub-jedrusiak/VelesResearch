@@ -11,7 +11,7 @@ packages = [{include = "velesresearch"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pydantic = "^1.10.9"
+pydantic = "^2.0.0"
 pynpm = "^0.1.2"
 markdown = "^3.4.3"
 
@@ -19,7 +19,7 @@ markdown = "^3.4.3"
 pre-commit = "^3.3.2"
 pytest = "^7.3.2"
 coverage = "^7.2.7"
-pylint-pydantic = "^0.1.8"
+pylint-pydantic = "^0.3.2"
 ipykernel = "^6.23.2"
 
 [tool.pylint]

@@ -29,17 +29,13 @@ Veles is in pre-alpha development, but the goal features are:
 
 - [Open source documentation](https://docs.velesweb.org/).
 
-- Python-based, so every Python tools work.
+- Python-based.
 
 - Esay to collaborate through git.
-
-- VS code extension pack.
 
 - Custom redirection in the end (for panels).
 
 - PsychoPy integration.
-
-- JavaScript code preview.
 
 - Modifiable themes.
 
@@ -75,8 +71,11 @@ choco install nodejs-lts
 # Homebrew
 brew install node
 ```
+
 After installing `node.js`, activate `yarn` with this command in the terminal:
-```
+
+``` bash
 corepack enable
 ```
+
 If everything went well, command `yarn -v` should return a version number.
