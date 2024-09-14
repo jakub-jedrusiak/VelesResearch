@@ -6,6 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    #tryAgainButton {
+      background-color: #CC0000;
+    }
+
+    #tryAgainButton:hover {
+      background-color: #b30000;
+    }
+
     .lds-dual-ring {
       /* change color here */
       color: #19B394 !important;
@@ -53,6 +61,9 @@
       <div class="lds-dual-ring"></div>
     </div>
   </div>
+  <div id="tryAgainDiv" style="text-align: center; padding-bottom: 2em; display: none;"><button id="tryAgainButton"
+      disabled class="sd-btn sd-btn--action">Try
+      again</button></div>
 </body>
 <footer style='font-family: "Roboto", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;'>
   <div style="text-align: center; opacity: 0.25;">
