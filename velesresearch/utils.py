@@ -24,6 +24,7 @@ def dict_without_defaults(self) -> dict:
             k not in ["questions", "pages", "validators", "addCode", "columns", "rows"]
             and v != self.model_fields[k].default
         )
+        or (k == "type")
     }
 
 
