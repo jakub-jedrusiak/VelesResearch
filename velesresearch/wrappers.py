@@ -439,10 +439,10 @@ def radio(
         )
 
 
-def checkboxMultiple(
+def dropdownMultiple(
     name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
 ):
-    """Create a multiple checkbox question object
+    """Create a multiple dropdown question object
 
     Args:
         name (str): The label of the question.

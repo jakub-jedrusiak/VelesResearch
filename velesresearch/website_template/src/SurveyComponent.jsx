@@ -33,6 +33,8 @@ function SurveyComponent() {
   const date_started = new Date();
 
   document.documentElement.lang = survey.locale;
+  const completedHtml = survey.completedHtml.valueOf();
+  survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em"><div class="lds-dual-ring"></div></div>';
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("date_started", date_started.toISOString());
@@ -58,7 +60,7 @@ function SurveyComponent() {
     );
 
     // send data to Django backend
-    fetch(window.location.pathname + "submit/", {
+    const postData = {
       method: "POST",
       headers: Object.assign(
         {
@@ -67,19 +69,22 @@ function SurveyComponent() {
         CSRFToken()
       ),
       body: JSON.stringify(result),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    }
+    fetch(window.location.pathname + "submit/", postData)
+      .then(response => {
+        if (response.ok) {
+          document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml;
+        } else {
+          fetch(window.location.pathname + "submit/", postData)
+            .then(response => {
+              if (response.ok) {
+                document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml;
+              } else {
+                document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+              }
+            });
         }
-        return response.json();
       })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
   });
   return <Survey model={survey} />;
 }

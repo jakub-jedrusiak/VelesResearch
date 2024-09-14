@@ -42,7 +42,9 @@ class ValidatorModel(BaseModel):
 
     @model_validator(mode="before")
     def check_type_and_arguments(cls, values):
-        type_ = values.get("type")
+        if isinstance(values, list):
+            values = values[0].dict()
+        type_ = values["type"]
 
         # Define valid types and related fields for each type
         type_field_map = {

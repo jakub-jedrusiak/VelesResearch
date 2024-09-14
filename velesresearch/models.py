@@ -248,7 +248,8 @@ class QuestionRankingModel(QuestionCheckboxModel):
     selectToRankEnabled: bool = False
 
     def __init__(self, **kwargs):
-        super().__init__(type="ranking", **kwargs)
+        super().__init__(**kwargs)
+        self.type = "ranking"
 
 
 class QuestionRadiogroupModel(QuestionCheckboxBase):
@@ -290,7 +291,8 @@ class QuestionTagboxModel(QuestionCheckboxModel):
     searchMode: str = "contains"
 
     def __init__(self, **kwargs):
-        super().__init__(type="tagbox", **kwargs)
+        super().__init__(**kwargs)
+        self.type = "tagbox"
 
 
 class QuestionCommentModel(QuestionModel):
@@ -760,6 +762,6 @@ class SurveyModel(BaseModel):
         if isinstance(path, str):
             path = Path(path)
 
-        self.createStructure(path, folderName)
+        self.createStructure(path=path, folderName=folderName)
 
         YarnPackage(path / folderName)._run_npm("build")
