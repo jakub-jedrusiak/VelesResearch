@@ -688,6 +688,7 @@ class SurveyModel(BaseModel):
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
         navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        numberOfGroups (int): The number of groups in the survey. Default is 1.
         pageNextText (str | None): Text for the 'Next' button.
         pagePrevText (str | None): Text for the 'Previous' button.
         previewText (str | None): Text for the 'Preview' button if `showPreviewBeforeComplete=True`.
@@ -758,6 +759,7 @@ class SurveyModel(BaseModel):
     mode: str = "edit"
     navigateToUrl: str | None = None
     navigateToUrlOnCondition: list[dict] | None = None
+    numberOfGroups: int = 1
     pageNextText: str | None = None
     pagePrevText: str | None = None
     previewText: str | None = None
