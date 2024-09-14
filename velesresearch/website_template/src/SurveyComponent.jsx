@@ -88,8 +88,6 @@ function SurveyComponent() {
   document.documentElement.lang = survey.locale;
   const completedHtml = survey.completedHtml + "<br>";
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
-  survey.locale = "pl";
-  console.log();
   document.getElementById("tryAgainButton").innerHTML = SurveyCore.surveyLocalization.getString("saveAgainButton", survey.locale);
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
