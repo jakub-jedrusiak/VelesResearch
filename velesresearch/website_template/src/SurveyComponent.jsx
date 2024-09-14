@@ -78,7 +78,11 @@ async function handleResults(sender, survey, completedHtml) {
     document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
     return "OK";
   } else {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div>
+<br>
+<div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div>
+<br>
+<div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
     return "Error";
   }
 }
