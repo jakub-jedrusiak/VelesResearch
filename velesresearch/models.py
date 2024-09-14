@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 from importlib.resources import files
 from markdown import markdown
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator, Field
 from pynpm import YarnPackage
 from .validators import ValidatorModel
 from .utils import dict_without_defaults
@@ -157,9 +157,7 @@ class QuestionDropdownModel(QuestionSelectBase):
     choicesMin: int | None = None
     choicesStep: int | None = None
     placeholder: str | None = None
-
-    def __init__(self, **kwargs):
-        super().__init__(type="dropdown", **kwargs)
+    type: str = Field(default="dropdown")
 
 
 class QuestionTextModel(QuestionModel):
@@ -194,9 +192,7 @@ class QuestionTextModel(QuestionModel):
     size: int | None = None
     step: str | None = None
     textUpdateMode: str = "default"
-
-    def __init__(self, **kwargs):
-        super().__init__(type="text", **kwargs)
+    type: str = Field(default="text")
 
 
 class QuestionCheckboxBase(QuestionSelectBase):
@@ -225,9 +221,7 @@ class QuestionCheckboxModel(QuestionCheckboxBase):
     minSelectedChoices: int = 0
     selectAllText: str | None = None
     showSelectAllItem: bool | None = None
-
-    def __init__(self, **kwargs):
-        super().__init__(type="checkbox", **kwargs)
+    type: str = Field(default="checkbox")
 
 
 class QuestionRankingModel(QuestionCheckboxModel):
@@ -260,9 +254,7 @@ class QuestionRadiogroupModel(QuestionCheckboxBase):
     """
 
     showClearButton: bool = False
-
-    def __init__(self, **kwargs):
-        super().__init__(type="radiogroup", **kwargs)
+    type: str = Field(default="radiogroup")
 
     def __str__(self):
         string = super().__str__() + "\n"
@@ -309,9 +301,7 @@ class QuestionCommentModel(QuestionModel):
     allowResize: bool | None = None
     autoGrow: bool | None = None
     rows: int = 4
-
-    def __init__(self, **kwargs):
-        super().__init__(type="comment", **kwargs)
+    type: str = Field(default="comment")
 
 
 class QuestionRatingModel(QuestionModel):
@@ -336,16 +326,13 @@ class QuestionRatingModel(QuestionModel):
     rateType: str = "labels"
     rateValues: list | None = None
     scaleColorMode: str = "monochrome"
-
-    def __init__(self, **kwargs):
-        super().__init__(type="rating", **kwargs)
+    type: str = Field(default="rating")
 
 
 class QuestionImagePickerModel(QuestionModel):
     """An image picker type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="imagepicker", **kwargs)
+    type: str = Field(default="imagepicker")
 
     # TODO
 
@@ -366,16 +353,13 @@ class QuestionBooleanModel(QuestionModel):
     swapOrder: bool = False
     valueFalse: bool | str = False
     valueTrue: bool | str = True
-
-    def __init__(self, **kwargs):
-        super().__init__(type="boolean", **kwargs)
+    type: str = Field(default="boolean")
 
 
 class QuestionImageModel(QuestionModel):
     """An image type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="image", **kwargs)
+    type: str = Field(default="image")
 
     # TODO
 
@@ -388,10 +372,14 @@ class QuestionHtmlModel(QuestionModel):
     """
 
     html: str
+    type: str = Field(default="html")
 
-    def __init__(self, **kwargs):
-        super().__init__(type="html", title=None, **kwargs)
-        self.html = markdown(self.html)
+    @model_validator(mode="before")
+    def process_html(cls, values):
+        # Automatically convert the `html` field to its markdown version
+        if "html" in values:
+            values["html"] = markdown(values["html"])
+        return values
 
     def __str__(self):
         return f"  {self.name} ({self.type}): {self.html[:20]}…\n"
@@ -400,8 +388,7 @@ class QuestionHtmlModel(QuestionModel):
 class QuestionSignaturePadModel(QuestionModel):
     """A signature pad type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="signaturepad", **kwargs)
+    type: str = Field(default="signaturepad")
 
     # TODO
 
@@ -409,8 +396,7 @@ class QuestionSignaturePadModel(QuestionModel):
 class QuestionExpressionModel(QuestionModel):
     """An expression type question object model (read-only)"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="expression", **kwargs)
+    type: str = Field(default="expression")
 
     # TODO
 
@@ -418,8 +404,7 @@ class QuestionExpressionModel(QuestionModel):
 class QuestionFileModel(QuestionModel):
     """A file type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="file", **kwargs)
+    type: str = Field(default="file")
 
     # TODO
 
@@ -513,16 +498,13 @@ class QuestionMatrixModel(QuestionMatrixBaseModel):
     hideIfRowsEmpty: bool | None = None
     isAllRowRequired: bool = False
     rowsOrder: str = "initial"
-
-    def __init__(self, **kwargs):
-        super().__init__(type="matrix", **kwargs)
+    type: str = Field(default="matrix")
 
 
 class QuestionMatrixDropdownModel(QuestionModel):
     """A multi-select matrix type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="matrixdropdown", **kwargs)
+    type: str = Field(default="matrixdropdown")
 
     # TODO
 
@@ -563,16 +545,13 @@ class QuestionMatrixDynamicModel(QuestionMatrixDropdownModelBase):
     minRowCount: int = 0
     removeRowText: str | None = None
     rowCount: int = 2
-
-    def __init__(self, **kwargs):
-        super().__init__(type="matrixdynamic", **kwargs)
+    type: str = Field(default="matrixdynamic")
 
 
 class QuestionMultipleTextModel(QuestionModel):
     """A multiple text type question object model"""
 
-    def __init__(self, **kwargs):
-        super().__init__(type="multipletext", **kwargs)
+    type: str = Field(default="multipletext")
 
     # TODO
 
@@ -603,9 +582,7 @@ class QuestionNoUiSliderModel(QuestionModel):
     orientation: str = "horizontal"
     direction: str = "ltr"
     tooltips: bool = True
-
-    def __init__(self, **kwargs):
-        super().__init__(type="nouislider", **kwargs)
+    type: str = Field(default="nouislider")
 
 
 class PageModel(BaseModel):

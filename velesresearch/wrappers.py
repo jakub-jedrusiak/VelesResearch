@@ -1,6 +1,7 @@
 """Functions creating objects for survey structure classes"""
 
 from .models import *
+from .helperModels import ValidatorModel
 from .utils import flatten
 
 
@@ -10,6 +11,73 @@ def survey(
     buildForPublication: bool = False,
     folderName: str = "survey",
     path: str | Path = os.getcwd(),
+    allowCompleteSurveyAutomatic: bool = True,
+    allowResizeComment: bool = True,
+    autoGrowComment: bool = False,
+    backgroundImage: str | None = None,
+    backgroundOpacity: int = 1,
+    checkErrorsMode: str = "onNextPage",
+    commentAreaRows: int = 2,
+    completedBeforeHtml: str | None = None,
+    completedHtml: str | None = None,
+    completedHtmlOnCondition: list[dict] | None = None,
+    completeText: str | None = None,
+    cookieName: str | None = None,
+    editText: str | None = None,
+    firstPageIsStarted: bool | None = None,
+    focusFirstQuestionAutomatic: bool = False,
+    focusOnFirstError: bool = True,
+    goNextPageAutomatic: bool = False,
+    locale: str = "en",
+    logo: str | None = None,
+    logoFit: str = "contain",
+    logoHeight: str = "200px",
+    logoPosition: str = "left",
+    logoWidth: str = "300px",
+    matrixDragHandleArea: str = "entireItem",
+    maxOthersLength: int = 0,
+    maxTextLength: int = 0,
+    maxTimeToFinish: int | None = None,
+    maxTimeToFinishPage: int | None = None,
+    mode: str = "edit",
+    navigateToUrl: str | None = None,
+    navigateToUrlOnCondition: list[dict] | None = None,
+    pageNextText: str | None = None,
+    pagePrevText: str | None = None,
+    previewText: str | None = None,
+    progressBarInheritWidthFrom: str = "container",
+    progressBarShowPageNumbers: bool = False,
+    progressBarShowPageTitles: bool = False,
+    progressBarType: str = "pages",
+    questionDescriptionLocation: str = "underTitle",
+    questionErrorLocation: str = "top",
+    questionsOnPageMode: str = "standard",
+    questionsOrder: str = "initial",
+    questionStartIndex: int | str | None = None,
+    questionTitleLocation: str = "top",
+    questionTitlePattern: str = "numTitleRequire",
+    requiredText: str = "*",
+    showCompletedPage: bool = True,
+    showNavigationButtons: str = "bottom",
+    showPageNumbers: bool | None = None,
+    showPageTitles: bool = True,
+    showPrevButton: bool = True,
+    showPreviewBeforeComplete: str = "noPreview",
+    showProgressBar: str = "off",
+    showQuestionNumbers: bool | str = True,
+    showTimerPanel: str = "none",
+    showTimerPanelMode: str = "all",
+    showTitle: bool = True,
+    showTOC: bool = False,
+    startSurveyText: str | None = None,
+    storeOthersAsComment: bool = True,
+    textUpdateMode: str = "onBlur",
+    tocLocation: str = "left",
+    triggers: list[dict] | None = None,
+    validateVisitedEmptyFields: bool = False,
+    width: str | None = None,
+    widthMode: str = "auto",
+    addCode: dict | None = None,
     **kwargs,
 ) -> SurveyModel:
     """Create a survey object
@@ -84,8 +152,77 @@ def survey(
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
         addCode (dict | None): Additional code for the survey. Usually not necessary.
     """
+    args = {
+        "allowCompleteSurveyAutomatic": allowCompleteSurveyAutomatic,
+        "allowResizeComment": allowResizeComment,
+        "autoGrowComment": autoGrowComment,
+        "backgroundImage": backgroundImage,
+        "backgroundOpacity": backgroundOpacity,
+        "checkErrorsMode": checkErrorsMode,
+        "commentAreaRows": commentAreaRows,
+        "completedBeforeHtml": completedBeforeHtml,
+        "completedHtml": completedHtml,
+        "completedHtmlOnCondition": completedHtmlOnCondition,
+        "completeText": completeText,
+        "cookieName": cookieName,
+        "editText": editText,
+        "firstPageIsStarted": firstPageIsStarted,
+        "focusFirstQuestionAutomatic": focusFirstQuestionAutomatic,
+        "focusOnFirstError": focusOnFirstError,
+        "goNextPageAutomatic": goNextPageAutomatic,
+        "locale": locale,
+        "logo": logo,
+        "logoFit": logoFit,
+        "logoHeight": logoHeight,
+        "logoPosition": logoPosition,
+        "logoWidth": logoWidth,
+        "matrixDragHandleArea": matrixDragHandleArea,
+        "maxOthersLength": maxOthersLength,
+        "maxTextLength": maxTextLength,
+        "maxTimeToFinish": maxTimeToFinish,
+        "maxTimeToFinishPage": maxTimeToFinishPage,
+        "mode": mode,
+        "navigateToUrl": navigateToUrl,
+        "navigateToUrlOnCondition": navigateToUrlOnCondition,
+        "pageNextText": pageNextText,
+        "pagePrevText": pagePrevText,
+        "previewText": previewText,
+        "progressBarInheritWidthFrom": progressBarInheritWidthFrom,
+        "progressBarShowPageNumbers": progressBarShowPageNumbers,
+        "progressBarShowPageTitles": progressBarShowPageTitles,
+        "progressBarType": progressBarType,
+        "questionDescriptionLocation": questionDescriptionLocation,
+        "questionErrorLocation": questionErrorLocation,
+        "questionsOnPageMode": questionsOnPageMode,
+        "questionsOrder": questionsOrder,
+        "questionStartIndex": questionStartIndex,
+        "questionTitleLocation": questionTitleLocation,
+        "questionTitlePattern": questionTitlePattern,
+        "requiredText": requiredText,
+        "showCompletedPage": showCompletedPage,
+        "showNavigationButtons": showNavigationButtons,
+        "showPageNumbers": showPageNumbers,
+        "showPageTitles": showPageTitles,
+        "showPrevButton": showPrevButton,
+        "showPreviewBeforeComplete": showPreviewBeforeComplete,
+        "showProgressBar": showProgressBar,
+        "showQuestionNumbers": showQuestionNumbers,
+        "showTimerPanel": showTimerPanel,
+        "showTimerPanelMode": showTimerPanelMode,
+        "showTitle": showTitle,
+        "showTOC": showTOC,
+        "startSurveyText": startSurveyText,
+        "storeOthersAsComment": storeOthersAsComment,
+        "textUpdateMode": textUpdateMode,
+        "tocLocation": tocLocation,
+        "triggers": triggers,
+        "validateVisitedEmptyFields": validateVisitedEmptyFields,
+        "width": width,
+        "widthMode": widthMode,
+        "addCode": addCode,
+    }
     pages = flatten(pages)
-    survey = SurveyModel(pages=pages, **kwargs)
+    survey = SurveyModel(pages=pages, **args, **kwargs)
     if buildForPublication:
         survey.buildForProduction(path=path, folderName=folderName)
     elif createStructure:
@@ -94,7 +231,31 @@ def survey(
 
 
 def page(
-    name: str, *questions: QuestionModel | list[QuestionModel], **kwargs
+    name: str,
+    *questions: QuestionModel | list[QuestionModel],
+    description: str | None = None,
+    enableIf: str | None = None,
+    id: str | None = None,
+    isRequired: bool = False,
+    maxTimeToFinish: int | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    navigationButtonsVisibility: str = "inherit",
+    navigationDescription: str | None = None,
+    navigationTitle: str | None = None,
+    questionErrorLocation: str = "default",
+    questionTitleLocation: str = "default",
+    questionsOrder: str = "default",
+    readOnly: bool = False,
+    requiredErrorText: str | None = None,
+    requiredIf: str | None = None,
+    state: str = "default",
+    title: str | None = None,
+    visible: bool = True,
+    visibleIf: str | None = None,
+    visibleIndex: int | None = None,
+    addCode: dict | None = None,
+    **kwargs,
 ) -> PageModel:
     """Create a page object
 
@@ -124,12 +285,91 @@ def page(
         visibleIndex (int | None): The index at which the page should be visible.
         width (str): Width of the page
     """
+    args = {
+        "description": description,
+        "enableIf": enableIf,
+        "id": id,
+        "isRequired": isRequired,
+        "maxTimeToFinish": maxTimeToFinish,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "navigationButtonsVisibility": navigationButtonsVisibility,
+        "navigationDescription": navigationDescription,
+        "navigationTitle": navigationTitle,
+        "questionErrorLocation": questionErrorLocation,
+        "questionTitleLocation": questionTitleLocation,
+        "questionsOrder": questionsOrder,
+        "readOnly": readOnly,
+        "requiredErrorText": requiredErrorText,
+        "requiredIf": requiredIf,
+        "state": state,
+        "title": title,
+        "visible": visible,
+        "visibleIf": visibleIf,
+        "visibleIndex": visibleIndex,
+        "addCode": addCode,
+    }
     questions = flatten(questions)
-    return PageModel(name=name, questions=questions, **kwargs)
+    return PageModel(
+        name=name,
+        questions=questions,
+        **args,
+        **kwargs,
+    )
 
 
 def dropdown(
-    name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    choicesMax: int | None = None,
+    choicesMin: int | None = None,
+    choicesStep: int | None = None,
+    placeholder: str | None = None,
+    **kwargs,
 ) -> QuestionDropdownModel | list[QuestionDropdownModel]:
     """Create a single-select dropdown question object
 
@@ -189,23 +429,120 @@ def dropdown(
     Returns:
         QuestionDropdownModel: The question object model or a list of question object models if `title` is a list.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "choicesMax": choicesMax,
+        "choicesMin": choicesMin,
+        "choicesStep": choicesStep,
+        "placeholder": placeholder,
+    }
     choices = flatten(choices)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionDropdownModel(
-                name=f"{name}_{i+1}", title=t, choices=choices, **kwargs
+                name=f"{name}_{i+1}", title=t, choices=choices, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     else:
         return QuestionDropdownModel(
-            name=name, title=title[0], choices=choices, **kwargs
+            name=name, title=title[0], choices=choices, **args, **kwargs
         )
 
 
-def text(name: str, *title: str | list[str] | None, **kwargs) -> QuestionTextModel:
+def text(
+    name: str,
+    *title: str | list[str] | None,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    autocomplete: str | None = None,
+    inputType: str = "text",
+    max: str | None = None,
+    maxErrorText: str | None = None,
+    maxLength: int | None = None,
+    maxValueExpression: str | None = None,
+    min: str | int | None = None,
+    minErrorText: str | None = None,
+    minValueExpression: str | None = None,
+    placeholder: str | None = None,
+    size: int | None = None,
+    step: str | None = None,
+    textUpdateMode: str = "default",
+    **kwargs,
+) -> QuestionTextModel:
     """Create a text question object
 
     Args:
@@ -256,17 +593,115 @@ def text(name: str, *title: str | list[str] | None, **kwargs) -> QuestionTextMod
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "autocomplete": autocomplete,
+        "inputType": inputType,
+        "max": max,
+        "maxErrorText": maxErrorText,
+        "maxLength": maxLength,
+        "maxValueExpression": maxValueExpression,
+        "min": min,
+        "minErrorText": minErrorText,
+        "minValueExpression": minValueExpression,
+        "placeholder": placeholder,
+        "size": size,
+        "step": step,
+        "textUpdateMode": textUpdateMode,
+    }
     title = flatten(title)
     if len(title) != 1:
         return [
-            QuestionTextModel(name=f"{name}_{i+1}", title=t, **kwargs)
+            QuestionTextModel(name=f"{name}_{i+1}", title=t, **args, **kwargs)
             for i, t in enumerate(title)
         ]
-    return QuestionTextModel(name=name, title=title[0], **kwargs)
+    return QuestionTextModel(name=name, title=title[0], **args, **kwargs)
 
 
 def checkbox(
-    name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    colCount: int | None = None,
+    isAllSelected: bool | None = None,
+    maxSelectedChoices: int = 0,
+    minSelectedChoices: int = 0,
+    selectAllText: str | None = None,
+    showSelectAllItem: bool | None = None,
+    **kwargs,
 ) -> QuestionCheckboxModel | list[QuestionCheckboxModel]:
     """Create a checkbox question object
 
@@ -325,25 +760,133 @@ def checkbox(
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "colCount": colCount,
+        "isAllSelected": isAllSelected,
+        "maxSelectedChoices": maxSelectedChoices,
+        "minSelectedChoices": minSelectedChoices,
+        "selectAllText": selectAllText,
+        "showSelectAllItem": showSelectAllItem,
+    }
     choices = flatten(choices)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionCheckboxModel(
-                name=f"{name}_{i+1}", title=t, choices=choices, **kwargs
+                name=f"{name}_{i+1}", title=t, choices=choices, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     else:
         return QuestionCheckboxModel(
-            name=name, title=title[0], choices=choices, **kwargs
+            name=name, title=title[0], choices=choices, **args, **kwargs
         )
 
 
 def ranking(
-    name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
-):
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    colCount: int | None = None,
+    isAllSelected: bool | None = None,
+    maxSelectedChoices: int = 0,
+    minSelectedChoices: int = 0,
+    selectAllText: str | None = None,
+    showSelectAllItem: bool | None = None,
+    longTap: bool = True,
+    selectToRankAreasLayout: str = "horizontal",
+    selectToRankEmptyRankedAreaText: str | None = None,
+    selectToRankEmptyUnrankedAreaText: str | None = None,
+    selectToRankEnabled: bool = False,
+    **kwargs,
+) -> QuestionRankingModel | list[QuestionRankingModel]:
     """Create a ranking question object
 
     Args:
@@ -406,24 +949,128 @@ def ranking(
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "colCount": colCount,
+        "isAllSelected": isAllSelected,
+        "maxSelectedChoices": maxSelectedChoices,
+        "minSelectedChoices": minSelectedChoices,
+        "selectAllText": selectAllText,
+        "showSelectAllItem": showSelectAllItem,
+        "longTap": longTap,
+        "selectToRankAreasLayout": selectToRankAreasLayout,
+        "selectToRankEmptyRankedAreaText": selectToRankEmptyRankedAreaText,
+        "selectToRankEmptyUnrankedAreaText": selectToRankEmptyUnrankedAreaText,
+        "selectToRankEnabled": selectToRankEnabled,
+    }
     choices = flatten(choices)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionRankingModel(
-                name=f"{name}_{i+1}", title=t, choices=choices, **kwargs
+                name=f"{name}_{i+1}", title=t, choices=choices, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     else:
         return QuestionRankingModel(
-            name=name, title=title[0], choices=choices, **kwargs
+            name=name, title=title[0], choices=choices, **args, **kwargs
         )
 
 
 def radio(
-    name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    colCount: int | None = None,
+    showClearButton: bool = False,
+    **kwargs,
 ) -> QuestionRadiogroupModel | list[QuestionRadiogroupModel]:
     """Create a radio question object
 
@@ -481,25 +1128,130 @@ def radio(
     Returns:
         QuestionRadiogroupModel: The question object model or a list of question object models if `title` is a list.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "colCount": colCount,
+        "showClearButton": showClearButton,
+    }
     choices = flatten(choices)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionRadiogroupModel(
-                name=f"{name}_{i+1}", title=t, choices=choices, **kwargs
+                name=f"{name}_{i+1}", title=t, choices=choices, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     else:
         return QuestionRadiogroupModel(
-            name=name, title=title[0], choices=choices, **kwargs
+            name=name, title=title[0], choices=choices, **args, **kwargs
         )
 
 
 def dropdownMultiple(
-    name: str, title: str | list[str] | None, *choices: str | dict | list, **kwargs
-):
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    colCount: int | None = None,
+    isAllSelected: bool | None = None,
+    maxSelectedChoices: int = 0,
+    minSelectedChoices: int = 0,
+    selectAllText: str | None = None,
+    showSelectAllItem: bool | None = None,
+    allowClear: bool = True,
+    closeOnSelect: int | None = None,
+    hideSelectedItems: bool | None = False,
+    placeholder: str | None = None,
+    searchEnabled: bool = True,
+    searchMode: str = "contains",
+    **kwargs,
+) -> QuestionTagboxModel | list[QuestionTagboxModel]:
     """Create a multiple dropdown question object
 
     Args:
@@ -563,21 +1315,119 @@ def dropdownMultiple(
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "colCount": colCount,
+        "isAllSelected": isAllSelected,
+        "maxSelectedChoices": maxSelectedChoices,
+        "minSelectedChoices": minSelectedChoices,
+        "selectAllText": selectAllText,
+        "showSelectAllItem": showSelectAllItem,
+        "allowClear": allowClear,
+        "closeOnSelect": closeOnSelect,
+        "hideSelectedItems": hideSelectedItems,
+        "placeholder": placeholder,
+        "searchEnabled": searchEnabled,
+        "searchMode": searchMode,
+    }
     choices = flatten(choices)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionTagboxModel(
-                name=f"{name}_{i+1}", title=t, choices=choices, **kwargs
+                name=f"{name}_{i+1}", title=t, choices=choices, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     else:
-        return QuestionTagboxModel(name=name, title=title[0], choices=choices, **kwargs)
+        return QuestionTagboxModel(
+            name=name, title=title[0], choices=choices, **args, **kwargs
+        )
 
 
-def textLong(name: str, *title: str | list[str] | None, **kwargs):
+def textLong(
+    name: str,
+    *title: str | list[str] | None,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    acceptCarriageReturn: bool = True,
+    allowResize: bool | None = None,
+    autoGrow: bool | None = None,
+    rows: int = 4,
+    **kwargs,
+) -> QuestionCommentModel | list[QuestionCommentModel]:
     """Create a long text question object
 
     Attributes:
@@ -619,16 +1469,96 @@ def textLong(name: str, *title: str | list[str] | None, **kwargs):
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "acceptCarriageReturn": acceptCarriageReturn,
+        "allowResize": allowResize,
+        "autoGrow": autoGrow,
+        "rows": rows,
+    }
     title = flatten(title)
     if len(title) != 1:
         return [
-            QuestionCommentModel(name=f"{name}_{i+1}", title=t, **kwargs)
+            QuestionCommentModel(name=f"{name}_{i+1}", title=t, **args, **kwargs)
             for i, t in enumerate(title)
         ]
-    return QuestionCommentModel(name=name, title=title[0], **kwargs)
+    return QuestionCommentModel(name=name, title=title[0], **args, **kwargs)
 
 
-def rating(name: str, *title: str | list[str] | None, **kwargs):
+def rating(
+    name: str,
+    *title: str | list[str] | None,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    maxRateDescription: str | None = None,
+    minRateDescription: str | None = None,
+    rateMax: int = 5,
+    rateMin: int = 1,
+    rateStep: int = 1,
+    rateType: str = "labels",
+    rateValues: list | None = None,
+    scaleColorMode: str = "monochrome",
+    **kwargs,
+) -> QuestionRatingModel | list[QuestionRatingModel]:
     """Create a rating question object
 
     Attributes:
@@ -674,16 +1604,97 @@ def rating(name: str, *title: str | list[str] | None, **kwargs):
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "maxRateDescription": maxRateDescription,
+        "minRateDescription": minRateDescription,
+        "rateMax": rateMax,
+        "rateMin": rateMin,
+        "rateStep": rateStep,
+        "rateType": rateType,
+        "rateValues": rateValues,
+        "scaleColorMode": scaleColorMode,
+    }
     title = flatten(title)
     if len(title) != 1:
         return [
-            QuestionRatingModel(name=f"{name}_{i+1}", title=t, **kwargs)
+            QuestionRatingModel(name=f"{name}_{i+1}", title=t, **args, **kwargs)
             for i, t in enumerate(title)
         ]
-    return QuestionRatingModel(name=name, title=title[0], **kwargs)
+    return QuestionRatingModel(name=name, title=title[0], **args, **kwargs)
 
 
-def yesno(name: str, *title: str | list[str] | None, **kwargs):
+def yesno(
+    name: str,
+    *title: str | list[str] | None,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    labelFalse: str | None = None,
+    labelTrue: str | None = None,
+    swapOrder: bool = False,
+    valueFalse: bool | str = False,
+    valueTrue: bool | str = True,
+    **kwargs,
+) -> QuestionBooleanModel | list[QuestionBooleanModel]:
     """Create a yes/no (boolean) question object
 
     Attributes:
@@ -726,16 +1737,89 @@ def yesno(name: str, *title: str | list[str] | None, **kwargs):
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "labelFalse": labelFalse,
+        "labelTrue": labelTrue,
+        "swapOrder": swapOrder,
+        "valueFalse": valueFalse,
+        "valueTrue": valueTrue,
+    }
     title = flatten(title)
     if len(title) != 1:
         return [
-            QuestionBooleanModel(name=f"{name}_{i+1}", title=t, **kwargs)
+            QuestionBooleanModel(name=f"{name}_{i+1}", title=t, **args, **kwargs)
             for i, t in enumerate(title)
         ]
-    return QuestionBooleanModel(name=name, title=title[0], **kwargs)
+    return QuestionBooleanModel(name=name, title=title[0], **args, **kwargs)
 
 
-def info(name: str, *infoHTML: str | list[str], **kwargs):
+def info(
+    name: str,
+    *infoHTML: str | list[str],
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    **kwargs,
+) -> QuestionHtmlModel | list[QuestionHtmlModel]:
     """Create an informational text object
 
     Args:
@@ -774,16 +1858,96 @@ def info(name: str, *infoHTML: str | list[str], **kwargs):
         width (str): Width of the question in CSS units.
     addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+    }
     infoHTML = flatten(infoHTML)
     if len(infoHTML) != 1:
         return [
-            QuestionHtmlModel(name=f"{name}_{i+1}", html=html, **kwargs)
+            QuestionHtmlModel(name=f"{name}_{i+1}", html=html, **args, **kwargs)
             for i, html in enumerate(infoHTML)
         ]
-    return QuestionHtmlModel(name=name, html=infoHTML[0], **kwargs)
+    return QuestionHtmlModel(name=name, html=infoHTML[0], **args, **kwargs)
 
 
-def matrix(name: str, title: str | list[str] | None, *columns, **kwargs):
+def matrix(
+    name: str,
+    title: str | list[str] | None,
+    *columns,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    rows: list | dict | None = None,
+    alternateRows: bool | None = None,
+    columnMinWidth: str | None = None,
+    displayMode: str = "auto",
+    rowTitleWidth: str | None = None,
+    showHeader: bool = True,
+    verticalAlign: str = "middle",
+    eachRowUnique: bool | None = None,
+    hideIfRowsEmpty: bool | None = None,
+    isAllRowRequired: bool = False,
+    rowsOrder: str = "initial",
+    **kwargs,
+) -> QuestionMatrixModel | list[QuestionMatrixModel]:
     """Create a matrix question object
 
     Attributes:
@@ -833,20 +1997,129 @@ def matrix(name: str, title: str | list[str] | None, *columns, **kwargs):
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "rows": rows,
+        "alternateRows": alternateRows,
+        "columnMinWidth": columnMinWidth,
+        "displayMode": displayMode,
+        "rowTitleWidth": rowTitleWidth,
+        "showHeader": showHeader,
+        "verticalAlign": verticalAlign,
+        "eachRowUnique": eachRowUnique,
+        "hideIfRowsEmpty": hideIfRowsEmpty,
+        "isAllRowRequired": isAllRowRequired,
+        "rowsOrder": rowsOrder,
+    }
     columns = flatten(columns)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionMatrixModel(
-                name=f"{name}_{i+1}", title=t, columns=columns, **kwargs
+                name=f"{name}_{i+1}", title=t, columns=columns, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
-    return QuestionMatrixModel(name=name, title=title[0], columns=columns, **kwargs)
+    return QuestionMatrixModel(
+        name=name, title=title[0], columns=columns, **args, **kwargs
+    )
 
 
-def matrixDynamic(name: str, title: str | list[str] | None, *columns, **kwargs):
+def matrixDynamic(
+    name: str,
+    title: str | list[str] | None,
+    *columns,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    rows: list | dict | None = None,
+    alternateRows: bool | None = None,
+    columnMinWidth: str | None = None,
+    displayMode: str = "auto",
+    rowTitleWidth: str | None = None,
+    showHeader: bool = True,
+    verticalAlign: str = "middle",
+    cellErrorLocation: str = "default",
+    cellType: str | None = None,
+    isUniqueCaseSensitive: bool = False,
+    placeHolder: str | None = None,
+    transposeData: bool = False,
+    addRowLocation: str = "default",
+    addRowText: str | None = None,
+    allowAddRows: bool = True,
+    allowRemoveRows: bool = True,
+    allowRowsDragAndDrop: bool = False,
+    confirmDelete: bool = False,
+    confirmDeleteText: str | None = None,
+    defaultRowValue: str | None = None,
+    defaultValueFromLastRow: bool = False,
+    emptyRowsText: str | None = None,
+    hideColumnsIfEmpty: bool = False,
+    maxRowCount: int = 1000,
+    minRowCount: int = 0,
+    removeRowText: str | None = None,
+    rowCount: int = 2,
+    **kwargs,
+) -> QuestionMatrixDynamicModel | list[QuestionMatrixDynamicModel]:
     """Create a dynamic matrix question object
 
     Attributes:
@@ -915,22 +2188,127 @@ def matrixDynamic(name: str, title: str | list[str] | None, *columns, **kwargs):
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "rows": rows,
+        "alternateRows": alternateRows,
+        "columnMinWidth": columnMinWidth,
+        "displayMode": displayMode,
+        "rowTitleWidth": rowTitleWidth,
+        "showHeader": showHeader,
+        "verticalAlign": verticalAlign,
+        "cellErrorLocation": cellErrorLocation,
+        "cellType": cellType,
+        "isUniqueCaseSensitive": isUniqueCaseSensitive,
+        "placeHolder": placeHolder,
+        "transposeData": transposeData,
+        "addRowLocation": addRowLocation,
+        "addRowText": addRowText,
+        "allowAddRows": allowAddRows,
+        "allowRemoveRows": allowRemoveRows,
+        "allowRowsDragAndDrop": allowRowsDragAndDrop,
+        "confirmDelete": confirmDelete,
+        "confirmDeleteText": confirmDeleteText,
+        "defaultRowValue": defaultRowValue,
+        "defaultValueFromLastRow": defaultValueFromLastRow,
+        "emptyRowsText": emptyRowsText,
+        "hideColumnsIfEmpty": hideColumnsIfEmpty,
+        "maxRowCount": maxRowCount,
+        "minRowCount": minRowCount,
+        "removeRowText": removeRowText,
+        "rowCount": rowCount,
+    }
     columns = flatten(columns)
     if not isinstance(title, list):
         title = [title]
     if len(title) != 1:
         return [
             QuestionMatrixDynamicModel(
-                name=f"{name}_{i+1}", title=t, columns=columns, **kwargs
+                name=f"{name}_{i+1}", title=t, columns=columns, **args, **kwargs
             )
             for i, t in enumerate(title)
         ]
     return QuestionMatrixDynamicModel(
-        name=name, title=title[0], columns=columns, **kwargs
+        name=name, title=title[0], columns=columns, **args, **kwargs
     )
 
 
-def slider(name: str, *title: str | list[str] | None, **kwargs):
+def slider(
+    name: str,
+    *title: str | list[str] | None,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    step: int = 1,
+    rangeMin: int = 0,
+    rangeMax: int = 100,
+    pipsMode: str = "positions",
+    pipsValues: list = [0, 25, 50, 75, 100],
+    pipsText: list = [0, 25, 50, 75, 100],
+    pipsDensity: int = 5,
+    orientation: str = "horizontal",
+    direction: str = "ltr",
+    tooltips: bool = True,
+    **kwargs,
+) -> QuestionNoUiSliderModel | list[QuestionNoUiSliderModel]:
     """Create a slider question object
 
     Args:
@@ -948,10 +2326,53 @@ def slider(name: str, *title: str | list[str] | None, **kwargs):
         tooltips (bool): Whether to show tooltips.
         addCode (dict | None): Additional code for the question. Usually not necessary.
     """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "step": step,
+        "rangeMin": rangeMin,
+        "rangeMax": rangeMax,
+        "pipsMode": pipsMode,
+        "pipsValues": pipsValues,
+        "pipsText": pipsText,
+        "pipsDensity": pipsDensity,
+        "orientation": orientation,
+        "direction": direction,
+        "tooltips": tooltips,
+    }
     title = flatten(title)
     if len(title) != 1:
         return [
-            QuestionNoUiSliderModel(name=f"{name}_{i+1}", title=t, **kwargs)
+            QuestionNoUiSliderModel(name=f"{name}_{i+1}", title=t, **args, **kwargs)
             for i, t in enumerate(title)
         ]
-    return QuestionNoUiSliderModel(name=name, title=title[0], **kwargs)
+    return QuestionNoUiSliderModel(name=name, title=title[0], **args, **kwargs)
