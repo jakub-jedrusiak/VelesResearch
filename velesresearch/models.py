@@ -680,19 +680,142 @@ class SurveyModel(BaseModel):
 
     Attributes:
         pages (list[PageModel]): The pages of the survey.
-        title (str | None): The title of the survey.
-        html (str | None): The HTML content to show after the survey is completed.
+        allowCompleteSurveyAutomatic (bool): Whether the survey should complete automatically after all questions on the last page had been answered. Works only if `goNextPageAutomatic=True`. Default is True.
+        allowResizeComment (bool): Whether to allow resizing the long questions input area. Default is True. Can be overridden for individual questions.
+        autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
+        backgroundImage (str | None): URL or base64 of the background image.
+        backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
+        checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
+        commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
+        completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
+        completedHtml (str | None): HTML content to show after the survey is completed.
+        completedHtmlOnCondition (list[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
+        completeText (str | None): Text for the 'Complete' button.
+        cookieName (str | None): The name of the cookie to store the information about the survey having been completed. See `completedBeforeHtml`.
+        editText (str | None): Text for the 'Edit' button if `showPreviewBeforeComplete=True`.
+        firstPageIsStarted (bool | None): Whether the first page is a start page. Default is False.
+        focusFirstQuestionAutomatic (bool): Whether to focus the first question automatically. Default is False.
+        focusOnFirstError (bool): Whether to focus on the first error if it was raised. Default is True.
+        goNextPageAutomatic (bool): Whether to go to the next page automatically after all questions had been answered. Default is False.
         locale (str): The locale of the survey. Default is 'en'.
-        firstPageIsStarted (bool): Whether the first page is a start page.
+        logo (str | None): URL or base64 of the logo image.
+        logoFit (str): The `object-fit` CSS property logo image. Can be 'contain', 'cover', 'fill', 'none'.
+        logoHeight (str): The height of the logo image in CSS units. Default is '200px'.
+        logoPosition (str): The position of the logo image. Can be 'left', 'right', 'none'.
+        logoWidth (str): The width of the logo image in CSS units. Default is '300px'.
+        matrixDragHandleArea (str): The part of an item with which the users can drag and drop in dynamic matrix questions. Can be 'entireItem' (default), 'icon' (drag icon only).
+        maxOthersLength (int): The maximum length of the comment area in the questions with `showOtherItem` or `showCommentArea` set to True. Default is 0 (no limit).
+        maxTextLength (int): The maximum length of the text in the textual questions. Default is 0 (no limit).
+        maxTimeToFinish (int | None): Maximum time in seconds to finish the survey.
+        maxTimeToFinishPage (int | None): Maximum time in seconds to finish the page. 0 means no limit.
+        mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
+        navigateToUrl (str | None): URL to navigate to after the survey is completed.
+        navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        pageNextText (str | None): Text for the 'Next' button.
+        pagePrevText (str | None): Text for the 'Previous' button.
+        previewText (str | None): Text for the 'Preview' button if `showPreviewBeforeComplete=True`.
+        progressBarInheritWidthFrom (str): The element from which the progress bar should inherit the width. Can be 'container', 'survey'.
+        progressBarShowPageNumbers (bool): Whether to show the page numbers on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
+        progressBarShowPageTitles (bool): Whether to show the page titles on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
+        progressBarType (str): The type of the progress bar. Can be 'pages' (default), 'questions', 'requiredQuestions', 'correctQuestions'.
+        questionDescriptionLocation (str): The location of the description for the questions. Can be 'underTitle' (default), 'underInput'. Can be overridden for individual questions.
+        questionErrorLocation (str): The location of the error text for the questions. Can be 'top' (default), 'bottom'. Can be overridden for individual questions.
+        questionsOnPageMode (str): The mode of the questions on the page. Can be 'standard' (default; use structure in JSON), 'singlePage' (combine all questions into a single page), 'questionPerPage' (move all questions to separate pages).
+        questionsOrder (str): The order of the questions. Can be 'initial' (default), 'random'. Can be overridden for individual pages.
+        questionStartIndex (int | str | None): The number or letter with which the questions numbering should start.
+        questionTitleLocation (str): The location of the title for the questions. Can be 'top' (default), 'bottom', 'left'. Can be overridden for individual questions or pages.
+        questionTitlePattern (str): The pattern of the question title. See <https://surveyjs.io/form-library/documentation/design-survey/configure-question-titles#title-pattern>.
+        requiredText (str): The text denoting the required questions. Default is '*'.
+        showCompletedPage (bool): Whether to show the completed page. Default is True.
+        showNavigationButtons (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'both', 'none'.
+        showPageNumbers (bool | None): Whether to show the page numbers in the pages' titles.
+        showPageTitles (bool): Whether to show the page titles. Default is True.
+        showPrevButton (bool): Whether to show the 'Previous' button. Default is True.
+        showPreviewBeforeComplete (str): Whether to preview all answers before completion. Can be 'noPreview' (default), 'showAllQuestions', 'showAnsweredQuestions'.
+        showProgressBar (str): Whether to show the progress bar. Can be 'off' (default), 'aboveHeader', 'belowHeader', 'bottom', 'topBottom', 'auto'.
+        showQuestionNumbers (bool | str): Whether to show the question numbers. Default is True. Can be True, 'on', False, 'off', 'onpage' (number each page anew).
+        showTimerPanel (str): Whether to show the timer panel. Can be 'none' (default), 'top', 'bottom'. See `maxTimeToFinish`, `maxTimeToFinishPage`, and `showTimerPanelMode`.
+        showTimerPanelMode (str): What times to show on the timer panel. Can be 'all' (default), 'page', 'survey'. See `showTimerPanel`.
+        showTitle (bool): Whether to show the survey title. Default is True.
+        showTOC (bool): Whether to show the table of contents. Default is False. See `tocLocation`.
+        startSurveyText (str | None): Text for the 'Start' button if `firstPageIsStarted=True`.
+        storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
+        textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
+        tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
+        triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
+        validateVisitedEmptyFields (bool): Whether to validate empty fields that had been clicked, and unclicked empty. Default is False.
+        width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
+        widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
         addCode (dict | None): Additional code for the survey. Usually not necessary.
     """
 
     pages: list[PageModel]
-    title: str | None = None
-    html: str | None = None
+    allowCompleteSurveyAutomatic: bool = True
+    allowResizeComment: bool = True
+    autoGrowComment: bool = False
+    backgroundImage: str | None = None
+    backgroundOpacity: int = 1
+    checkErrorsMode: str = "onNextPage"
+    commentAreaRows: int = 2
+    completedBeforeHtml: str | None = None
+    completedHtml: str | None = None
+    completedHtmlOnCondition: list[dict] | None = None
+    completeText: str | None = None
+    cookieName: str | None = None
+    editText: str | None = None
+    firstPageIsStarted: bool | None = None
+    focusFirstQuestionAutomatic: bool = False
+    focusOnFirstError: bool = True
+    goNextPageAutomatic: bool = False
     locale: str = "en"
-    numberOfGroups: int = 1
-    firstPageIsStarted: bool = False
+    logo: str | None = None
+    logoFit: str = "contain"
+    logoHeight: str = "200px"
+    logoPosition: str = "left"
+    logoWidth: str = "300px"
+    matrixDragHandleArea: str = "entireItem"
+    maxOthersLength: int = 0
+    maxTextLength: int = 0
+    maxTimeToFinish: int | None = None
+    maxTimeToFinishPage: int | None = None
+    mode: str = "edit"
+    navigateToUrl: str | None = None
+    navigateToUrlOnCondition: list[dict] | None = None
+    pageNextText: str | None = None
+    pagePrevText: str | None = None
+    previewText: str | None = None
+    progressBarInheritWidthFrom: str = "container"
+    progressBarShowPageNumbers: bool = False
+    progressBarShowPageTitles: bool = False
+    progressBarType: str = "pages"
+    questionDescriptionLocation: str = "underTitle"
+    questionErrorLocation: str = "top"
+    questionsOnPageMode: str = "standard"
+    questionsOrder: str = "initial"
+    questionStartIndex: int | str | None = None
+    questionTitleLocation: str = "top"
+    questionTitlePattern: str = "numTitleRequire"
+    requiredText: str = "*"
+    showCompletedPage: bool = True
+    showNavigationButtons: str = "bottom"
+    showPageNumbers: bool | None = None
+    showPageTitles: bool = True
+    showPrevButton: bool = True
+    showPreviewBeforeComplete: str = "noPreview"
+    showProgressBar: str = "off"
+    showQuestionNumbers: bool | str = True
+    showTimerPanel: str = "none"
+    showTimerPanelMode: str = "all"
+    showTitle: bool = True
+    showTOC: bool = False
+    startSurveyText: str | None = None
+    storeOthersAsComment: bool = True
+    textUpdateMode: str = "onBlur"
+    tocLocation: str = "left"
+    triggers: list[dict] | None = None
+    validateVisitedEmptyFields: bool = False
+    width: str | None = None
+    widthMode: str = "auto"
     addCode: dict | None = None
 
     def __str__(self) -> str:
