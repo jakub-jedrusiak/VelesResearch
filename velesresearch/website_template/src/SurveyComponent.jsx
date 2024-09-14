@@ -28,64 +28,73 @@ function groupNumber(max) {
   return Math.floor(Math.random() * max + 1);
 }
 
+function createResults(sender, survey) {
+  // Create results object
+  const dateCompleted = new Date();
+  survey.setVariable("dateCompleted", dateCompleted.toISOString());
+
+  const variables = {};
+  for (const variable in survey.getVariableNames()) {
+    variables[variable] = survey.getVariable(variable);
+  }
+
+  const URLparams = Object.fromEntries(new URLSearchParams(window.location.search));
+
+  return Object.assign(
+    {
+      id: MakeID(8)
+    },
+    sender.data,
+    URLparams,
+    variables
+  );
+}
+
+async function handleResults(sender, survey) {
+  const result = createResults(sender, survey);
+
+  // send data to Django backend
+  const requestHeaders = {
+    method: "POST",
+    headers: Object.assign(
+      {
+        "Content-Type": "application/json",
+      },
+      CSRFToken()
+    ),
+    body: JSON.stringify(result),
+  };
+  const url = window.location.pathname + "submit/";
+
+  // first try
+  let response = await fetch(url, requestHeaders);
+  if (response.ok) {
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
+    return "OK";
+  }
+  // second try
+  response = await fetch(url, requestHeaders);
+  if (response.ok) {
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
+    return "OK";
+  } else {
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+    return "Error";
+  }
+}
+
 function SurveyComponent() {
   const survey = new Model(json);
-  const date_started = new Date();
+  const dateStarted = new Date();
 
   document.documentElement.lang = survey.locale;
   const completedHtml = survey.completedHtml.valueOf();
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em"><div class="lds-dual-ring"></div></div>';
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
-  survey.setVariable("date_started", date_started.toISOString());
+  survey.setVariable("dateStarted", dateStarted.toISOString());
 
-  survey.onComplete.add((sender) => {
-    const date_completed = new Date();
-    survey.setVariable("date_completed", date_completed.toISOString());
-
-    const variables = {};
-    for (const variable in survey.getVariableNames()) {
-      variables[variable] = survey.getVariable(variable);
-    }
-
-    const URLparams = Object.fromEntries(new URLSearchParams(window.location.search));
-
-    const result = Object.assign(
-      {
-        id: MakeID(8)
-      },
-      sender.data,
-      URLparams,
-      variables
-    );
-
-    // send data to Django backend
-    const postData = {
-      method: "POST",
-      headers: Object.assign(
-        {
-          "Content-Type": "application/json",
-        },
-        CSRFToken()
-      ),
-      body: JSON.stringify(result),
-    }
-    fetch(window.location.pathname + "submit/", postData)
-      .then(response => {
-        if (response.ok) {
-          document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml;
-        } else {
-          fetch(window.location.pathname + "submit/", postData)
-            .then(response => {
-              if (response.ok) {
-                document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml;
-              } else {
-                document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
-              }
-            });
-        }
-      })
-  });
+  survey.onComplete.add(sender => handleResults(sender, survey));
   return <Survey model={survey} />;
 }
 
