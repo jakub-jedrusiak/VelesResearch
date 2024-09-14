@@ -52,7 +52,7 @@ class QuestionModel(BaseModel):
     """
 
     name: str
-    title: str | None
+    title: str | None = None
     type: str
     titleLocation: str = "default"
     description: str | None = None
