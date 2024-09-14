@@ -21,6 +21,17 @@ module.exports = {
       directory: path.join(__dirname, "build"),
     },
     port: 3000,
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+      devServer.app.post('/submit', (req, res) => {
+        setTimeout(() => {
+          res.status(200).send("OK");
+        }, 1000);  // 1 second delay
+      });
+      return middlewares;
+    }
   },
   module: {
     // exclude node_modules

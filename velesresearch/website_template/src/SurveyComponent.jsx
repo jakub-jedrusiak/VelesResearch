@@ -50,7 +50,7 @@ function createResults(sender, survey) {
   );
 }
 
-async function handleResults(sender, survey) {
+async function handleResults(sender, survey, completedHtml) {
   const result = createResults(sender, survey);
 
   // send data to Django backend
@@ -88,13 +88,13 @@ function SurveyComponent() {
   const dateStarted = new Date();
 
   document.documentElement.lang = survey.locale;
-  const completedHtml = survey.completedHtml.valueOf();
+  const completedHtml = survey.completedHtml + "<br>";
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em"><div class="lds-dual-ring"></div></div>';
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());
 
-  survey.onComplete.add(sender => handleResults(sender, survey));
+  survey.onComplete.add(sender => handleResults(sender, survey, completedHtml));
   return <Survey model={survey} />;
 }
 
