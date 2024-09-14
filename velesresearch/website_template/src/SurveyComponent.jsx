@@ -28,10 +28,12 @@ function groupNumber(max) {
   return Math.floor(Math.random() * max + 1);
 }
 
-function createResults(sender, survey) {
+function createResults(survey) {
   // Create results object
-  const dateCompleted = new Date();
-  survey.setVariable("dateCompleted", dateCompleted.toISOString());
+  if (!survey.getVariable("dateCompleted")) {
+    const dateCompleted = new Date();
+    survey.setVariable("dateCompleted", dateCompleted.toISOString());
+  }
 
   const variables = {};
   for (const variable in survey.getVariableNames()) {
@@ -44,15 +46,14 @@ function createResults(sender, survey) {
     {
       id: MakeID(8)
     },
-    sender.data,
+    survey.data,
     URLparams,
     variables
   );
 }
 
-async function handleResults(sender, survey, completedHtml) {
-  const result = createResults(sender, survey);
-
+async function handleResults(survey, completedHtml) {
+  const result = createResults(survey);
   // send data to Django backend
   const requestHeaders = {
     method: "POST",
@@ -66,23 +67,16 @@ async function handleResults(sender, survey, completedHtml) {
   };
   const url = window.location.pathname + "submit/";
 
-  // first try
   let response = await fetch(url, requestHeaders);
   if (response.ok) {
     document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
-    return "OK";
-  }
-  // second try
-  response = await fetch(url, requestHeaders);
-  if (response.ok) {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
+    document.getElementById("tryAgainDiv").style.display = "none";
+    document.getElementById("tryAgainButton").disabled = true;
     return "OK";
   } else {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">Results not saved</div>
-<br>
-<div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div>
-<br>
-<div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">${SurveyCore.surveyLocalization.getString("savingDataError", survey.locale)}</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+    document.getElementById("tryAgainDiv").style.display = "block";
+    document.getElementById("tryAgainButton").disabled = false;
     return "Error";
   }
 }
@@ -93,12 +87,24 @@ function SurveyComponent() {
 
   document.documentElement.lang = survey.locale;
   const completedHtml = survey.completedHtml + "<br>";
-  survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em"><div class="lds-dual-ring"></div></div>';
+  survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
+  survey.locale = "pl";
+  console.log();
+  document.getElementById("tryAgainButton").innerHTML = SurveyCore.surveyLocalization.getString("saveAgainButton", survey.locale);
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());
 
-  survey.onComplete.add(sender => handleResults(sender, survey, completedHtml));
+  document.getElementById("tryAgainButton").addEventListener("click", () => {
+    if (survey.isCompleted) {
+      document.getElementsByClassName("sd-completedpage")[0].innerHTML = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
+      document.getElementById("tryAgainDiv").style.display = "none";
+      document.getElementById("tryAgainButton").disabled = true;
+      handleResults(survey, completedHtml)
+    }
+  });
+
+  survey.onComplete.add(sender => handleResults(sender, completedHtml));
   return <Survey model={survey} />;
 }
 
