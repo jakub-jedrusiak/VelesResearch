@@ -54,6 +54,14 @@ function createResults(survey) {
 
 async function handleResults(survey, completedHtml) {
   const result = createResults(survey);
+  // Add scores to results
+  if (survey.addScoreToResults === undefined || survey.addScoreToResults) {
+    for (const question of survey.getAllQuestions()) {
+      if (question.correctAnswer && question.selectedItem) {
+        result[question.name + (survey.scoresSuffix || "_score")] = question.selectedItem.value === question.correctAnswer ? 1 : 0;
+      }
+    }
+  }
   // send data to Django backend
   const requestHeaders = {
     method: "POST",

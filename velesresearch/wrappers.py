@@ -11,6 +11,7 @@ def survey(
     buildForPublication: bool = False,
     folderName: str = "survey",
     path: str | Path = os.getcwd(),
+    addScoreToResults: bool = True,
     allowCompleteSurveyAutomatic: bool = True,
     allowResizeComment: bool = True,
     autoGrowComment: bool = False,
@@ -58,6 +59,7 @@ def survey(
     questionTitleLocation: str = "top",
     questionTitlePattern: str = "numTitleRequire",
     requiredText: str = "*",
+    scoresSuffix: str = "_score",
     showCompletedPage: bool = True,
     showNavigationButtons: str = "bottom",
     showPageNumbers: bool | None = None,
@@ -86,6 +88,7 @@ def survey(
 
     Args:
         pages (list[PageModel]): The pages of the survey.
+        addScoreToResults (bool): Whether to add the scores of the questions with `correctAnswer` to the results data. See `scoresSuffix`.
         allowCompleteSurveyAutomatic (bool): Whether the survey should complete automatically after all questions on the last page had been answered. Works only if `goNextPageAutomatic=True`. Default is True.
         allowResizeComment (bool): Whether to allow resizing the long questions input area. Default is True. Can be overridden for individual questions.
         autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
@@ -132,6 +135,7 @@ def survey(
         questionTitleLocation (str): The location of the title for the questions. Can be 'top' (default), 'bottom', 'left'. Can be overridden for individual questions or pages.
         questionTitlePattern (str): The pattern of the question title. See <https://surveyjs.io/form-library/documentation/design-survey/configure-question-titles#title-pattern>.
         requiredText (str): The text denoting the required questions. Default is '*'.
+        scoresSuffix (str): The suffix of the score column if `addScoreToResults=True`. Default is '_score'.
         showCompletedPage (bool): Whether to show the completed page. Default is True.
         showNavigationButtons (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'both', 'none'.
         showPageNumbers (bool | None): Whether to show the page numbers in the pages' titles.
@@ -156,6 +160,7 @@ def survey(
         addCode (dict | None): Additional code for the survey. Usually not necessary.
     """
     args = {
+        "addScoreToResults": addScoreToResults,
         "allowCompleteSurveyAutomatic": allowCompleteSurveyAutomatic,
         "allowResizeComment": allowResizeComment,
         "autoGrowComment": autoGrowComment,
@@ -203,6 +208,7 @@ def survey(
         "questionTitleLocation": questionTitleLocation,
         "questionTitlePattern": questionTitlePattern,
         "requiredText": requiredText,
+        "scoresSuffix": scoresSuffix,
         "showCompletedPage": showCompletedPage,
         "showNavigationButtons": showNavigationButtons,
         "showPageNumbers": showPageNumbers,
