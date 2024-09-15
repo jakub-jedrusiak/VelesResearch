@@ -73,6 +73,7 @@ def survey(
     startSurveyText: str | None = None,
     storeOthersAsComment: bool = True,
     textUpdateMode: str = "onBlur",
+    title: str | None = None,
     tocLocation: str = "left",
     triggers: list[dict] | None = None,
     validateVisitedEmptyFields: bool = False,
@@ -146,6 +147,7 @@ def survey(
         startSurveyText (str | None): Text for the 'Start' button if `firstPageIsStarted=True`.
         storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
         textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
+        title (str | None): The title of the survey.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
         validateVisitedEmptyFields (bool): Whether to validate empty fields that had been clicked, and unclicked empty. Default is False.
@@ -216,6 +218,7 @@ def survey(
         "startSurveyText": startSurveyText,
         "storeOthersAsComment": storeOthersAsComment,
         "textUpdateMode": textUpdateMode,
+        "title": title,
         "tocLocation": tocLocation,
         "triggers": triggers,
         "validateVisitedEmptyFields": validateVisitedEmptyFields,
