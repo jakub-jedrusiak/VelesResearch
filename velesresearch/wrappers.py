@@ -541,7 +541,7 @@ def text(
     addCode: dict | None = None,
     autocomplete: str | None = None,
     inputType: str = "text",
-    max: str | None = None,
+    max: str | int | None = None,
     maxErrorText: str | None = None,
     maxLength: int | None = None,
     maxValueExpression: str | None = None,
