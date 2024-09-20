@@ -2387,3 +2387,137 @@ def slider(
             for i, t in enumerate(title)
         ]
     return QuestionNoUiSliderModel(name=name, title=title[0], **args, **kwargs)
+
+
+def image(
+    name: str,
+    *imageLink: str,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    altText: str | None = None,
+    contentMode: str = "auto",
+    imageFit: str = "contain",
+    imageHeight: int | str = 150,
+    imageWidth: int | str = 200,
+    **kwargs,
+) -> QuestionImageModel | list[QuestionImageModel]:
+    """An image or video question object
+
+    Args:
+        name (str): The label of the question.
+        imageLink (str | None): The src property for <img> or video link.
+        altText (str | None): The alt property for <img>.
+        commentPlaceholder (str | None): Placeholder text for the comment area.
+        commentText (str | None): Text for the comment area.
+        contentMode (str): The content type. Can be 'auto' (default), 'image', 'video', 'youtube'.
+        correctAnswer (str | None): Correct answer for the question. Use for quizzes.
+        defaultValue (str | None): Default value for the question.
+        defaultValueExpression (str | None): Expression deciding the default value for the question.
+        description (str | None): Optional subtitle or description of the question.
+        descriptionLocation (str): The location of the description. Can be 'default', 'underTitle', 'underInput'.
+        enableIf (str | None): Expression to enable the question.
+        errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
+        hideNumber (bool): Whether to hide the question number.
+        id (str | None): HTML id attribute for the question. Usually not necessary.
+        imageFit (str): The object-fit property of <img>. Can be 'contain', 'cover', 'fill', 'none'. See MDN <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>.
+        imageHeight (int | str): The height of the image container in CSS units. See `imageFit`.
+        imageWidth (int | str): The width of the image container in CSS units. See `imageFit`.
+        isRequired (bool): Whether the question is required.
+        maxWidth (str): Maximum width of the question in CSS units.
+        minWidth (str): Minimum width of the question in CSS units.
+        readOnly (bool): Whether the question is read-only.
+        requiredErrorText (str | None): Error text if the required condition is not met.
+        requiredIf (str | None): Expression to make the question required.
+        resetValueIf (str | None): Expression to reset the value of the question.
+        setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
+        setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
+        showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
+        showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
+        startWithNewLine (bool): Whether to start the question on a new line.
+        state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
+        title (str | None): The visible title of the question. If None, `name` is used.
+        titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
+        useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
+        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        visible (bool): Whether the question is visible.
+        visibleIf (str | None): Expression to make the question visible.
+        width (str): Width of the question in CSS units.
+        addCode (dict | None): Additional code for the question. Usually not necessary.
+    """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "altText": altText,
+        "contentMode": contentMode,
+        "imageFit": imageFit,
+        "imageHeight": imageHeight,
+        "imageWidth": imageWidth,
+    }
+
+    imageLink = flatten(imageLink)
+    if len(imageLink) != 1:
+        return [
+            QuestionImageModel(
+                name=f"{name}_{i+1}", imageLink=imageLink, **args, **kwargs
+            )
+            for i, imageLink in enumerate(imageLink)
+        ]
+    return QuestionImageModel(name=name, imageLink=imageLink[0], **args, **kwargs)

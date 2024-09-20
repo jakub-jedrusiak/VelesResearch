@@ -357,11 +357,24 @@ class QuestionBooleanModel(QuestionModel):
 
 
 class QuestionImageModel(QuestionModel):
-    """An image type question object model"""
+    """An image type question object model
 
+    Attributes:
+        altText (str | None): The alt property for <img>.
+        contentMode (str): The content type. Can be 'auto' (default), 'image', 'video', 'youtube'.
+        imageFit (str): The object-fit property of <img>. Can be 'contain', 'cover', 'fill', 'none'. See MDN <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>.
+        imageHeight (int | str): The height of the image container in CSS units. See `imageFit`.
+        imageLink (str | None): The src property for <img> or video link.
+        imageWidth (int | str): The width of the image container in CSS units. See `imageFit`.
+    """
+
+    altText: str | None = None
+    contentMode: str = "auto"
+    imageFit: str = "contain"
+    imageHeight: int | str = 150
+    imageLink: str | None = None
+    imageWidth: int | str = 200
     type: str = Field(default="image")
-
-    # TODO
 
 
 class QuestionHtmlModel(QuestionModel):
