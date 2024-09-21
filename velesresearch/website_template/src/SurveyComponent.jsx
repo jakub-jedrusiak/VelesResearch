@@ -36,7 +36,7 @@ function createResults(survey) {
   }
 
   const variables = {};
-  for (const variable in survey.getVariableNames()) {
+  for (const variable of survey.getVariableNames()) {
     variables[variable] = survey.getVariable(variable);
   }
 
