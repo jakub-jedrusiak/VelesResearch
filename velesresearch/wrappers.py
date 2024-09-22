@@ -2536,7 +2536,7 @@ def consent(
         title (str): The visible title of the question. Defaults to "Do you consent to take part in the study?".
         error (str): Error shown if a person doesn't consent.
         name (str): The label of the question. Defaults to "consent".
-        kwargs: other arguments passed to `yesno()`.
+        kwargs: Other arguments passed to `yesno()`.
     """
     return yesno(
         name=name,
