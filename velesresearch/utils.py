@@ -1,6 +1,8 @@
 """Additional utility functions for Veles"""
 
 import itertools
+import inspect
+import re
 
 
 def flatten(args: tuple) -> list:
@@ -83,3 +85,33 @@ def get_class_attributes_assignments(cls):
 
     # Join them as a comma-separated string
     return "args = {" + ", ".join(attribute_assignments) + "}"
+
+
+def create_docs(func_name: callable):
+    signature = str(inspect.signature(func_name))
+    signature = re.sub(", ", ",\n    ", signature)
+    signature = re.sub(r"\(", "(\n    ", signature)
+    signature = re.sub(r"\)", "\n)", signature)
+
+    docstring = inspect.getdoc(func_name).split("\n")
+    description = re.sub(r"(?<!\.)$", ".", docstring[0])
+    args = docstring[4:]
+
+    args = [re.sub("^ +", "", arg) for arg in args]
+    args = [re.sub(r"^(\w+)", r"**`\1`**", arg) for arg in args]
+    args = [re.sub(r"\((.+)\): ", r": _\1_\n", arg) for arg in args]
+
+    return f"""# `{func_name.__name__}()`
+
+{description}
+
+## Signature
+
+```{{python}}
+#| eval: false
+{func_name.__name__}{signature}
+```
+
+## Arguments
+
+{"\n\n".join(args)}"""
