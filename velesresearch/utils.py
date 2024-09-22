@@ -129,7 +129,7 @@ def create_docs(func_name: callable):
     return string
 
 
-def convertImage(*files: Path | str | list[Path | str]) -> list[str]:
+def convertImage(*files: Path | str | list[Path | str]) -> str | list[str]:
     """Convert an images to base64; used for the `image` question type
 
     Args:
@@ -148,4 +148,6 @@ def convertImage(*files: Path | str | list[Path | str]) -> list[str]:
             string = str(b64encode(image.read()), encoding="UTF-8")
             string = f"data:image/{extension};charset=utf-8;base64,{string}"
             base64.append(string)
+    if len(base64) == 1:
+        return base64[0]
     return base64
