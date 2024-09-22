@@ -2539,8 +2539,8 @@ def consent(
         kwargs: Other arguments passed to `yesno()`.
     """
     return yesno(
-        name=name,
-        title=title,
+        name,
+        title,
         validators=expressionValidator(expression=f"{{{name}}} = true", error=error),
         isRequired=True,
         **kwargs,
