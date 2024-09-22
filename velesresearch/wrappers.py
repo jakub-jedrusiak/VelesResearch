@@ -3,6 +3,7 @@
 from .models import *
 from .helperModels import ValidatorModel
 from .utils import flatten
+from .validators import expressionValidator
 
 
 def survey(
@@ -2521,3 +2522,25 @@ def image(
             for i, imageLink in enumerate(imageLink)
         ]
     return QuestionImageModel(name=name, imageLink=imageLink[0], **args, **kwargs)
+
+
+def consent(
+    title: str = "Do you consent to take part in the study?",
+    error: str = "You can't continue without a consent",
+    name: str = "consent",
+    **kwargs,
+) -> QuestionBooleanModel:
+    """Create a question with a consent to take part in the study
+
+    Args:
+        title (str): The visible title of the question. Defaults to "Do you consent to take part in the study?".
+        error (str): Error shown if a person doesn't consent.
+        name (str): The label of the question. Defaults to "consent".
+        kwargs: other arguments passed to `yesno()`.
+    """
+    return yesno(
+        name=name,
+        title=title,
+        validators=expressionValidator(expression=f"{{{name}}} = true", error=error),
+        **kwargs,
+    )
