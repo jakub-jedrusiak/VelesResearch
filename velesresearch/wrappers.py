@@ -2542,5 +2542,6 @@ def consent(
         name=name,
         title=title,
         validators=expressionValidator(expression=f"{{{name}}} = true", error=error),
+        isRequired=True,
         **kwargs,
     )
