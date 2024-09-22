@@ -101,9 +101,11 @@ def create_docs(func_name: callable):
     args = [re.sub(r"^(\w+)", r"**`\1`**", arg) for arg in args]
     args = [re.sub(r"\((.+)\): ", r": _\1_\n", arg) for arg in args]
 
-    return f"""# `{func_name.__name__}()`
+    string = f"""# `{func_name.__name__}()`
 
 {description}
+
+![The {func_name.__name__} question example](./figs/question_types/{func_name.__name__}.png)
 
 ## Signature
 
@@ -115,3 +117,10 @@ def create_docs(func_name: callable):
 ## Arguments
 
 {"\n\n".join(args)}"""
+
+    string = re.sub(r"velesresearch\.models\.", "", string)
+
+    if func_name.__name__ in ["survey", "page", "panel"]:
+        string = re.sub(".+./figs/question_types.+\n\n", "", string)
+
+    return string
