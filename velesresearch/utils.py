@@ -129,18 +129,23 @@ def create_docs(func_name: callable):
     return string
 
 
-def convertImage(*files: Path | str):
-    """Convert an image to base64; used for the `image` question type
+def convertImage(*files: Path | str | list[Path | str]) -> list[str]:
+    """Convert an images to base64; used for the `image` question type
 
     Args:
         files (Path | str): The path to the image file.
     """
-    if not isinstance(files, list):
-        files = [files]
+    files = [
+        Path(file) if not isinstance(file, Path) else file
+        for file in flatten(list(files))
+    ]
     base64 = []
     for file in files:
+        if file.stat().st_size > 1048576:  # 1 MB
+            warn("Your image is larger than 1 MB, consider compressing it.")
+        extension = file.suffix[1:]
         with open(file, "rb") as image:
-            if image.stat().st_size > 1048576:  # 1 MB
-                warn("Your image is larger than 1 MB, consider compressing it.")
-            base64.append(b64encode(image.read()))
+            string = str(b64encode(image.read()), encoding="UTF-8")
+            string = f"data:image/{extension};charset=utf-8;base64,{string}"
+            base64.append(string)
     return base64
