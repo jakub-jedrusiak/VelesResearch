@@ -2527,6 +2527,7 @@ def image(
 def consent(
     title: str = "Do you consent to take part in the study?",
     error: str = "You can't continue without a consent",
+    mode: str = "forbid",
     name: str = "consent",
     **kwargs,
 ) -> QuestionBooleanModel:
@@ -2535,13 +2536,29 @@ def consent(
     Args:
         title (str): The visible title of the question. Defaults to "Do you consent to take part in the study?".
         error (str): Error shown if a person doesn't consent.
+        mode (str): What to do if a person doesn't consent. Can be 'forbid' (default, doesn't allow to continue) or 'end' (redirects to the end).
+            For 'end' to work, set `triggers` in the `survey()` call to `[{"type": "complete", "expression": "{consent} = false"}]`. You can also
+            set `completedHtmlOnCondition` in the `survey()` call to `[{"expression": "{consent} = false", "html": "You can't continue without a consent"}]`
+            to show a custom message in that case.
         name (str): The label of the question. Defaults to "consent".
         kwargs: Other arguments passed to `yesno()`.
     """
-    return yesno(
-        name,
-        title,
-        validators=expressionValidator(expression=f"{{{name}}} = true", error=error),
-        isRequired=True,
-        **kwargs,
-    )
+    if mode == "forbid":
+        return yesno(
+            name,
+            title,
+            validators=expressionValidator(
+                expression=f"{{{name}}} = true", error=error
+            ),
+            isRequired=True,
+            **kwargs,
+        )
+    elif mode == "end":
+        return yesno(
+            name,
+            title,
+            isRequired=True,
+            **kwargs,
+        )
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
