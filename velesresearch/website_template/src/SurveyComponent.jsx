@@ -110,6 +110,10 @@ function SurveyComponent() {
     }
   });
 
+  survey.onAfterRenderSurvey.add((sender, options) => {
+    document.body.style.setProperty("--sjs-general-backcolor-dim", document.getElementsByClassName("sd-root-modern")[0].style.getPropertyValue("--sjs-general-backcolor-dim"));
+  });
+
   survey.onComplete.add(sender => handleResults(sender, completedHtml));
   return <Survey model={survey} />;
 }
