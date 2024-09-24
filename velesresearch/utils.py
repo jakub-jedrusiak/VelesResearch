@@ -102,7 +102,7 @@ def create_docs(func_name: callable):
 
     args = [re.sub("^ +", "", arg) for arg in args]
     args = [re.sub(r"^(\w+)", r"**`\1`**", arg) for arg in args]
-    args = [re.sub(r"\((.+)\): ", r": _\1_\n", arg) for arg in args]
+    args = [re.sub(r"\((.+)\): ", r": _\1_<br>\n", arg) for arg in args]
 
     string = f"""# `{func_name.__name__}()`
 
