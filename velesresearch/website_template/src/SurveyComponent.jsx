@@ -50,6 +50,9 @@ function createResults(survey) {
 
   const variables = {};
   for (const variable of survey.getVariableNames()) {
+    if (survey?.calculatedValues.some( // Skip calculatedValues that are not included into results
+      dict => (dict.name === variable || dict.name?.toLowerCase() === variable) && dict.includeIntoResult === false
+    )) continue;
     variables[variable] = survey.getVariable(variable);
   }
 
