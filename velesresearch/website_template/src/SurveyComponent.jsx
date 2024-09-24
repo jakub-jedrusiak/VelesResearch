@@ -28,6 +28,19 @@ function groupNumber(max) {
   return Math.floor(Math.random() * max + 1);
 }
 
+// Implement rounding function
+SurveyCore.FunctionFactory.Instance.register("round", function (params) {
+  let num;
+  if (typeof params[0] === 'number') {
+    num = params[0];
+  } else if (this.survey.getQuestionByName(params[0])?.value) {
+    num = this.survey.getQuestionByName(params[0]).value;
+  } else if (this.survey.getVariable(params[0])) {
+    num = this.survey.getVariable(params[0]);
+  }
+  return Math.round((num + Number.EPSILON) * 10 * params[1]) / 10 * params[1];
+});
+
 function createResults(survey) {
   // Create results object
   if (!survey.getVariable("dateCompleted")) {
