@@ -676,6 +676,7 @@ class SurveyModel(BaseModel):
         autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
         backgroundImage (str | None): URL or base64 of the background image.
         backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
+        calculatedValues (list[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
         checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
         commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
         completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
@@ -750,6 +751,7 @@ class SurveyModel(BaseModel):
     autoGrowComment: bool = False
     backgroundImage: str | None = None
     backgroundOpacity: int = 1
+    calculatedValues: list[dict] | None = None
     checkErrorsMode: str = "onNextPage"
     commentAreaRows: int = 2
     completedBeforeHtml: str | None = None
