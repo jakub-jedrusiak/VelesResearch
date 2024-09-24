@@ -419,7 +419,7 @@ def dropdown(
         placeholder (str | None): Placeholder text.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -587,7 +587,7 @@ def text(
         minWidth (str): Minimum width of the question in CSS units.
         placeholder (str | None): Placeholder text for the input.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -751,7 +751,7 @@ def checkbox(
         otherText: str | None = None
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -936,7 +936,7 @@ def ranking(
         otherText: str | None = None
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1117,7 +1117,7 @@ def radio(
         otherText: str | None = None
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1304,7 +1304,7 @@ def dropdownMultiple(
         placeholder (str | None): Placeholder text for the input with no value.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1465,7 +1465,7 @@ def textLong(
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1600,7 +1600,7 @@ def rating(
         rateType (str): The type of the rate. Can be 'labels', 'stars', 'smileys'.
         rateValues (list | None): Manually set rate values. Use a list of primitives and/or dictionaries `{"value": ..., "text": ...}`.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1731,7 +1731,7 @@ def yesno(
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1854,7 +1854,7 @@ def info(
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -1990,7 +1990,7 @@ def matrix(
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
         readOnly (bool): Whether the question is read-only.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
@@ -2179,7 +2179,7 @@ def matrixDynamic(
         placeHolder (str | None): Placeholder text for the cells.
         readOnly (bool): Whether the question is read-only.
         removeRowText (str | None): Text for the 'Remove row' button.
-        required (bool): Whether the question is required.
+        isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
