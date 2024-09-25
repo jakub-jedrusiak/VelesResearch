@@ -8,6 +8,7 @@ import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
 import * as config from "./config.js";
 import CSRFToken from "./csrf.js";
+import registerCustomFunctions from "./customExpressionFunctions.js";
 
 nouislider(SurveyCore);
 
@@ -28,19 +29,6 @@ function groupNumber(max) {
   return Math.floor(Math.random() * max + 1);
 }
 
-// Implement rounding function
-SurveyCore.FunctionFactory.Instance.register("round", function (params) {
-  let num;
-  if (typeof params[0] === 'number') {
-    num = params[0];
-  } else if (this.survey.getQuestionByName(params[0])?.value) {
-    num = this.survey.getQuestionByName(params[0]).value;
-  } else if (this.survey.getVariable(params[0])) {
-    num = this.survey.getVariable(params[0]);
-  }
-  return Math.round((num + Number.EPSILON) * 10 * params[1]) / 10 * params[1];
-});
-
 function createResults(survey) {
   // Create results object
   if (!survey.getVariable("dateCompleted")) {
@@ -60,7 +48,7 @@ function createResults(survey) {
 
   return Object.assign(
     {
-      id: MakeID(8)
+      id: survey.participantID
     },
     survey.data,
     URLparams,
@@ -105,8 +93,11 @@ async function handleResults(survey, completedHtml) {
   }
 }
 
+registerCustomFunctions();
+
 function SurveyComponent() {
   const survey = new Model(json);
+  survey.participantID = MakeID(8);
   const dateStarted = new Date();
 
   document.documentElement.lang = survey.locale;
