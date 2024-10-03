@@ -388,7 +388,7 @@ class QuestionHtmlModel(QuestionModel):
     type: str = Field(default="html")
 
     @model_validator(mode="before")
-    def process_html(self, values):
+    def process_html(cls, values):
         # Automatically convert the `html` field to its markdown version
         if "html" in values:
             values["html"] = markdown(values["html"])
