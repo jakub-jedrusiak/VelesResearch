@@ -388,7 +388,7 @@ class QuestionHtmlModel(QuestionModel):
     type: str = Field(default="html")
 
     @model_validator(mode="before")
-    def process_html(cls, values):
+    def process_html(self, values):
         # Automatically convert the `html` field to its markdown version
         if "html" in values:
             values["html"] = markdown(values["html"])
@@ -596,6 +596,70 @@ class QuestionNoUiSliderModel(QuestionModel):
     direction: str = "ltr"
     tooltips: bool = True
     type: str = Field(default="nouislider")
+
+
+class PanelModel(BaseModel):
+    """Object model for panel data
+
+    Attributes:
+        name (str): The label of the panel.
+        questions (QuestionModel | list): The questions on the panel.
+        description (str | None): Optional subtitle or description of the panel.
+        enableIf (str | None): Expression to enable the panel.
+        id (str | None): HTML id attribute for the panel. Usually not necessary.
+        innerIndent (int | None): The inner indent of the panel from the left edge. Can be integers from 0 up.
+        isRequired (bool): Whether the panel is required (at least one question must be answered).
+        maxWidth (str): Maximum width of the panel in CSS units.
+        minWidth (str): Minimum width of the panel in CSS units.
+        questionErrorLocation (str): The location of the error text for the questions. Can be 'default', 'top', 'bottom'.
+        questionsOrder (str): The order of the questions. Can be 'default', 'random', 'initial'.
+        questionStartIndex (str | None): The start index of the questions' numbers. Can include prefixes and suffixes. Default is '1.'.
+        questionTitleLocation (str): The location of the title for the questions. Can be 'default', 'top', 'bottom'.
+        questionTitleWidth (str | None): The width of the question title in CSS units. Only if `questionTitleLocation='left'`.
+        readOnly (bool): Whether the panel is read-only.
+        requiredErrorText (str | None): Error text if the required condition is not met.
+        requiredIf (str | None): Expression to make the panel required.
+        rightIndent (int | None): The right indent of the panel from the right edge. Can be integers from 0 up.
+        showNumber (bool): Whether to show the panel number.
+        showQuestionNumbers (str): Whether to show the question numbers. Can be 'default', 'onpanel', 'off'.
+        startWithNewLine (bool): Whether to start the panel on a new line.
+        title (str): The visible title of the panel.
+        visible (bool): Whether the panel is visible.
+        visibleIf (str | None): Expression to make the panel visible.
+        width (str): Width of the panel in CSS units.
+    """
+
+    name: str
+    questions: QuestionModel | list
+    description: str | None = None
+    enableIf: str | None = None
+    id: str | None = None
+    innerIndent: int | None = None
+    isRequired: bool = False
+    maxWidth: str = "100%"
+    minWidth: str = "300px"
+    questionErrorLocation: str = "default"
+    questionsOrder: str = "default"
+    questionStartIndex: str | None = None
+    questionTitleLocation: str = "default"
+    questionTitleWidth: str | None = None
+    readOnly: bool = False
+    requiredErrorText: str | None = None
+    requiredIf: str | None = None
+    rightIndent: int | None = None
+    showNumber: bool = False
+    showQuestionNumbers: str = "default"
+    startWithNewLine: bool = True
+    title: str | None = None
+    visible: bool = True
+    visibleIf: str | None = None
+    width: str = ""
+
+    def dict(self) -> dict:
+        return dict_without_defaults(self) | {
+            "type": "panel",
+            "elements": [question.dict() for question in self.questions],
+        }
 
 
 class PageModel(BaseModel):
