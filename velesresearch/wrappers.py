@@ -333,6 +333,66 @@ def page(
     )
 
 
+def panel(
+    name: str,
+    *questions: QuestionModel | list[QuestionModel],
+    description: str | None = None,
+    enableIf: str | None = None,
+    id: str | None = None,
+    innerIndent: int | None = None,
+    isRequired: bool = False,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    questionErrorLocation: str = "default",
+    questionsOrder: str = "default",
+    questionStartIndex: str | None = None,
+    questionTitleLocation: str = "default",
+    questionTitleWidth: str | None = None,
+    readOnly: bool = False,
+    requiredErrorText: str | None = None,
+    requiredIf: str | None = None,
+    rightIndent: int | None = None,
+    showNumber: bool = False,
+    showQuestionNumbers: str = "default",
+    startWithNewLine: bool = True,
+    visible: bool = True,
+    visibleIf: str | None = None,
+    width: str = "",
+    **kwargs,
+) -> PanelModel:
+    args = {
+        "description": description,
+        "enableIf": enableIf,
+        "id": id,
+        "innerIndent": innerIndent,
+        "isRequired": isRequired,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "questionErrorLocation": questionErrorLocation,
+        "questionsOrder": questionsOrder,
+        "questionStartIndex": questionStartIndex,
+        "questionTitleLocation": questionTitleLocation,
+        "questionTitleWidth": questionTitleWidth,
+        "readOnly": readOnly,
+        "requiredErrorText": requiredErrorText,
+        "requiredIf": requiredIf,
+        "rightIndent": rightIndent,
+        "showNumber": showNumber,
+        "showQuestionNumbers": showQuestionNumbers,
+        "startWithNewLine": startWithNewLine,
+        "visible": visible,
+        "visibleIf": visibleIf,
+        "width": width,
+    }
+    questions = flatten(questions)
+    return PanelModel(
+        name=name,
+        questions=questions,
+        **args,
+        **kwargs,
+    )
+
+
 def dropdown(
     name: str,
     title: str | list[str] | None,
