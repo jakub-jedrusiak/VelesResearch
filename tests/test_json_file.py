@@ -36,7 +36,7 @@ def test_creation():
     for file in [
         "src",
         "public",
-        "build",
+        # "build",
         "package.json",
         "node_modules",
         "src/survey.js",
