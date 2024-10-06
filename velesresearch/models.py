@@ -3,11 +3,11 @@
 import json
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from importlib.resources import files
 from markdown import markdown
 from pydantic import BaseModel, model_validator, Field
-from pynpm import YarnPackage
 from .validators import ValidatorModel
 from .utils import dict_without_defaults
 
@@ -921,7 +921,7 @@ class SurveyModel(BaseModel):
 
         # do Yarn stuff if needed
         if not os.path.exists(path / "node_modules"):
-            YarnPackage(path).install()
+            subprocess.run(["yarn", "install"], cwd=path, shell=True)
 
         # survey.js
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
@@ -951,4 +951,4 @@ class SurveyModel(BaseModel):
 
         self.createStructure(path=path, folderName=folderName)
 
-        YarnPackage(path / folderName)._run_npm("build")
+        subprocess.run(["yarn", "build"], cwd=path / folderName, shell=True)
