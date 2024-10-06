@@ -4,7 +4,7 @@ from pathlib import Path
 from shutil import rmtree
 from velesresearch import survey, page, radio
 
-RSSI_items = """I feel that I am a person of worth, at least on an equal plane with others.
+RSES_items = """I feel that I am a person of worth, at least on an equal plane with others.
 I feel that I have a number of good qualities.
 All in all, I am inclined to feel that I am a failure.
 I am able to do things as well as most other people.
@@ -15,7 +15,7 @@ I wish I could have more respect for myself.
 I certainly feel useless at times.
 At times I think I am no good at all."""
 
-RSSI_scale = "Strongly Agree; Agree; Disagree; Strongly Disagree"
+RSES_scale = "Strongly Agree; Agree; Disagree; Strongly Disagree"
 
 
 def test_creation():
@@ -25,10 +25,10 @@ def test_creation():
     wd = Path(os.getcwd()) / "build_dir"
 
     survey(
-        page("RSSI", radio("RSSI", RSSI_items.split("\n"), RSSI_scale.split("; "))),
+        page("RSES", radio("RSES", RSES_items.split("\n"), RSES_scale.split("; "))),
         path=wd,
         buildForPublication=True,
-        folderName="rssi",
+        folderName="RSES",
     )
 
     # Check if the file was created
@@ -43,6 +43,6 @@ def test_creation():
         "src/SurveyComponent.jsx",
         "public/index.html",
     ]:
-        assert os.path.exists(wd / "rssi" / file)
+        assert os.path.exists(wd / "RSES" / file)
 
     rmtree(wd)
