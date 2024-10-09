@@ -151,3 +151,18 @@ def convertImage(*files: Path | str | list[Path | str]) -> str | list[str]:
     if len(base64) == 1:
         return base64[0]
     return base64
+
+
+def getJS(*files: Path | str | list[Path | str]) -> str:
+    """Get the contents of a .js file and return it as a string"""
+    files = [
+        Path(file) if not isinstance(file, Path) else file
+        for file in flatten(list(files))
+    ]
+    contents = []
+    for file in files:
+        with open(file, "r", encoding="UTF-8") as file:
+            data = file.read()
+            contents.append(data)
+
+    return "\n\n".join(contents)

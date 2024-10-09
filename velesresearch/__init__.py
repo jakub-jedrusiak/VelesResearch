@@ -1,4 +1,4 @@
 "VelesResearch main functionality."
 from .wrappers import *
 from .validators import *
-from .utils import convertImage
+from .utils import convertImage, getJS
