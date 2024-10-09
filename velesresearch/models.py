@@ -957,7 +957,7 @@ class SurveyModel(BaseModel):
 
         # do Yarn stuff if needed
         if not os.path.exists(path / "node_modules"):
-            subprocess.run(["yarn", "install"], cwd=path, shell=True)
+            subprocess.run(["yarn", "install"], cwd=path, shell=True, check=False)
 
         # survey.js
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
@@ -1007,4 +1007,6 @@ class SurveyModel(BaseModel):
 
         self.createStructure(path=path, folderName=folderName)
 
-        subprocess.run(["yarn", "build"], cwd=path / folderName, shell=True)
+        subprocess.run(
+            ["yarn", "build"], cwd=path / folderName, shell=True, check=False
+        )
