@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import subprocess
+import re
 from pathlib import Path
 from importlib.resources import files
 from markdown import markdown
@@ -85,6 +86,7 @@ class QuestionModel(BaseModel):
     useDisplayValuesInDynamicTexts: bool = True
     width: str = ""
     addCode: dict | None = None
+    customCode: str | None = None
 
     def __str__(self) -> str:
         return f"  {self.name} ({self.type}): {self.title}"
@@ -717,6 +719,7 @@ class PageModel(BaseModel):
     visibleIf: str | None = None
     visibleIndex: int | None = None
     addCode: dict | None = None
+    customCode: str | None = None
 
     def __str__(self) -> str:
         return f"Page: {self.name}\n" + "\n".join(
@@ -881,6 +884,7 @@ class SurveyModel(BaseModel):
     width: str | None = None
     widthMode: str = "auto"
     addCode: dict | None = None
+    customCode: str | None = None
 
     def __str__(self) -> str:
         first_line = "VelesSurvey" + (f' ("{self.title}")\n' if self.title else "\n")
@@ -899,6 +903,35 @@ class SurveyModel(BaseModel):
 
     def json(self) -> str:
         return json.dumps(self.dict())
+
+    def extractKey(self, keyName) -> str:
+        "Extracts the data with a specified key from self.dict()"
+        # Retrieve the dictionary data.
+        data = self.dict()
+
+        # Initialize an empty list to store customCode values.
+        result = []
+        # Create a stack with the initial data to iterate through.
+        stack = [data]
+
+        # Loop through the stack until it's empty.
+        while stack:
+            current = stack.pop()
+
+            # If current item is a dictionary, process its keys and values.
+            if isinstance(current, dict):
+                for key, value in current.items():
+                    # If the key is 'customCode', add its value to the result list.
+                    if key == keyName:
+                        result.append(value)
+                    # Add the value to the stack for further processing.
+                    stack.append(value)
+
+            # If current item is a list, add all its elements to the stack.
+            elif isinstance(current, list):
+                stack.extend(current)
+
+        return "\n\n".join([f"  {result}" for result in result])
 
     def createStructure(
         self, path: str | Path = os.getcwd(), folderName: str = "survey"
@@ -941,6 +974,19 @@ class SurveyModel(BaseModel):
             )
         with open(path / "src" / "config.js", "w", encoding="utf-8") as configJS:
             configJS.write(configJSData)
+
+        # customCode
+        with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:
+            surveyComponentData = file.read()
+            surveyComponentData = re.sub(
+                r"(?<=  \/\/ \{% customCode %\}\n\n).+(?=\n\n  \/\/ \{% end customCode %\})",
+                self.extractKey("customCode"),
+                surveyComponentData,
+                flags=re.M | re.S,
+            )
+
+        with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
+            file.write(surveyComponentData)
 
     def buildForProduction(
         self, path: str | Path = os.getcwd(), folderName: str = "survey"
