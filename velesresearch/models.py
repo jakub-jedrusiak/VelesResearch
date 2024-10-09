@@ -87,6 +87,7 @@ class QuestionModel(BaseModel):
     width: str = ""
     addCode: dict | None = None
     customCode: str | None = None
+    customFunctions: str | None = None
 
     def __str__(self) -> str:
         return f"  {self.name} ({self.type}): {self.title}"
@@ -720,6 +721,7 @@ class PageModel(BaseModel):
     visibleIndex: int | None = None
     addCode: dict | None = None
     customCode: str | None = None
+    customFunctions: str | None = None
 
     def __str__(self) -> str:
         return f"Page: {self.name}\n" + "\n".join(
@@ -885,6 +887,7 @@ class SurveyModel(BaseModel):
     widthMode: str = "auto"
     addCode: dict | None = None
     customCode: str | None = None
+    customFunctions: str | None = None
 
     def __str__(self) -> str:
         first_line = "VelesSurvey" + (f' ("{self.title}")\n' if self.title else "\n")
@@ -978,12 +981,19 @@ class SurveyModel(BaseModel):
         # customCode
         with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:
             surveyComponentData = file.read()
-            surveyComponentData = re.sub(
-                r"(?<=  \/\/ \{% customCode %\}\n\n).+(?=\n\n  \/\/ \{% end customCode %\})",
-                self.extractKey("customCode"),
-                surveyComponentData,
-                flags=re.M | re.S,
-            )
+
+        surveyComponentData = re.sub(
+            r"(?<=  \/\/ \{% customCode %\}\n\n).+(?=\n\n  \/\/ \{% end customCode %\})",
+            self.extractKey("customCode"),
+            surveyComponentData,
+            flags=re.M | re.S,
+        )
+        surveyComponentData = re.sub(
+            r"(?<=\/\/ \{% customFunctions %\}\n\n).+(?=\n\n\/\/ \{% end customFunctions %\})",
+            self.extractKey("customFunctions"),
+            surveyComponentData,
+            flags=re.M | re.S,
+        )
 
         with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
             file.write(surveyComponentData)

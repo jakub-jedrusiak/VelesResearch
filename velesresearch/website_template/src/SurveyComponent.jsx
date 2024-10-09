@@ -93,6 +93,12 @@ async function handleResults(survey, completedHtml) {
   }
 }
 
+// {% customFunctions %}
+
+// placeholder
+
+// {% end customFunctions %}
+
 registerCustomFunctions();
 
 function SurveyComponent() {
