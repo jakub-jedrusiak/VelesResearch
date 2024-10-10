@@ -6,6 +6,7 @@ import { json } from "./survey.js";
 import * as SurveyCore from "survey-core";
 import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
+import { Converter } from "showdown";
 import * as config from "./config.js";
 import CSRFToken from "./csrf.js";
 import registerCustomFunctions from "./customExpressionFunctions.js";
@@ -125,6 +126,18 @@ function SurveyComponent() {
 
   survey.onAfterRenderSurvey.add((sender, options) => {
     document.body.style.setProperty("--sjs-general-backcolor-dim", document.getElementsByClassName("sd-root-modern")[0].style.getPropertyValue("--sjs-general-backcolor-dim"));
+  });
+
+  // Markdown formatting
+  const converter = new Converter();
+  survey.onTextMarkdown.add(function (survey, options) {
+    // Convert Markdown to HTML
+    let str = converter.makeHtml(options.text);
+    // Remove root paragraphs <p></p>
+    str = str.substring(3);
+    str = str.substring(0, str.length - 4);
+    // Set HTML markup to render
+    options.html = str;
   });
 
   // {% customCode %}
