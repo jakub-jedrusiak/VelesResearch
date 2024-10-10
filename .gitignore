@@ -166,3 +166,4 @@ cython_debug/
 survey.json
 build_dir/
 node_modules
+survey/
