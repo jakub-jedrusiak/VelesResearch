@@ -50,6 +50,8 @@ class QuestionModel(BaseModel):
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
 
     name: str
@@ -694,6 +696,8 @@ class PageModel(BaseModel):
         visibleIndex (int | None): The index at which the page should be visible.
         width (str): Width of the page
         addCode (dict | None): Additional code for the page. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
 
     name: str
@@ -811,6 +815,8 @@ class SurveyModel(BaseModel):
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
         addCode (dict | None): Additional code for the survey. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
 
     pages: list[PageModel]

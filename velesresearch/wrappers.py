@@ -161,6 +161,9 @@ def survey(
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
         addCode (dict | None): Additional code for the survey. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
+
     """
     args = {
         "addScoreToResults": addScoreToResults,
@@ -299,6 +302,9 @@ def page(
         visibleIf (str | None): Expression to make the page visible.
         visibleIndex (int | None): The index at which the page should be visible.
         width (str): Width of the page
+        addCode (dict | None): Additional code for the survey. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "description": description,
@@ -360,6 +366,35 @@ def panel(
     width: str = "",
     **kwargs,
 ) -> PanelModel:
+    """
+    Create a panel.
+
+    Args:
+        name (str): The label of the page.
+        questions (QuestionModel | list[QuestionModel]): The questions on the panel.
+        description (str | None): Optional subtitle or description of the panel.
+        enableIf (str | None): Expression to enable the panel.
+        id (str | None): HTML id attribute for the panel. Usually not necessary.
+        innerIndent (int | None): The inner indent of the panel.
+        isRequired (bool): Whether the panel is required (at least one question must be answered).
+        maxWidth (str): Maximum width of the panel in CSS units.
+        minWidth (str): Minimum width of the panel in CSS units.
+        questionErrorLocation (str): The location of the error text for the questions. Can be 'default', 'top', 'bottom'.
+        questionsOrder (str): The order of the questions. Can be 'default', 'random'.
+        questionStartIndex (str | None): The number or letter with which the questions numbering should start.
+        questionTitleLocation (str): The location of the title for the questions. Can be 'default', 'top', 'bottom'.
+        questionTitleWidth (str | None): The width of the question title.
+        readOnly (bool): Whether the panel is read-only.
+        requiredErrorText (str | None): Error text if the required condition is not met.
+        requiredIf (str | None): Expression to make the panel required (at least one question must be answered).
+        rightIndent (int | None): The right indent of the panel.
+        showNumber (bool): Whether to show the panel number.
+        showQuestionNumbers (str): Whether to show the question numbers. Can be 'default', 'on', 'off', 'onpage' (number each page anew).
+        startWithNewLine (bool): Whether to start the panel on a new line.
+        visible (bool): Whether the panel is visible.
+        visibleIf (str | None): Expression to make the panel visible.
+        width (str): Width of the panel.
+    """
     args = {
         "description": description,
         "enableIf": enableIf,
@@ -500,9 +535,8 @@ def dropdown(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
-
-    Returns:
-        QuestionDropdownModel: The question object model or a list of question object models if `title` is a list.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -667,6 +701,8 @@ def text(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -834,6 +870,8 @@ def checkbox(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1023,6 +1061,8 @@ def ranking(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1199,6 +1239,8 @@ def radio(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
 
     Returns:
         QuestionRadiogroupModel: The question object model or a list of question object models if `title` is a list.
@@ -1389,6 +1431,8 @@ def dropdownMultiple(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1543,6 +1587,8 @@ def textLong(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1678,6 +1724,8 @@ def rating(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1811,6 +1859,8 @@ def yesno(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -1932,6 +1982,8 @@ def info(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
     addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -2071,6 +2123,8 @@ def matrix(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -2262,6 +2316,8 @@ def matrixDynamic(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -2400,6 +2456,8 @@ def slider(
         direction (str): The direction of the slider. Can be 'ltr', 'rtl'.
         tooltips (bool): Whether to show tooltips.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
@@ -2536,6 +2594,8 @@ def image(
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
         addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
     """
     args = {
         "titleLocation": titleLocation,
