@@ -939,7 +939,8 @@ class SurveyModel(BaseModel):
             # If current item is a list, add all its elements to the stack.
             elif isinstance(current, list):
                 stack.extend(current)
-
+        if len(result) == 0 or (len(result) == 1 and result[0] == ""):
+            return r"// placeholder"
         return "\n\n".join([f"  {result}" for result in result])
 
     def createStructure(
