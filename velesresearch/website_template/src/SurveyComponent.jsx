@@ -71,9 +71,14 @@ async function handleResults(survey, completedHtml) {
 
   // Wait for reCAPTCHA to be ready and get token
   let siteKey = new URL(document.getElementById("recaptchaScript").src).searchParams.get("render");
-  await new Promise(resolve => window.grecaptcha.ready(resolve));
-  const token = await window.grecaptcha.execute(siteKey, { action: 'submit' });
-  Object.assign(result, { "g-recaptcha-token": token });
+  let recaptchaToken;
+  if (siteKey) {
+    await new Promise(resolve => window.grecaptcha.ready(resolve));
+    recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+  } else {
+    recaptchaToken = NaN;
+  }
+  Object.assign(result, { "g-recaptcha-token": recaptchaToken });
 
   // send data to Django backend
   const requestHeaders = {
