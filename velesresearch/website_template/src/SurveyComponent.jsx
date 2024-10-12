@@ -125,10 +125,6 @@ function SurveyComponent() {
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
   document.getElementById("tryAgainButton").innerHTML = SurveyCore.surveyLocalization.getString("saveAgainButton", survey.locale);
 
-  const recaptchaScript = document.createElement("script");
-  recaptchaScript.src = "https://www.google.com/recaptcha/api.js?render=" + (survey.recaptchaSiteKey ?? "6Lfg0l4qAAAAALSzLmLER0BhBpQ1BG_PJWaAc1wq");
-  document.head.appendChild(recaptchaScript);
-
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());
 

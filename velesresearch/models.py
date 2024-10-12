@@ -791,7 +791,6 @@ class SurveyModel(BaseModel):
         questionStartIndex (int | str | None): The number or letter with which the questions numbering should start.
         questionTitleLocation (str): The location of the title for the questions. Can be 'top' (default), 'bottom', 'left'. Can be overridden for individual questions or pages.
         questionTitlePattern (str): The pattern of the question title. See <https://surveyjs.io/form-library/documentation/design-survey/configure-question-titles#title-pattern>.
-        recaptchaSiteKey (str): The site key for the reCAPTCHA v3. Default is VelesWeb's key. Use only if you self-host.
         requiredText (str): The text denoting the required questions. Default is '*'.
         scoresSuffix (str): The suffix of the score column if `addScoreToResults=True`. Default is '_score'.
         showCompletedPage (bool): Whether to show the completed page. Default is True.
@@ -869,7 +868,6 @@ class SurveyModel(BaseModel):
     questionStartIndex: int | str | None = None
     questionTitleLocation: str = "top"
     questionTitlePattern: str = "numTitleRequire"
-    recaptchaSiteKey: str = "6Lfg0l4qAAAAALSzLmLER0BhBpQ1BG_PJWaAc1wq"
     requiredText: str = "*"
     scoresSuffix: str = "_score"
     showCompletedPage: bool = True
