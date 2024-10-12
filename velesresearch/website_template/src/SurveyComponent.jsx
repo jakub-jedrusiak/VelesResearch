@@ -59,6 +59,7 @@ function createResults(survey) {
 
 async function handleResults(survey, completedHtml) {
   const result = createResults(survey);
+
   // Add scores to results
   if (survey.addScoreToResults === undefined || survey.addScoreToResults) {
     for (const question of survey.getAllQuestions()) {
@@ -67,6 +68,12 @@ async function handleResults(survey, completedHtml) {
       }
     }
   }
+
+  // Wait for reCAPTCHA to be ready and get token
+  await new Promise(resolve => window.grecaptcha.ready(resolve));
+  const token = await window.grecaptcha.execute(survey.recaptchaSiteKey ?? "6Lfg0l4qAAAAALSzLmLER0BhBpQ1BG_PJWaAc1wq", { action: 'submit' });
+  Object.assign(result, { "g-recaptcha-token": token });
+
   // send data to Django backend
   const requestHeaders = {
     method: "POST",
@@ -79,15 +86,21 @@ async function handleResults(survey, completedHtml) {
     body: JSON.stringify(result),
   };
   const url = window.location.pathname + "submit/";
+  const response = await fetch(url, requestHeaders);
 
-  let response = await fetch(url, requestHeaders);
   if (response.ok) {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = completedHtml;
     document.getElementById("tryAgainDiv").style.display = "none";
     document.getElementById("tryAgainButton").disabled = true;
     return "OK";
   } else {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `<div style="text-align: center">${SurveyCore.surveyLocalization.getString("savingDataError", survey.locale)}</div><br><div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div><br><div style="text-align: center; padding-bottom: 2em; fint-size: 2em">${response.statusText}</div>`;
+    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `
+        <div style="text-align: center">${SurveyCore.surveyLocalization.getString("savingDataError", survey.locale)}</div>
+        <br>
+        <div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${response.status}</div>
+        <br>
+        <div style="text-align: center; padding-bottom: 2em; font-size: 2em">${response.statusText}</div>
+      `;
     document.getElementById("tryAgainDiv").style.display = "block";
     document.getElementById("tryAgainButton").disabled = false;
     return "Error";
@@ -111,6 +124,10 @@ function SurveyComponent() {
   const completedHtml = survey.completedHtml + "<br>";
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
   document.getElementById("tryAgainButton").innerHTML = SurveyCore.surveyLocalization.getString("saveAgainButton", survey.locale);
+
+  const recaptchaScript = document.createElement("script");
+  recaptchaScript.src = "https://www.google.com/recaptcha/api.js?render=" + (survey.recaptchaSiteKey ?? "6Lfg0l4qAAAAALSzLmLER0BhBpQ1BG_PJWaAc1wq");
+  document.head.appendChild(recaptchaScript);
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());

@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const express = require('express');
+const recaptchaSecret = require("./recaptchaSecret.json").recaptchaSecret;
 
 module.exports = {
   entry: "./src/index.js",
@@ -25,10 +27,32 @@ module.exports = {
       if (!devServer) {
         throw new Error('webpack-dev-server is not defined');
       }
-      devServer.app.post('/submit', (req, res) => {
-        setTimeout(() => {
-          res.status(200).send("OK");
-        }, 1000);  // 1 second delay
+      devServer.app.use(express.json());
+      devServer.app.post('/submit', async (req, res) => {
+        const data = req.body;
+        const token = data["g-recaptcha-token"];
+        delete data["g-recaptcha-token"];
+        let recaptcha_response = {};
+        if (token) {
+          const requestHeaders = {
+            method: "POST",
+            body: `secret=${recaptchaSecret}&response=${token}`, // URL-encoded body
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded', // important for proper format
+            },
+          };
+          let recaptcha = await fetch("https://www.google.com/recaptcha/api/siteverify", requestHeaders);
+          recaptcha = await recaptcha.json();
+          recaptcha_response = {
+            g_recaptcha_score: recaptcha.success ? recaptcha.score : NaN,
+          };
+        } else {
+          recaptcha_response = {
+            g_recaptcha_score: NaN,
+          };
+        }
+        res.body = Object.assign(data, recaptcha_response);
+        res.status(200).send(res.body);
       });
       return middlewares;
     }
