@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const express = require('express');
-const recaptchaSecret = require("./recaptchaSecret.json").recaptchaSecret;
+const recaptchaKeys = require("./recaptchaKeys.json");
 
 module.exports = {
   entry: "./src/index.js",
@@ -13,6 +13,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html"),
+      templateParameters: {
+        RECAPTCHA_SITE_KEY: recaptchaKeys.RECAPTCHA_SITE_KEY
+      },
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: "public/images", to: "images" }],
@@ -36,7 +39,7 @@ module.exports = {
         if (token) {
           const requestHeaders = {
             method: "POST",
-            body: `secret=${recaptchaSecret}&response=${token}`, // URL-encoded body
+            body: `secret=${recaptchaKeys.RECAPTCHA_SECRET_KEY}&response=${token}`, // URL-encoded body
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded', // important for proper format
             },
