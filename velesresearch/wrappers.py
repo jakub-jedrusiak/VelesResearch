@@ -646,6 +646,7 @@ def text(
     min: str | int | None = None,
     minErrorText: str | None = None,
     minValueExpression: str | None = None,
+    monitorInput: bool = False,
     placeholder: str | None = None,
     size: int | None = None,
     step: str | None = None,
@@ -679,6 +680,7 @@ def text(
         minErrorText (str | None): Error text if the value is less than `min`.
         minValueExpression (str | None): Expression to decide the minimum value.
         minWidth (str): Minimum width of the question in CSS units.
+        monitorInput (bool): Whether to count the time spent with the question focused and the number of key presses. Useful for bot detection.
         placeholder (str | None): Placeholder text for the input.
         readOnly (bool): Whether the question is read-only.
         isRequired (bool): Whether the question is required.
@@ -745,6 +747,7 @@ def text(
         "min": min,
         "minErrorText": minErrorText,
         "minValueExpression": minValueExpression,
+        "monitorInput": monitorInput,
         "placeholder": placeholder,
         "size": size,
         "step": step,
@@ -1533,6 +1536,7 @@ def textLong(
     id: str | None = None,
     maxWidth: str = "100%",
     minWidth: str = "300px",
+    monitorInput: bool = False,
     resetValueIf: str | None = None,
     setValueIf: str | None = None,
     setValueExpression: str | None = None,
@@ -1568,6 +1572,7 @@ def textLong(
         id (str | None): HTML id attribute for the question. Usually not necessary.
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
+        monitorInput (bool): Whether to count the time spent with the question focused and the number of key presses. Useful for bot detection.
         readOnly (bool): Whether the question is read-only.
         isRequired (bool): Whether the question is required.
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -1614,6 +1619,7 @@ def textLong(
         "id": id,
         "maxWidth": maxWidth,
         "minWidth": minWidth,
+        "monitorInput": monitorInput,
         "resetValueIf": resetValueIf,
         "setValueIf": setValueIf,
         "setValueExpression": setValueExpression,

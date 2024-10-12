@@ -165,7 +165,17 @@ class QuestionDropdownModel(QuestionSelectBase):
     type: str = Field(default="dropdown")
 
 
-class QuestionTextModel(QuestionModel):
+class QuestionTextBase(QuestionModel):
+    """Base class for text type question object models
+
+    Attributes:
+        monitorInput (bool): Whether to count the time spent with the question focused and the number of key presses. Useful for bot detection.
+    """
+
+    monitorInput: bool = False
+
+
+class QuestionTextModel(QuestionTextBase):
     """A short text type question object model
 
     Attributes:
@@ -292,7 +302,7 @@ class QuestionTagboxModel(QuestionCheckboxModel):
         self.type = "tagbox"
 
 
-class QuestionCommentModel(QuestionModel):
+class QuestionCommentModel(QuestionTextBase):
     """A long text type question object model
 
     Attributes:

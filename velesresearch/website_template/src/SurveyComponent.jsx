@@ -113,6 +113,77 @@ async function handleResults(survey, completedHtml) {
   }
 }
 
+// Input monitoring function
+function setupTracking(survey, questionName) {
+  const textboxId = survey.getQuestionByName(questionName).id + "i";
+  const setupTextboxEvents = () => {
+    const textbox = document.getElementById(textboxId);
+
+    if (!textbox) return; // Return if the textbox is not yet available in the DOM
+
+    // Retrieve previously stored values
+    let totalFocusedTime = parseInt(survey.getVariable(`${questionName}_time`), 10) || 0;
+    let keystrokeCount = parseInt(survey.getVariable(`${questionName}_keystrokes`), 10) || 0;
+    let timerInterval = null;
+    let startTime = 0; // Start time when focused
+
+    // Start the timer
+    const startTimer = () => {
+      if (!timerInterval) {
+        startTime = Date.now(); // Record the time when focus starts
+        timerInterval = setInterval(() => {
+          const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+          survey.setVariable(`${questionName}_time`, totalFocusedTime + elapsedTime);
+        }, 1000); // Update every second
+      }
+    };
+
+    // Stop the timer and update the total time
+    const stopTimer = () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        totalFocusedTime += Math.floor((Date.now() - startTime) / 1000); // Add elapsed time to total
+        survey.setVariable(`${questionName}_time`, totalFocusedTime);
+      }
+    };
+
+    // Count keystrokes only when focused
+    const countKeystrokes = (event) => {
+      if (event.isTrusted && textbox === document.activeElement) { // Ensure the event is a valid user input
+        keystrokeCount++;
+        survey.setVariable(`${questionName}_keystrokes`, keystrokeCount);
+      }
+    };
+
+    // Add event listeners for focus, blur, and keystrokes
+    textbox.addEventListener("focus", startTimer);
+    textbox.addEventListener("blur", stopTimer);
+    textbox.addEventListener("keydown", countKeystrokes);
+  };
+
+  // Watch for the textbox being added back to the DOM
+  const observeDOMChanges = () => {
+    const container = document.getElementById("root");
+
+    // MutationObserver to detect when the textbox is added back to the DOM
+    const observer = new MutationObserver(() => {
+      const textbox = document.getElementById(textboxId);
+      if (textbox) {
+        setupTextboxEvents(); // Reattach the event listeners once the textbox exists
+      }
+    });
+
+    // Start observing for DOM changes
+    observer.observe(container, { childList: true, subtree: true });
+
+    // Initial setup if the textbox is already in the DOM
+    setupTextboxEvents();
+  };
+
+  observeDOMChanges(); // Begin observing and setup tracking
+}
+
 // {% customFunctions %}
 
 // placeholder
@@ -157,6 +228,12 @@ function SurveyComponent() {
     str = str.substring(0, str.length - 4);
     // Set HTML markup to render
     options.html = str;
+  });
+
+  // Input monitoring setup
+  SurveyCore.Serializer.addProperty("question", { name: "monitorInput", type: "boolean" })
+  survey.onAfterRenderQuestion.add((sender, options) => {
+    if (options.question.getPropertyValue("monitorInput", false)) setupTracking(sender, options.question.name);
   });
 
   // {% customCode %}
