@@ -23,11 +23,15 @@ Veles is in pre-alpha development, but the goal features are:
 
 - Text-based, so automatable and easily modifiable.
 
-- Integration with GitHub.
-
 - Ability to use JavaScript and CSS directly.
 
 - [Open source documentation](https://docs.velesweb.org/).
+
+- reCAPTCHA v3 protection from bots by default.
+
+- Detection of pasted answers and writing speed calculation (detect GPT).
+
+- Integration with GitHub.
 
 - Python-based.
 
