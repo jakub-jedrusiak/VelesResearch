@@ -70,7 +70,7 @@ async function handleResults(survey, completedHtml) {
   }
 
   // Wait for reCAPTCHA to be ready and get token
-  let siteKey = new Url(document.getElementById("recaptchaScript").src).searchParams.get("render");
+  let siteKey = new URL(document.getElementById("recaptchaScript").src).searchParams.get("render");
   await new Promise(resolve => window.grecaptcha.ready(resolve));
   const token = await window.grecaptcha.execute(siteKey, { action: 'submit' });
   Object.assign(result, { "g-recaptcha-token": token });
