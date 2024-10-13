@@ -3,6 +3,7 @@
 ## future release
 
 * Added a functional `index.css` file.
+* Matrix questions work as expected. Added the `matrixDropdown` question type.
 
 ## 0.2.0
 

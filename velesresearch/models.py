@@ -464,15 +464,22 @@ class QuestionMatrixBaseModel(QuestionModel):
         if self.columns is not None:
             columns = {
                 "columns": [
-                    column.dict() if not isinstance(column, dict) else column
+                    column.dict() if isinstance(column, QuestionModel) else column
                     for column in self.columns
                 ]
             }
             for col in columns["columns"]:
-                if "type" in col:
+                if isinstance(col, dict) and "type" in col:
                     col["cellType"] = col.pop("type")
         else:
             columns = {}
+
+        if self.rows is not None:
+            if not isinstance(self.rows, list):
+                rows = [rows]
+            rows = {"rows": self.rows}
+        else:
+            rows = {}
 
         if self.validators is not None:
             if isinstance(self.validators, list):
@@ -489,7 +496,7 @@ class QuestionMatrixBaseModel(QuestionModel):
         else:
             addCode = {}
 
-        return dict_without_defaults(self) | columns | validators | addCode
+        return dict_without_defaults(self) | columns | rows | validators | addCode
 
 
 class QuestionMatrixDropdownModelBase(QuestionMatrixBaseModel):
@@ -529,7 +536,7 @@ class QuestionMatrixModel(QuestionMatrixBaseModel):
     type: str = Field(default="matrix")
 
 
-class QuestionMatrixDropdownModel(QuestionModel):
+class QuestionMatrixDropdownModel(QuestionMatrixDropdownModelBase):
     """A multi-select matrix type question object model"""
 
     type: str = Field(default="matrixdropdown")

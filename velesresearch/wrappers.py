@@ -2036,49 +2036,49 @@ def info(
 def matrix(
     name: str,
     title: str | list[str] | None,
-    *columns,
-    titleLocation: str = "default",
-    description: str | None = None,
-    descriptionLocation: str = "default",
-    isRequired: bool = False,
-    readOnly: bool = False,
-    visible: bool = True,
-    requiredIf: str | None = None,
-    enableIf: str | None = None,
-    visibleIf: str | None = None,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
-    showOtherItem: bool = False,
-    showCommentArea: bool = False,
+    columns: list | dict,
+    *rows: list | dict,
+    alternateRows: bool | None = None,
+    columnMinWidth: str | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
     correctAnswer: str | None = None,
     defaultValue: str | None = None,
     defaultValueExpression: str | None = None,
-    requiredErrorText: str | None = None,
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    displayMode: str = "auto",
+    eachRowUnique: bool | None = None,
+    enableIf: str | None = None,
     errorLocation: str = "default",
+    hideIfRowsEmpty: bool | None = None,
     hideNumber: bool = False,
     id: str | None = None,
+    isAllRowRequired: bool = False,
+    isRequired: bool = False,
     maxWidth: str = "100%",
     minWidth: str = "300px",
+    readOnly: bool = False,
+    requiredErrorText: str | None = None,
+    requiredIf: str | None = None,
     resetValueIf: str | None = None,
-    setValueIf: str | None = None,
+    rowTitleWidth: str | None = None,
+    rowsOrder: str = "initial",
     setValueExpression: str | None = None,
+    setValueIf: str | None = None,
+    showCommentArea: bool = False,
+    showHeader: bool = True,
+    showOtherItem: bool = False,
     startWithNewLine: bool = True,
     state: str = "default",
+    titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    verticalAlign: str = "middle",
+    visible: bool = True,
+    visibleIf: str | None = None,
     width: str = "",
     addCode: dict | None = None,
-    rows: list | dict | None = None,
-    alternateRows: bool | None = None,
-    columnMinWidth: str | None = None,
-    displayMode: str = "auto",
-    rowTitleWidth: str | None = None,
-    showHeader: bool = True,
-    verticalAlign: str = "middle",
-    eachRowUnique: bool | None = None,
-    hideIfRowsEmpty: bool | None = None,
-    isAllRowRequired: bool = False,
-    rowsOrder: str = "initial",
     **kwargs,
 ) -> QuestionMatrixModel | list[QuestionMatrixModel]:
     """Create a matrix question object
@@ -2086,7 +2086,7 @@ def matrix(
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
+        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
         rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
         alternateRows (bool | None): Whether to alternate the rows.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
@@ -2164,7 +2164,6 @@ def matrix(
         "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
         "width": width,
         "addCode": addCode,
-        "rows": rows,
         "alternateRows": alternateRows,
         "columnMinWidth": columnMinWidth,
         "displayMode": displayMode,
@@ -2176,18 +2175,207 @@ def matrix(
         "isAllRowRequired": isAllRowRequired,
         "rowsOrder": rowsOrder,
     }
-    columns = flatten(columns)
+    rows = flatten(rows)
     if not isinstance(title, list):
         title = [title]
+    rows_changed = []
+    for i, row in enumerate(rows):
+        if isinstance(row, dict):
+            rows_changed.append(row)
+        else:
+            rows_changed.append({"value": f"{name}_{i+1}", "text": row})
     if len(title) != 1:
         return [
             QuestionMatrixModel(
-                name=f"{name}_{i+1}", title=t, columns=columns, **args, **kwargs
+                name=f"{name}_{i+1}",
+                title=t,
+                columns=columns,
+                rows=rows_changed,
+                **args,
+                **kwargs,
             )
             for i, t in enumerate(title)
         ]
     return QuestionMatrixModel(
-        name=name, title=title[0], columns=columns, **args, **kwargs
+        name=name, title=title[0], columns=columns, rows=rows_changed, **args, **kwargs
+    )
+
+
+def matrixDropdown(
+    name: str,
+    title: str | list[str],
+    columns: list | QuestionModel | dict,
+    *rows: list | dict,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    customCode: str | None = None,
+    customFunctions: str | None = None,
+    alternateRows: bool | None = None,
+    columnMinWidth: str | None = None,
+    displayMode: str = "auto",
+    rowTitleWidth: str | None = None,
+    showHeader: bool = True,
+    verticalAlign: str = "middle",
+    cellErrorLocation: str = "default",
+    cellType: str | None = None,
+    isUniqueCaseSensitive: bool = False,
+    placeHolder: str | None = None,
+    transposeData: bool = False,
+    **kwargs,
+):
+    """Create a matrix, where each column can be a question of a specified type.
+
+    Args:
+        name (str): The label of the question.
+        title (str | None): The visible title of the question. If None, `name` is used.
+        columns (list | QuestionModel | dict): The columns of the matrix. Use question objects or dictionaries.
+        rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
+        alternateRows (bool | None): Whether to alternate the rows.
+        cellErrorLocation (str): The location of the error text for the cells. Can be 'default', 'top', 'bottom'.
+        cellType (str | None): The type of the matrix cells. Can be overridden for individual columns. Can be "dropdown" (default), "checkbox", "radiogroup", "tagbox", "text", "comment", "boolean", "expression", "rating".
+        choices (str | dict | list | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
+        columnMinWidth (str | None): Minimum width of the column in CSS units.
+        commentPlaceholder (str | None): Placeholder text for the comment area.
+        commentText (str | None): Text for the comment area.
+        correctAnswer (str | None): Correct answer for the question. Use for quizzes.
+        defaultValue (str | None): Default value for the question.
+        defaultValueExpression (str | None): Expression deciding the default value for the question.
+        description (str | None): Optional subtitle or description of the question.
+        descriptionLocation (str): The location of the description. Can be 'default', 'underTitle', 'underInput'.
+        displayMode (str): The display mode of the matrix. Can be 'auto', 'list', 'table'.
+        enableIf (str | None): Expression to enable the question.
+        errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
+        hideNumber (bool): Whether to hide the question number.
+        id (str | None): HTML id attribute for the question. Usually not necessary.
+        isRequired (bool): Whether the question is required.
+        isUniqueCaseSensitive (bool): Whether the case of the answer should be considered when checking for uniqueness. If `True`, "Kowalski" and "kowalski" will be considered different answers.
+        maxWidth (str): Maximum width of the question in CSS units.
+        minWidth (str): Minimum width of the question in CSS units.
+        placeHolder (str | None): Placeholder text for the cells.
+        readOnly (bool): Whether the question is read-only.
+        requiredErrorText (str | None): Error text if the required condition is not met.
+        requiredIf (str | None): Expression to make the question required.
+        resetValueIf (str | None): Expression to reset the value of the question.
+        rowTitleWidth (str | None): Width of the row title in CSS units.
+        setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
+        setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
+        showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
+        showHeader (bool): Whether to show the header of the table.
+        showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
+        startWithNewLine (bool): Whether to start the question on a new line.
+        state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
+        titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
+        transposeData (bool): Whether to show columns as rows. Default is False.
+        useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
+        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
+        visible (bool): Whether the question is visible.
+        visibleIf (str | None): Expression to make the question visible.
+        width (str): Width of the question in CSS units.
+        addCode (dict | None): Additional code for the question. Usually not necessary.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
+    """
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "customCode": customCode,
+        "customFunctions": customFunctions,
+        "alternateRows": alternateRows,
+        "columnMinWidth": columnMinWidth,
+        "displayMode": displayMode,
+        "rowTitleWidth": rowTitleWidth,
+        "showHeader": showHeader,
+        "verticalAlign": verticalAlign,
+        "cellErrorLocation": cellErrorLocation,
+        "cellType": cellType,
+        "isUniqueCaseSensitive": isUniqueCaseSensitive,
+        "placeHolder": placeHolder,
+        "transposeData": transposeData,
+    }
+    rows = flatten(rows)
+    if not isinstance(title, list):
+        title = [title]
+    if not isinstance(columns, list):
+        columns = [columns]
+    rows_changed = []
+    for i, row in enumerate(rows):
+        if isinstance(row, dict):
+            rows_changed.append(row)
+        else:
+            rows_changed.append({"value": f"{name}_{i+1}", "text": row})
+    if len(title) != 1:
+        return [
+            QuestionMatrixDropdownModel(
+                name=f"{name}_{i+1}",
+                title=t,
+                columns=columns,
+                rows=rows_changed,
+                **args,
+                **kwargs,
+            )
+            for i, t in enumerate(title)
+        ]
+    return QuestionMatrixDropdownModel(
+        name=name, title=title[0], columns=columns, rows=rows_changed, **args, **kwargs
     )
 
 
