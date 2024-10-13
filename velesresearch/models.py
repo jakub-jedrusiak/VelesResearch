@@ -683,6 +683,9 @@ class PanelModel(BaseModel):
             "elements": [question.dict() for question in self.questions],
         }
 
+    def __iter__(self):
+        return iter(self.questions)
+
 
 class PageModel(BaseModel):
     """Object model for page data
@@ -753,6 +756,9 @@ class PageModel(BaseModel):
         return dict_without_defaults(self) | {
             "elements": [question.dict() for question in self.questions]
         }
+
+    def __iter__(self):
+        return iter(self.questions)
 
 
 class SurveyModel(BaseModel):
@@ -921,6 +927,9 @@ class SurveyModel(BaseModel):
             + "\n".join([str(page) for page in self.pages])
             + "-" * (len(first_line) - 1)
         )
+
+    def __iter__(self):
+        return iter(self.pages)
 
     def dict(self) -> dict:
         return dict_without_defaults(self) | {
