@@ -969,9 +969,7 @@ class SurveyModel(BaseModel):
             return r"// placeholder"
         return "\n\n".join([f"  {result}" for result in result])
 
-    def createStructure(
-        self, path: str | Path = os.getcwd(), folderName: str = "survey"
-    ):
+    def build(self, path: str | Path = os.getcwd(), folderName: str = "survey"):
         """Create the file structure for the survey but not build it"""
 
         if isinstance(path, str):
@@ -988,9 +986,9 @@ class SurveyModel(BaseModel):
                 ignore=shutil.ignore_patterns("__pycache__", "__init__.py"),
             )
 
-        # do Yarn stuff if needed
+        # do bun stuff if needed
         if not os.path.exists(path / "node_modules"):
-            subprocess.run("yarn install", cwd=path, shell=True, check=False)
+            subprocess.run("bun install", cwd=path, shell=True, check=False)
 
         # survey.js
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
@@ -1031,13 +1029,4 @@ class SurveyModel(BaseModel):
         with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
             file.write(surveyComponentData)
 
-    def buildForProduction(
-        self, path: str | Path = os.getcwd(), folderName: str = "survey"
-    ):
-        """Update the survey and build it for production"""
-        if isinstance(path, str):
-            path = Path(path)
-
-        self.createStructure(path=path, folderName=folderName)
-
-        subprocess.run("yarn build", cwd=path / folderName, shell=True, check=False)
+        subprocess.run("bun build", cwd=path, shell=True, check=False)
