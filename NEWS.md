@@ -6,7 +6,7 @@
 * Matrix questions work as expected. Added the `matrixDropdown` question type.
 * Surveys, pages and panels are now iterable so they can be unpacked with the `*` operator.
 * Moved from yarn and webpack to bun, esbuild and hono which makes everything much faster.
-* Deleted the `buildForProduction` arg and method as building is now quick enough to be done on the fly.
+* Repleced the `createStructure` and `buildForProduction` args and methods (`survey()`) with a single `build()` as building is now quick enough to be done on the fly.
 
 ## 0.2.0
 
