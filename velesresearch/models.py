@@ -994,20 +994,20 @@ class SurveyModel(BaseModel):
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
             survey_js.write("export const json = " + self.json() + ";")
 
-        # config.js
+        # config.ts
         shutil.copyfile(
-            files("velesresearch.website_template") / "src" / "config.js",
-            path / "src" / "config.js",
+            files("velesresearch.website_template") / "src" / "config.ts",
+            path / "src" / "config.ts",
         )
-        with open(path / "src" / "config.js", "r", encoding="utf-8") as configJS:
-            configJSData = configJS.read()
+        with open(path / "src" / "config.ts", "r", encoding="utf-8") as configTS:
+            configTSData = configTS.read()
 
             # number of groups
-            configJSData = configJSData.replace(
+            configTSData = configTSData.replace(
                 r"{% numberOfGroups %}", str(self.numberOfGroups)
             )
-        with open(path / "src" / "config.js", "w", encoding="utf-8") as configJS:
-            configJS.write(configJSData)
+        with open(path / "src" / "config.ts", "w", encoding="utf-8") as configTS:
+            configTS.write(configTSData)
 
         # customCode
         with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:

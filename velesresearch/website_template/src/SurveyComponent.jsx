@@ -7,8 +7,8 @@ import * as SurveyCore from "survey-core";
 import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
 import { Converter } from "showdown";
-import * as config from "./config.js";
-import CSRFToken from "./csrf.js";
+import * as config from "./config.ts";
+import CSRFToken from "./csrf.ts";
 import registerCustomFunctions from "./customExpressionFunctions.js";
 
 nouislider(SurveyCore);
