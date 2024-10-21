@@ -2,6 +2,8 @@
 
 ## future release
 
+## 0.3.0
+
 * Added a functional `index.css` file.
 * Matrix questions work as expected. Added the `matrixDropdown` question type.
 * Surveys, pages and panels are now iterable so they can be unpacked with the `*` operator.
