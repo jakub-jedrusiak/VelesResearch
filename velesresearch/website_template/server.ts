@@ -1,8 +1,7 @@
 import { Hono } from 'hono'
-import { build } from 'esbuild'
-const { style } = require("@hyrious/esbuild-plugin-style");
 import { readFileSync } from 'fs';
 import Mustache from 'mustache';
+import buildMain from './build.ts';
 const recaptchaKeys = require("./recaptchaKeys.json");
 
 async function createResults(req: any) {
@@ -42,13 +41,7 @@ app.get('/', (c) => {
     return c.html(Mustache.render(templateContent, { "RECAPTCHA_SITE_KEY": recaptchaKeys.RECAPTCHA_SITE_KEY }), 200)
 })
 app.get('/main.js', async (c) => {
-    await build({
-        entryPoints: ['./src/index.tsx'],
-        bundle: true,
-        minify: true,
-        outfile: "./build/main.js",
-        plugins: [style()],
-    });
+    await buildMain();
     const jsContent = await readFileSync('./build/main.js', 'utf-8');
     return c.text(jsContent, 200, { "Content-Type": "application/javascript" });
 })
