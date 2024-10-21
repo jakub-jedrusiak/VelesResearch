@@ -8,8 +8,7 @@ from .validators import expressionValidator
 
 def survey(
     *pages: PageModel | list[PageModel],
-    createStructure: bool = True,
-    buildForPublication: bool = False,
+    build: bool = True,
     folderName: str = "survey",
     path: str | Path = os.getcwd(),
     addScoreToResults: bool = True,
@@ -90,6 +89,7 @@ def survey(
 
     Args:
         pages (list[PageModel]): The pages of the survey.
+        build (bool): Whether to build the survey. Default is True.
         addScoreToResults (bool): Whether to add the scores of the questions with `correctAnswer` to the results data. See `scoresSuffix`.
         allowCompleteSurveyAutomatic (bool): Whether the survey should complete automatically after all questions on the last page had been answered. Works only if `goNextPageAutomatic=True`. Default is True.
         allowResizeComment (bool): Whether to allow resizing the long questions input area. Default is True. Can be overridden for individual questions.
@@ -241,10 +241,8 @@ def survey(
     }
     pages = flatten(pages)
     surveyObject = SurveyModel(pages=pages, **args, **kwargs)
-    if buildForPublication:
-        surveyObject.buildForProduction(path=path, folderName=folderName)
-    elif createStructure:
-        surveyObject.createStructure(path=path, folderName=folderName)
+    if build:
+        surveyObject.build(path=path, folderName=folderName)
     return surveyObject
 
 
