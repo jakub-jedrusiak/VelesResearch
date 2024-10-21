@@ -1029,4 +1029,4 @@ class SurveyModel(BaseModel):
         with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
             file.write(surveyComponentData)
 
-        subprocess.run("bun build", cwd=path, shell=True, check=False)
+        subprocess.run("bun run build", cwd=path, shell=True, check=False)
