@@ -2,6 +2,12 @@
 
 ## future release
 
+## 0.3.2
+
+* Moved building code to a .ts file.
+* Extensively changed the development server so building now happens only when invoked by the user and the window reloads automatically when the survey is updated.
+* The node_modules folder is not copied even if it exists in the website_template folder for any reason.
+
 ## 0.3.0
 
 * Added a functional `index.css` file.

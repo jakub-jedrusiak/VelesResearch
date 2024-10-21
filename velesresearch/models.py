@@ -980,6 +980,8 @@ class SurveyModel(BaseModel):
         # main file structure
         if not os.path.exists(path / "package.json"):
             template = str(files("velesresearch.website_template"))
+            if "node_modules" in template:
+                template.remove("node_modules")
             shutil.copytree(
                 template,
                 path,
