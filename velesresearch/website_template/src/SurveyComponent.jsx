@@ -45,14 +45,23 @@ function createResults(survey) {
     variables[variable] = survey.getVariable(variable);
   }
 
-  const URLparams = Object.fromEntries(new URLSearchParams(window.location.search));
+  const URLparams = new URLSearchParams(window.location.search);
+  const filteredParams = {};
+  if (survey.jsonObj.UrlParameters) {
+    survey.jsonObj.UrlParameters.forEach(param => {
+      const value = URLparams.get(param);
+      if (value !== null) {
+        filteredParams[param] = value;
+      }
+    });
+  }
 
   return Object.assign(
     {
       id: survey.participantID
     },
     survey.data,
-    URLparams,
+    filteredParams,
     variables
   );
 }

@@ -79,6 +79,7 @@ def survey(
     title: str | None = None,
     tocLocation: str = "left",
     triggers: list[dict] | None = None,
+    UrlParameters: str | list[str] | None = None,
     validateVisitedEmptyFields: bool = False,
     width: str | None = None,
     widthMode: str = "auto",
@@ -157,6 +158,7 @@ def survey(
         title (str | None): The title of the survey.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
+        UrlParameters (list[str] | None): The URL parameters to be expected and saved. Default is None.
         validateVisitedEmptyFields (bool): Whether to validate empty fields that had been clicked, and unclicked empty. Default is False.
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
@@ -165,6 +167,8 @@ def survey(
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
 
     """
+    if not isinstance(UrlParameters, list):
+        UrlParameters = [UrlParameters] if UrlParameters else None
     args = {
         "addScoreToResults": addScoreToResults,
         "allowCompleteSurveyAutomatic": allowCompleteSurveyAutomatic,
@@ -234,6 +238,7 @@ def survey(
         "title": title,
         "tocLocation": tocLocation,
         "triggers": triggers,
+        "UrlParameters": UrlParameters,
         "validateVisitedEmptyFields": validateVisitedEmptyFields,
         "width": width,
         "widthMode": widthMode,
