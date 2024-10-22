@@ -49,6 +49,10 @@ app.get('/reload.js', (c) => {
     const jsContent = readFileSync('./public/reload.js', 'utf-8');
     return c.text(jsContent, 200, { "Content-Type": "application/javascript" });
 })
+app.get("/load.js", (c) => {
+    const jsContent = readFileSync('./node_modules/loadjs/dist/loadjs.min.js', 'utf-8');
+    return c.text(jsContent, 200, { "Content-Type": "application/javascript" });
+})
 
 app.post("/submit/", async (c) => {
     const data = await c.req.json()

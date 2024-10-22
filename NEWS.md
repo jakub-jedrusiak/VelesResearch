@@ -2,6 +2,8 @@
 
 ## future release
 
+* Hot reloading now only reloads the survey, not the whole page.
+
 ## 0.3.2
 
 * Moved building code to a .ts file.
