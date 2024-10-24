@@ -831,6 +831,7 @@ class SurveyModel(BaseModel):
         startSurveyText (str | None): Text for the 'Start' button if `firstPageIsStarted=True`.
         storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
         textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
+        themeFile (Path | str | None): The path to the theme file. If None, default is used. Use the [theme builder](https://surveyjs.io/create-free-survey) to create a theme file.
         title (str | None): The title of the survey.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
@@ -909,6 +910,7 @@ class SurveyModel(BaseModel):
     startSurveyText: str | None = None
     storeOthersAsComment: bool = True
     textUpdateMode: str = "onBlur"
+    themeFile: Path | str | None = None
     title: str | None = None
     tocLocation: str = "left"
     triggers: list[dict] | None = None
@@ -934,9 +936,11 @@ class SurveyModel(BaseModel):
         return iter(self.pages)
 
     def dict(self) -> dict:
-        return dict_without_defaults(self) | {
+        dictionary = dict_without_defaults(self) | {
             "pages": [page.dict() for page in self.pages]
         }
+        dictionary.pop("themeFile", None)
+        return dictionary
 
     def json(self) -> str:
         return json.dumps(self.dict())
@@ -1037,6 +1041,17 @@ class SurveyModel(BaseModel):
 
         with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
             file.write(surveyComponentData)
+
+        # theme
+        if self.themeFile is not None:
+            if not isinstance(self.themeFile, Path):
+                self.themeFile = Path(self.themeFile)
+            shutil.copyfile(self.themeFile, path / "src" / "theme.json")
+        else:
+            shutil.copyfile(
+                files("velesresearch.website_template") / "src" / "theme.json",
+                path / "src" / "theme.json",
+            )
 
         if not pauseBuild:
             subprocess.run("bun run build", cwd=path, shell=True, check=False)

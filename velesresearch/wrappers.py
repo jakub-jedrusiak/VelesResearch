@@ -78,6 +78,7 @@ def survey(
     storeOthersAsComment: bool = True,
     textUpdateMode: str = "onBlur",
     title: str | None = None,
+    themeFile: Path | str | None = None,
     tocLocation: str = "left",
     triggers: list[dict] | None = None,
     UrlParameters: str | list[str] | None = None,
@@ -157,6 +158,7 @@ def survey(
         storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
         textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
         title (str | None): The title of the survey.
+        themeFile (Path | str | None): The path to the theme file. If None, default is used. Use the [theme builder](https://surveyjs.io/create-free-survey) to create a theme file.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
         UrlParameters (list[str] | None): The URL parameters to be expected and saved. Default is None.
@@ -237,6 +239,7 @@ def survey(
         "storeOthersAsComment": storeOthersAsComment,
         "textUpdateMode": textUpdateMode,
         "title": title,
+        "themeFile": themeFile,
         "tocLocation": tocLocation,
         "triggers": triggers,
         "UrlParameters": UrlParameters,

@@ -10,6 +10,7 @@ import { Converter } from "showdown";
 import * as config from "./config.ts";
 import CSRFToken from "./csrf.ts";
 import registerCustomFunctions from "./customExpressionFunctions.js";
+import * as theme from "./theme.json";
 
 nouislider(SurveyCore);
 
@@ -206,6 +207,8 @@ function SurveyComponent() {
   survey.participantID = MakeID(8);
   const dateStarted = new Date();
 
+  survey.applyTheme(theme);
+
   document.documentElement.lang = survey.locale;
   const completedHtml = survey.completedHtml + "<br>";
   survey.completedHtml = '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
@@ -224,8 +227,11 @@ function SurveyComponent() {
   });
 
   survey.onAfterRenderSurvey.add((sender, options) => {
-    document.body.style.setProperty("--sjs-general-backcolor-dim", document.getElementsByClassName("sd-root-modern")[0].style.getPropertyValue("--sjs-general-backcolor-dim"));
+    const backgroundColor = document.getElementsByClassName("sd-root-modern")[0].style.getPropertyValue("--sjs-general-backcolor-dim");
+    document.body.style.setProperty("--sjs-general-backcolor-dim", backgroundColor);
+    document.querySelector('footer').style.setProperty("--sjs-general-backcolor-dim", backgroundColor);
   });
+
 
   // Markdown formatting
   const converter = new Converter();
