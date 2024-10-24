@@ -1,5 +1,6 @@
 """Functions creating objects for survey structure classes"""
 
+from json import dumps, loads
 from .models import *
 from .helperModels import ValidatorModel
 from .utils import flatten
@@ -2882,3 +2883,41 @@ def consent(
         )
     else:
         raise ValueError(f"Unknown mode: {mode}")
+
+
+def surveyFromJson(
+    jsonPath: Path | str,
+    folderName: Path | str = "survey",
+    path: Path | str = os.getcwd(),
+) -> None:
+    """Create a survey from a JSON file
+
+    Args:
+        jsonPath (Path | str): Full path to the JSON file created with the creator (<https://surveyjs.io/free-survey-tool>).
+        folderName (Path | str): The name of the folder where the survey will be created. Defaults to "survey".
+        path (Path | str): The path where the survey will be created. Defaults to the current working directory.
+    """
+    if isinstance(jsonPath, str):
+        jsonPath = Path(jsonPath)
+    if isinstance(folderName, str):
+        folderName = Path(folderName)
+    if isinstance(path, str):
+        path = Path(path)
+
+    tempSurvey = SurveyModel(
+        pages=[
+            PageModel(
+                name="temp", questions=[QuestionModel(name="temp", type="radiogroup")]
+            )
+        ]
+    )
+
+    tempSurvey.build(path=path, folderName=folderName, pauseBuild=True)
+
+    with open(jsonPath, "r", encoding="UTF-8") as file:
+        jsonFile = loads(file.read())  # use json.loads() to ensure proper structure
+
+    with open(path / folderName / "src/survey.js", "w", encoding="UTF-8") as file:
+        file.write(f"export const json = {dumps(jsonFile)}")
+
+    subprocess.run("bun run build", cwd=path / folderName, shell=True, check=False)

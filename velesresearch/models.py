@@ -971,7 +971,12 @@ class SurveyModel(BaseModel):
             return r"// placeholder"
         return "\n\n".join([f"  {result}" for result in result])
 
-    def build(self, path: str | Path = os.getcwd(), folderName: str = "survey"):
+    def build(
+        self,
+        path: str | Path = os.getcwd(),
+        folderName: str = "survey",
+        pauseBuild: bool = False,
+    ):
         """Create the file structure for the survey but not build it"""
 
         if isinstance(path, str):
@@ -1033,4 +1038,5 @@ class SurveyModel(BaseModel):
         with open(path / "src" / "SurveyComponent.jsx", "w", encoding="UTF-8") as file:
             file.write(surveyComponentData)
 
-        subprocess.run("bun run build", cwd=path, shell=True, check=False)
+        if not pauseBuild:
+            subprocess.run("bun run build", cwd=path, shell=True, check=False)
