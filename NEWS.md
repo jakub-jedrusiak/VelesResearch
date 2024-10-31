@@ -9,6 +9,7 @@
 * Themes have been implemented. See `themeFile` argument in the `SurveyModel` class.
 * Imports in __init__.py are now explicit.
 * Fixed the `monitorInput` property so it now works as expected.
+* Added `botSalt()` function that can be put inside a question's title. It will generate a non-visible string that can still be copied and pasted. This can be used to detect GPT usage.
 
 ## 0.3.2
 

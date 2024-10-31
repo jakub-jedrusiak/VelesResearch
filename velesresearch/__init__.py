@@ -29,4 +29,4 @@ from .validators import (
     answerCountValidator,
     regexValidator,
 )
-from .utils import convertImage, getJS
+from .utils import convertImage, getJS, botSalt

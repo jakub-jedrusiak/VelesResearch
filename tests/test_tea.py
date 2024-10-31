@@ -54,7 +54,7 @@ def test_wrappers():
             ),
             vls.textLong(
                 "textLong",
-                "What is your favorite tea memory?",
+                f"What is your favorite tea memory?{vls.botSalt()}",
                 description="Describe in 2-3 sentences",
             ),
             vls.rating("rating", "Rate your tea experience", rateMin=1, rateMax=10),
