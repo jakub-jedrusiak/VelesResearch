@@ -203,6 +203,8 @@ function setupTracking(survey, questionName) {
 registerCustomFunctions();
 
 function SurveyComponent() {
+  SurveyCore.Serializer.addProperty("question", { name: "monitorInput", type: "boolean" })
+
   const survey = new Model(json);
   survey.participantID = MakeID(8);
   const dateStarted = new Date();
@@ -246,7 +248,6 @@ function SurveyComponent() {
   });
 
   // Input monitoring setup
-  SurveyCore.Serializer.addProperty("question", { name: "monitorInput", type: "boolean" })
   survey.onAfterRenderQuestion.add((sender, options) => {
     if (options.question.getPropertyValue("monitorInput", false)) setupTracking(sender, options.question.name);
   });
