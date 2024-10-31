@@ -7,6 +7,7 @@
 * Added `pauseBuild` arg to `SurveyModel.build()` to prevent the survey from being built when created.
 * Added `surveyFromJson()` function to create a survey from a json file made with the visual creator.
 * Themes have been implemented. See `themeFile` argument in the `SurveyModel` class.
+* Imports in __init__.py are now explicit.
 
 ## 0.3.2
 
