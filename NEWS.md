@@ -1,6 +1,6 @@
 # Release notes
 
-## future release
+## 0.4.0
 
 * Hot reloading now only reloads the survey, not the whole page.
 * Added `UrlParameters` argument to the `Survey` class to specify what parameters should be saved in the database.
