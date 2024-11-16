@@ -1,5 +1,9 @@
 # Release notes
 
+## future release
+
+* Added the `showCompleteButton` property to the `SurveyModel` class.
+
 ## 0.4.0
 
 * Hot reloading now only reloads the survey, not the whole page.

@@ -816,6 +816,7 @@ class SurveyModel(BaseModel):
         questionTitlePattern (str): The pattern of the question title. See <https://surveyjs.io/form-library/documentation/design-survey/configure-question-titles#title-pattern>.
         requiredText (str): The text denoting the required questions. Default is '*'.
         scoresSuffix (str): The suffix of the score column if `addScoreToResults=True`. Default is '_score'.
+        showCompleteButton (bool): Whether to show the 'Complete' button. Default is True.
         showCompletedPage (bool): Whether to show the completed page. Default is True.
         showNavigationButtons (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'both', 'none'.
         showPageNumbers (bool | None): Whether to show the page numbers in the pages' titles.
@@ -895,6 +896,7 @@ class SurveyModel(BaseModel):
     questionTitlePattern: str = "numTitleRequire"
     requiredText: str = "*"
     scoresSuffix: str = "_score"
+    showCompleteButton: bool = True
     showCompletedPage: bool = True
     showNavigationButtons: str = "bottom"
     showPageNumbers: bool | None = None
