@@ -2119,7 +2119,7 @@ def matrix(
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
-        rowTitleWidth (str | None): Width of the row title in CSS units.
+        rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
         rowsOrder (str): The order of the rows. Can be 'initial', 'random'.
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
@@ -2292,7 +2292,7 @@ def matrixDropdown(
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
-        rowTitleWidth (str | None): Width of the row title in CSS units.
+        rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
@@ -2499,7 +2499,7 @@ def matrixDynamic(
         requiredIf (str | None): Expression to make the question required.
         resetValueIf (str | None): Expression to reset the value of the question.
         rowCount (int): The initial number of rows.
-        rowTitleWidth (str | None): Width of the row title in CSS units.
+        rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
         rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ...}`.
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.

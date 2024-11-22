@@ -446,7 +446,7 @@ class QuestionMatrixBaseModel(QuestionModel):
         alternateRows (bool | None): Whether to alternate the rows.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
         displayMode (str): The display mode of the matrix. Can be 'auto', 'list', 'table'.
-        rowTitleWidth (str | None): Width of the row title in CSS units.
+        rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
         showHeader (bool): Whether to show the header of the table.
         verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
     """

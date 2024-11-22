@@ -1,5 +1,9 @@
 # Release notes
 
+## future release
+
+* Updated the `rowTitleWidth` documentation to point out that you need to also set `columnMinWidth` to change the relative width of the title column.
+
 ## 0.4.0
 
 * Hot reloading now only reloads the survey, not the whole page.
