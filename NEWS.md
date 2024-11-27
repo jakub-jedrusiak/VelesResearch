@@ -1,8 +1,9 @@
 # Release notes
 
-## future release
+## 0.4.1
 
 * Updated the `rowTitleWidth` documentation to point out that you need to also set `columnMinWidth` to change the relative width of the title column.
+* Hotfix: Fixed a bug where `navigateToUrl` would fire even if the results were not saved. Now Veles uses SurveyJS's native Try Again button.
 
 ## 0.4.0
 

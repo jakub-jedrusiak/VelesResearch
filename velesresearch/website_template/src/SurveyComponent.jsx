@@ -118,9 +118,7 @@ async function handleResults(survey, completedHtml) {
   if (response.ok) {
     document.getElementsByClassName("sd-completedpage")[0].innerHTML =
       completedHtml;
-    document.getElementById("tryAgainDiv").style.display = "none";
-    document.getElementById("tryAgainButton").disabled = true;
-    return "OK";
+    return true;
   } else {
     document.getElementsByClassName("sd-completedpage")[0].innerHTML = `
         <div style="text-align: center">${SurveyCore.surveyLocalization.getString(
@@ -136,9 +134,7 @@ async function handleResults(survey, completedHtml) {
           response.statusText
         }</div>
       `;
-    document.getElementById("tryAgainDiv").style.display = "block";
-    document.getElementById("tryAgainButton").disabled = false;
-    return "Error";
+    return false;
   }
 }
 
@@ -240,24 +236,12 @@ function SurveyComponent() {
   survey.applyTheme(theme);
 
   document.documentElement.lang = survey.locale;
+  const loadingHTML = `<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>`;
   const completedHtml = survey.completedHtml + "<br>";
-  survey.completedHtml =
-    '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
-  document.getElementById("tryAgainButton").innerHTML =
-    SurveyCore.surveyLocalization.getString("saveAgainButton", survey.locale);
+  survey.completedHtml = loadingHTML;
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());
-
-  document.getElementById("tryAgainButton").addEventListener("click", () => {
-    if (survey.isCompleted) {
-      document.getElementsByClassName("sd-completedpage")[0].innerHTML =
-        '<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>';
-      document.getElementById("tryAgainDiv").style.display = "none";
-      document.getElementById("tryAgainButton").disabled = true;
-      handleResults(survey, completedHtml);
-    }
-  });
 
   survey.onAfterRenderSurvey.add((sender, options) => {
     const backgroundColor = document
@@ -296,7 +280,15 @@ function SurveyComponent() {
 
   // {% end customCode %}
 
-  survey.onComplete.add((sender) => handleResults(sender, completedHtml));
+  survey.onComplete.add(async (sender, options) => {
+    options.showSaveInProgress();
+    const completedPage = document.querySelector(".sd-completedpage");
+    if (completedPage) {
+      completedPage.innerHTML = loadingHTML;
+    }
+    const responseOK = await handleResults(sender, completedHtml);
+    responseOK ? options.showSaveSuccess() : options.showSaveError();
+  });
   return <Survey model={survey} />;
 }
 
