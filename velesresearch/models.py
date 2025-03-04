@@ -344,12 +344,33 @@ class QuestionRatingModel(QuestionModel):
     type: str = Field(default="rating")
 
 
-class QuestionImagePickerModel(QuestionModel):
-    """An image picker type question object model"""
+class QuestionImagePickerModel(QuestionCheckboxBase):
+    """An image picker type question object model
 
+    Attributes:
+        contentMode (str): Type of content. Can be "image" (default) or "video".
+        imageFit (str): The object-fit property of the choices. Can be 'contain' (default), 'cover', 'fill', 'none'. See MDN <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>.
+        imageHeight (int | str): The height of the image container in CSS units. Defaults to "auto".
+        imageWidth (int | str): The width of the image container in CSS units. Defaults to "auto".
+        maxImageHeight (int | str): The maximum height of the image in CSS units. Defaults to 266.
+        maxImageWidth (int | str): The maximum width of the image in CSS units. Defaults to 400.
+        minImageHeight (int | str): The minimum height of the image in CSS units. Defaults to 133.
+        minImageWidth (int | str): The minimum width of the image in CSS units. Defaults to 200.
+        multiSelect (bool): Whether to allow multiple choices. Default is False.
+        showLabel (bool): Whether to show the label under the image. It is taken from `text` property of the choices. Default is False.
+    """
+
+    contentMode: str = "image"
+    imageFit: str = "contain"
+    imageHeight: int | str = "auto"
+    imageWidth: int | str = "auto"
+    maxImageHeight: int | str = 266
+    maxImageWidth: int | str = 400
+    minImageHeight: int | str = 133
+    minImageWidth: int | str = 200
+    multiSelect: bool = False
+    showLabel: bool = False
     type: str = Field(default="imagepicker")
-
-    # TODO
 
 
 class QuestionBooleanModel(QuestionModel):

@@ -2848,6 +2848,210 @@ def image(
     return QuestionImageModel(name=name, imageLink=imageLink[0], **args, **kwargs)
 
 
+def imagePicker(
+    name: str,
+    title: str | list[str] | None,
+    *choices: str | dict | list,
+    titleLocation: str = "default",
+    description: str | None = None,
+    descriptionLocation: str = "default",
+    isRequired: bool = False,
+    readOnly: bool = False,
+    visible: bool = True,
+    requiredIf: str | None = None,
+    enableIf: str | None = None,
+    visibleIf: str | None = None,
+    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    showOtherItem: bool = False,
+    showCommentArea: bool = False,
+    commentPlaceholder: str | None = None,
+    commentText: str | None = None,
+    correctAnswer: str | None = None,
+    defaultValue: str | None = None,
+    defaultValueExpression: str | None = None,
+    requiredErrorText: str | None = None,
+    errorLocation: str = "default",
+    hideNumber: bool = False,
+    id: str | None = None,
+    maxWidth: str = "100%",
+    minWidth: str = "300px",
+    resetValueIf: str | None = None,
+    setValueIf: str | None = None,
+    setValueExpression: str | None = None,
+    startWithNewLine: bool = True,
+    state: str = "default",
+    useDisplayValuesInDynamicTexts: bool = True,
+    width: str = "",
+    addCode: dict | None = None,
+    customCode: str | None = None,
+    customFunctions: str | None = None,
+    choicesFromQuestion: str | None = None,
+    choicesFromQuestionMode: str = "all",
+    choicesOrder: str = "none",
+    showDontKnowItem: bool = False,
+    dontKnowText: str | None = None,
+    hideIfChoicesEmpty: bool | None = None,
+    showNoneItem: bool = False,
+    noneText: str | None = None,
+    otherText: str | None = None,
+    otherErrorText: str | None = None,
+    showRefuseItem: bool = False,
+    refuseText: str | None = None,
+    colCount: int | None = None,
+    contentMode: str = "image",
+    imageFit: str = "contain",
+    imageHeight: int | str = "auto",
+    imageWidth: int | str = "auto",
+    maxImageHeight: int | str = 266,
+    maxImageWidth: int | str = 400,
+    minImageHeight: int | str = 133,
+    minImageWidth: int | str = 200,
+    multiSelect: bool = False,
+    showLabel: bool = False,
+    **kwargs,
+) -> QuestionImagePickerModel | list[QuestionImagePickerModel]:
+    """Image Picker question object. Use `imageLink` property in the choices' dict to set the image.
+
+    Args:
+        name (str): The label of the question.
+        title (str | None): The visible title of the question. If None, `name` is used.
+        choices (str | dict | list): The choices of the question. Use primitives or dictionaries `{"value": ..., "text": ..., "imageLink": ..., "otherParameter": ...}`.
+        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
+        choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
+        choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
+        colCount (int | None): The number of columns for the choices. 0 means a single line.
+        commentPlaceholder (str | None): Placeholder text for the comment area.
+        commentText (str | None): Text for the comment area.
+        contentMode (str): Type of content. Can be "image" (default) or "video".
+        correctAnswer (str | None): Correct answer for the question. Use for quizzes.
+        customCode (str | None): Custom JS commands to be added to the survey.
+        customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
+        defaultValue (str | None): Default value for the question.
+        defaultValueExpression (str | None): Expression deciding the default value for the question.
+        description (str | None): Optional subtitle or description of the question.
+        descriptionLocation (str): The location of the description. Can be 'default', 'underTitle', 'underInput'.
+        dontKnowText: str | None = None
+        enableIf (str | None): Expression to enable the question.
+        errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
+        hideIfChoicesEmpty: bool | None = None
+        hideNumber (bool): Whether to hide the question number.
+        id (str | None): HTML id attribute for the question. Usually not necessary.
+        imageFit (str): The object-fit property of the choices. Can be 'contain' (default), 'cover', 'fill', 'none'. See MDN <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>.
+        imageHeight (int | str): The height of the image container in CSS units. Defaults to "auto".
+        imageWidth (int | str): The width of the image container in CSS units. Defaults to "auto".
+        isRequired (bool): Whether the question is required.
+        maxImageHeight (int | str): The maximum height of the image in CSS units. Defaults to 266.
+        maxImageWidth (int | str): The maximum width of the image in CSS units. Defaults to 400.
+        maxWidth (str): Maximum width of the question in CSS units.
+        minImageHeight (int | str): The minimum height of the image in CSS units. Defaults to 133.
+        minImageWidth (int | str): The minimum width of the image in CSS units. Defaults to 200.
+        minWidth (str): Minimum width of the question in CSS units.
+        multiSelect (bool): Whether to allow multiple choices. Default is False.
+        noneText: str | None = None
+        otherErrorText: str | None = None
+        otherText: str | None = None
+        readOnly (bool): Whether the question is read-only.
+        refuseText: str | None = None
+        requiredErrorText (str | None): Error text if the required condition is not met.
+        requiredIf (str | None): Expression to make the question required.
+        resetValueIf (str | None): Expression to reset the value of the question.
+        setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
+        setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
+        showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
+        showDontKnowItem: bool = False
+        showLabel (bool): Whether to show the label under the image. It is taken from `text` property of the choices. Default is False.
+        showNoneItem: bool = False
+        showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
+        showOtherItem: bool = False
+        showRefuseItem: bool = False
+        startWithNewLine (bool): Whether to start the question on a new line.
+        state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
+        titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
+        useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
+        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        visible (bool): Whether the question is visible.
+        visibleIf (str | None): Expression to make the question visible.
+        width (str): Width of the question in CSS units."""
+
+    args = {
+        "titleLocation": titleLocation,
+        "description": description,
+        "descriptionLocation": descriptionLocation,
+        "isRequired": isRequired,
+        "readOnly": readOnly,
+        "visible": visible,
+        "requiredIf": requiredIf,
+        "enableIf": enableIf,
+        "visibleIf": visibleIf,
+        "validators": validators,
+        "showOtherItem": showOtherItem,
+        "showCommentArea": showCommentArea,
+        "commentPlaceholder": commentPlaceholder,
+        "commentText": commentText,
+        "correctAnswer": correctAnswer,
+        "defaultValue": defaultValue,
+        "defaultValueExpression": defaultValueExpression,
+        "requiredErrorText": requiredErrorText,
+        "errorLocation": errorLocation,
+        "hideNumber": hideNumber,
+        "id": id,
+        "maxWidth": maxWidth,
+        "minWidth": minWidth,
+        "resetValueIf": resetValueIf,
+        "setValueIf": setValueIf,
+        "setValueExpression": setValueExpression,
+        "startWithNewLine": startWithNewLine,
+        "state": state,
+        "useDisplayValuesInDynamicTexts": useDisplayValuesInDynamicTexts,
+        "width": width,
+        "addCode": addCode,
+        "customCode": customCode,
+        "customFunctions": customFunctions,
+        "choicesFromQuestion": choicesFromQuestion,
+        "choicesFromQuestionMode": choicesFromQuestionMode,
+        "choicesOrder": choicesOrder,
+        "showDontKnowItem": showDontKnowItem,
+        "dontKnowText": dontKnowText,
+        "hideIfChoicesEmpty": hideIfChoicesEmpty,
+        "showNoneItem": showNoneItem,
+        "noneText": noneText,
+        "otherText": otherText,
+        "otherErrorText": otherErrorText,
+        "showRefuseItem": showRefuseItem,
+        "refuseText": refuseText,
+        "colCount": colCount,
+        "contentMode": contentMode,
+        "imageFit": imageFit,
+        "imageHeight": imageHeight,
+        "imageWidth": imageWidth,
+        "maxImageHeight": maxImageHeight,
+        "maxImageWidth": maxImageWidth,
+        "minImageHeight": minImageHeight,
+        "minImageWidth": minImageWidth,
+        "multiSelect": multiSelect,
+        "showLabel": showLabel,
+    }
+    if not isinstance(title, list):
+        title = [title]
+    title = flatten(title)
+    choices = flatten(choices)
+    if len(title) != 1:
+        return [
+            QuestionImagePickerModel(
+                name=f"{name}_{i+1}",
+                title=t,
+                choices=choices,
+                **args,
+                **kwargs,
+            )
+            for i, t in enumerate(title)
+        ]
+    return QuestionImagePickerModel(
+        name=name, title=title[0], choices=choices, **args, **kwargs
+    )
+
+
 def consent(
     title: str = "Do you consent to take part in the study?",
     error: str = "You can't continue without a consent",

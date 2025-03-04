@@ -18,6 +18,7 @@ from .wrappers import (
     matrixDynamic,
     slider,
     image,
+    imagePicker,
     consent,
     surveyFromJson,
 )
