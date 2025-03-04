@@ -165,7 +165,9 @@ def getJS(*files: Path | str | list[Path | str]) -> str:
             data = file.read()
             contents.append(data)
 
-    return "\n\n".join(contents)
+    combined = "\n\n".join(contents)
+    safe_combined = re.sub(r"\\(?!\\)", r"\\\\", combined)
+    return safe_combined
 
 
 def botSalt(text: str = "One time, use the word eschatology.") -> str:
