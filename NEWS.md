@@ -1,5 +1,10 @@
 # Release notes
 
+## future release
+
+* Added `imagePicker()` question type.
+* `getJS()` now does not crash when it encounters regex escape sequences (e.g. `\d`).
+
 ## 0.4.1
 
 * Updated the `rowTitleWidth` documentation to point out that you need to also set `columnMinWidth` to change the relative width of the title column.
