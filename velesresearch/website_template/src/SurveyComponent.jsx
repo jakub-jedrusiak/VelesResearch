@@ -73,7 +73,7 @@ function createResults(survey) {
   );
 }
 
-async function handleResults(survey, completedHtml) {
+async function handleResults(survey) {
   const result = createResults(survey);
 
   // Add scores to results
@@ -115,27 +115,7 @@ async function handleResults(survey, completedHtml) {
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);
 
-  if (response.ok) {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML =
-      completedHtml;
-    return true;
-  } else {
-    document.getElementsByClassName("sd-completedpage")[0].innerHTML = `
-        <div style="text-align: center">${SurveyCore.surveyLocalization.getString(
-          "savingDataError",
-          survey.locale
-        )}</div>
-        <br>
-        <div style="text-align: center; font-size: 3em; color: #CC0000; font-weight: bold">Error ${
-          response.status
-        }</div>
-        <br>
-        <div style="text-align: center; padding-bottom: 2em; font-size: 2em">${
-          response.statusText
-        }</div>
-      `;
-    return false;
-  }
+  return response.ok ? true : false;
 }
 
 // Input monitoring function
@@ -236,9 +216,6 @@ function SurveyComponent() {
   survey.applyTheme(theme);
 
   document.documentElement.lang = survey.locale;
-  const loadingHTML = `<div style="text-align: center; padding-bottom: 2em;"><div class="lds-dual-ring"></div></div>`;
-  const completedHtml = survey.completedHtml + "<br>";
-  survey.completedHtml = loadingHTML;
 
   survey.setVariable("group", groupNumber(config.numberOfGroups));
   survey.setVariable("dateStarted", dateStarted.toISOString());
@@ -282,11 +259,7 @@ function SurveyComponent() {
 
   survey.onComplete.add(async (sender, options) => {
     options.showSaveInProgress();
-    const completedPage = document.querySelector(".sd-completedpage");
-    if (completedPage) {
-      completedPage.innerHTML = loadingHTML;
-    }
-    const responseOK = await handleResults(sender, completedHtml);
+    const responseOK = await handleResults(sender);
     responseOK ? options.showSaveSuccess() : options.showSaveError();
   });
   return <Survey model={survey} />;
