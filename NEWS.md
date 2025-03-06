@@ -6,7 +6,8 @@
 * `getJS()` now does not crash when it encounters regex escape sequences (e.g. `\d`).
 * Veles now uses the default `completedHTML` setup, as the previous one had some problems with dynamic values.
 * Changed the result structure, so the order of the answers is preserved.
-* Additional changes to the SurveyComponent.jsx file to make it more readable.
+* Additional changes to the website template to change the structure of the files.
+* URL parameters added to the survey `UrlParameters` argument are now saved as variables before the survey is rendered.
 
 ## 0.4.1
 

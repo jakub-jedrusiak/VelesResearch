@@ -51,23 +51,11 @@ function createResults(survey) {
     variables[variable] = survey.getVariable(variable);
   }
 
-  const URLparams = new URLSearchParams(window.location.search);
-  const filteredParams = {};
-  if (survey.jsonObj.UrlParameters) {
-    survey.jsonObj.UrlParameters.forEach((param) => {
-      const value = URLparams.get(param);
-      if (value !== null) {
-        filteredParams[param] = value;
-      }
-    });
-  }
-
   return Object.assign(
     {
       id: survey.participantID,
     },
     survey.data,
-    filteredParams,
     variables
   );
 }
@@ -232,6 +220,9 @@ function SurveyComponent() {
     type: "number",
     default: 1,
   });
+  SurveyCore.Serializer.addProperty("survey", {
+    name: "UrlParameters",
+  });
 
   const survey = new Model(json);
   survey.participantID = MakeID(8);
@@ -245,6 +236,16 @@ function SurveyComponent() {
     survey.setVariable("group", groupNumber(survey.numberOfGroups));
   }
   survey.setVariable("date_started", dateStarted.toISOString());
+
+  const URLparams = new URLSearchParams(window.location.search);
+  if (survey.UrlParameters) {
+    survey.UrlParameters.forEach((param) => {
+      const value = URLparams.get(param);
+      if (value !== null) {
+        survey.setVariable(param, value);
+      }
+    });
+  }
 
   survey.onAfterRenderSurvey.add((sender, options) => {
     const backgroundColor = document
