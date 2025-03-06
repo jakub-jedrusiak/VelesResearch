@@ -7,7 +7,6 @@ import * as SurveyCore from "survey-core";
 import { nouislider } from "surveyjs-widgets";
 import "nouislider/distribute/nouislider.css";
 import { Converter } from "showdown";
-import * as config from "./config.ts";
 import CSRFToken from "./csrf.ts";
 import registerCustomFunctions from "./customExpressionFunctions.js";
 import * as theme from "./theme.json";
@@ -33,9 +32,9 @@ function groupNumber(max) {
 
 function createResults(survey) {
   // Create results object
-  if (!survey.getVariable("dateCompleted")) {
+  if (!survey.getVariable("date_completed")) {
     const dateCompleted = new Date();
-    survey.setVariable("dateCompleted", dateCompleted.toISOString());
+    survey.setVariable("date_completed", dateCompleted.toISOString());
   }
 
   const variables = {};
@@ -101,6 +100,26 @@ async function handleResults(survey) {
   }
   Object.assign(result, { "g-recaptcha-token": recaptchaToken });
 
+  // Gather keys for ordering
+  const firstColumns = ["id", "date_started", "date_completed", "group"];
+
+  const questionNames = survey
+    .getAllQuestions(false, false, true)
+    .map((x) => x?.name || null)
+    .filter((x) => x !== null);
+
+  const varNames = survey
+    .getVariableNames()
+    .filter((x) => !firstColumns.includes(x));
+
+  const orderKeys = [...firstColumns, ...questionNames, ...varNames];
+
+  const remainingKeys = Object.keys(result)
+    .filter((x) => !orderKeys.includes(x))
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+    );
+
   // send data to Django backend
   const requestHeaders = {
     method: "POST",
@@ -110,12 +129,12 @@ async function handleResults(survey) {
       },
       CSRFToken()
     ),
-    body: JSON.stringify(result),
+    body: JSON.stringify(result, [...orderKeys, ...remainingKeys]),
   };
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);
 
-  return response.ok ? true : false;
+  return response.ok;
 }
 
 // Input monitoring function
@@ -208,6 +227,11 @@ function SurveyComponent() {
     name: "monitorInput",
     type: "boolean",
   });
+  SurveyCore.Serializer.addProperty("survey", {
+    name: "numberOfGroups",
+    type: "number",
+    default: 1,
+  });
 
   const survey = new Model(json);
   survey.participantID = MakeID(8);
@@ -217,8 +241,10 @@ function SurveyComponent() {
 
   document.documentElement.lang = survey.locale;
 
-  survey.setVariable("group", groupNumber(config.numberOfGroups));
-  survey.setVariable("dateStarted", dateStarted.toISOString());
+  if (survey.numberOfGroups > 1) {
+    survey.setVariable("group", groupNumber(survey.numberOfGroups));
+  }
+  survey.setVariable("date_started", dateStarted.toISOString());
 
   survey.onAfterRenderSurvey.add((sender, options) => {
     const backgroundColor = document

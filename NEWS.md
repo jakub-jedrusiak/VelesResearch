@@ -5,6 +5,8 @@
 * Added `imagePicker()` question type.
 * `getJS()` now does not crash when it encounters regex escape sequences (e.g. `\d`).
 * Veles now uses the default `completedHTML` setup, as the previous one had some problems with dynamic values.
+* Changed the result structure, so the order of the answers is preserved.
+* Additional changes to the SurveyComponent.jsx file to make it more readable.
 
 ## 0.4.1
 

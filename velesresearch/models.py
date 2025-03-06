@@ -95,6 +95,10 @@ class QuestionModel(BaseModel):
         return f"  {self.name} ({self.type}): {self.title}"
 
     def dict(self) -> dict:
+        if self.name in ["id", "date_started", "date_completed", "group"]:
+            raise ValueError(
+                "Questions cannot be named as one of these: ['id', 'date_started', 'date_completed', 'group']"
+            )
         if self.validators is not None:
             if isinstance(self.validators, list):
                 validators = {
@@ -718,7 +722,7 @@ class PageModel(BaseModel):
         enableIf (str | None): Expression to enable the page.
         id (str | None): HTML id attribute for the page. Usually not necessary.
         isRequired (bool): Whether the page is required (at least one question must be answered).
-        maxTimeToFinish (int | None): Maximum time in seconds to finish the page.
+        timeLimit (int | None): Maximum time in seconds to finish the page.
         maxWidth (str): Maximum width of the page in CSS units.
         minWidth (str): Minimum width of the page in CSS units.
         navigationButtonsVisibility (str): The visibility of the navigation buttons. Can be 'inherit', 'show', 'hide'.
@@ -747,7 +751,7 @@ class PageModel(BaseModel):
     enableIf: str | None = None
     id: str | None = None
     isRequired: bool = False
-    maxTimeToFinish: int | None = None
+    timeLimit: int | None = None
     maxWidth: str = "100%"
     minWidth: str = "300px"
     navigationButtonsVisibility: str = "inherit"
@@ -815,8 +819,8 @@ class SurveyModel(BaseModel):
         matrixDragHandleArea (str): The part of an item with which the users can drag and drop in dynamic matrix questions. Can be 'entireItem' (default), 'icon' (drag icon only).
         maxOthersLength (int): The maximum length of the comment area in the questions with `showOtherItem` or `showCommentArea` set to True. Default is 0 (no limit).
         maxTextLength (int): The maximum length of the text in the textual questions. Default is 0 (no limit).
-        maxTimeToFinish (int | None): Maximum time in seconds to finish the survey.
-        maxTimeToFinishPage (int | None): Maximum time in seconds to finish the page. 0 means no limit.
+        timeLimit (int | None): Maximum time in seconds to finish the survey.
+        timeLimitPerPage (int | None): Maximum time in seconds to finish the page. 0 means no limit.
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
         navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
@@ -845,7 +849,7 @@ class SurveyModel(BaseModel):
         showPreviewBeforeComplete (str): Whether to preview all answers before completion. Can be 'noPreview' (default), 'showAllQuestions', 'showAnsweredQuestions'.
         showProgressBar (str): Whether to show the progress bar. Can be 'off' (default), 'aboveHeader', 'belowHeader', 'bottom', 'topBottom', 'auto'.
         showQuestionNumbers (bool | str): Whether to show the question numbers. Default is True. Can be True, 'on', False, 'off', 'onpage' (number each page anew).
-        showTimerPanel (str): Whether to show the timer panel. Can be 'none' (default), 'top', 'bottom'. See `maxTimeToFinish`, `maxTimeToFinishPage`, and `showTimerPanelMode`.
+        showTimerPanel (str): Whether to show the timer panel. Can be 'none' (default), 'top', 'bottom'. See `timeLimit`, `timeLimitPerPage`, and `showTimerPanelMode`.
         showTimerPanelMode (str): What times to show on the timer panel. Can be 'all' (default), 'page', 'survey'. See `showTimerPanel`.
         showTitle (bool): Whether to show the survey title. Default is True.
         showTOC (bool): Whether to show the table of contents. Default is False. See `tocLocation`.
@@ -894,8 +898,8 @@ class SurveyModel(BaseModel):
     matrixDragHandleArea: str = "entireItem"
     maxOthersLength: int = 0
     maxTextLength: int = 0
-    maxTimeToFinish: int | None = None
-    maxTimeToFinishPage: int | None = None
+    timeLimit: int | None = None
+    timeLimitPerPage: int | None = None
     mode: str = "edit"
     navigateToUrl: str | None = None
     navigateToUrlOnCondition: list[dict] | None = None
@@ -1027,21 +1031,6 @@ class SurveyModel(BaseModel):
         # survey.js
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
             survey_js.write("export const json = " + self.json() + ";")
-
-        # config.ts
-        shutil.copyfile(
-            files("velesresearch.website_template") / "src" / "config.ts",
-            path / "src" / "config.ts",
-        )
-        with open(path / "src" / "config.ts", "r", encoding="utf-8") as configTS:
-            configTSData = configTS.read()
-
-            # number of groups
-            configTSData = configTSData.replace(
-                r"{% numberOfGroups %}", str(self.numberOfGroups)
-            )
-        with open(path / "src" / "config.ts", "w", encoding="utf-8") as configTS:
-            configTS.write(configTSData)
 
         # customCode
         with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:
