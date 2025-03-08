@@ -25,8 +25,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "showdown": "^2.1.0",
-    "survey-core": "^1.12.26",
-    "survey-react-ui": "^1.12.26",
+    "survey-core": "2.0.0",
+    "survey-react-ui": "2.0.0",
     "surveyjs-widgets": "^1.12.26"
   },
   "scripts": {
