@@ -519,14 +519,14 @@ def dropdown(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         isRequired (bool): Whether the question is required.
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         placeholder (str | None): Placeholder text.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
@@ -536,12 +536,11 @@ def dropdown(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
-        showNoneItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
@@ -853,7 +852,7 @@ def checkbox(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         isAllSelected (bool | None): Start with all choices selected. Default is False.
         isRequired (bool): Whether the question is required.
@@ -861,9 +860,9 @@ def checkbox(
         maxWidth (str): Maximum width of the question in CSS units.
         minSelectedChoices (int): Minimum number of selected choices. 0 means no limit.
         minWidth (str): Minimum width of the question in CSS units.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -873,12 +872,11 @@ def checkbox(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
-        showNoneItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         showSelectAllItem (bool | None): Whether to show the 'Select All' item.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
@@ -1039,7 +1037,7 @@ def ranking(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         isAllSelected (bool | None): Start with all choices selected. Default is False.
         isRequired (bool): Whether the question is required.
@@ -1048,9 +1046,9 @@ def ranking(
         maxWidth (str): Maximum width of the question in CSS units.
         minSelectedChoices (int): Minimum number of selected choices. 0 means no limit.
         minWidth (str): Minimum width of the question in CSS units.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -1064,12 +1062,11 @@ def ranking(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
-        showNoneItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         showSelectAllItem (bool | None): Whether to show the 'Select All' item.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
@@ -1227,14 +1224,14 @@ def radio(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         isRequired (bool): Whether the question is required.
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -1243,12 +1240,11 @@ def radio(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
-        showNoneItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
@@ -1410,7 +1406,7 @@ def dropdownMultiple(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         hideSelectedItems (bool | None): Whether to hide selected items in the dropdown.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         isAllSelected (bool | None): Start with all choices selected. Default is False.
@@ -1419,9 +1415,9 @@ def dropdownMultiple(
         maxWidth (str): Maximum width of the question in CSS units.
         minSelectedChoices (int): Minimum number of selected choices. 0 means no limit.
         minWidth (str): Minimum width of the question in CSS units.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         placeholder (str | None): Placeholder text for the input with no value.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
@@ -1434,12 +1430,11 @@ def dropdownMultiple(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
-        showNoneItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         showSelectAllItem (bool | None): Whether to show the 'Select All' item.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
@@ -2940,7 +2935,7 @@ def imagePicker(
         dontKnowText: str | None = None
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
-        hideIfChoicesEmpty: bool | None = None
+        hideIfChoicesEmpty (bool | None): Whether to hide the question if there are no choices.
         id (str | None): HTML id attribute for the question. Usually not necessary.
         imageFit (str): The object-fit property of the choices. Can be 'contain' (default), 'cover', 'fill', 'none'. See MDN <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>.
         imageHeight (int | str): The height of the image container in CSS units. Defaults to "auto".
@@ -2953,9 +2948,9 @@ def imagePicker(
         minImageWidth (int | str): The minimum width of the image in CSS units. Defaults to 200.
         minWidth (str): Minimum width of the question in CSS units.
         multiSelect (bool): Whether to allow multiple choices. Default is False.
-        noneText: str | None = None
-        otherErrorText: str | None = None
-        otherText: str | None = None
+        noneText (str | None): Text for the 'None' choice.
+        otherErrorText (str | None): Error text no text for the 'Other' choice.
+        otherText (str | None): Text for the 'Other' choice.
         readOnly (bool): Whether the question is read-only.
         refuseText: str | None = None
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -2964,13 +2959,12 @@ def imagePicker(
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
-        showDontKnowItem: bool = False
+        showDontKnowItem (bool): Show don't know option. Defaults to `False`.
         showLabel (bool): Whether to show the label under the image. It is taken from `text` property of the choices. Default is False.
-        showNoneItem: bool = False
+        showNoneItem (bool): Show none option. Defaults to `False`.
         showNumber (bool): Whether to hide the question number.
         showOtherItem (bool): Whether to show the 'Other' item. Doesn't work with `showCommentArea`.
-        showOtherItem: bool = False
-        showRefuseItem: bool = False
+        showRefuseItem (bool): Show refuse option. Defaults to `False`.
         startWithNewLine (bool): Whether to start the question on a new line.
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
