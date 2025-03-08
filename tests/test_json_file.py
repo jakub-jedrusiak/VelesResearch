@@ -1,4 +1,5 @@
 "Test json file"
+
 import os
 from pathlib import Path
 from shutil import rmtree
@@ -27,7 +28,6 @@ def test_creation():
     survey(
         page("RSES", radio("RSES", RSES_items.split("\n"), RSES_scale.split("; "))),
         path=wd,
-        buildForPublication=True,
         folderName="RSES",
     )
 
@@ -36,7 +36,7 @@ def test_creation():
     for file in [
         "src",
         "public",
-        # "build",
+        "build",
         "package.json",
         "node_modules",
         "src/survey.js",
