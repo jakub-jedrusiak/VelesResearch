@@ -223,6 +223,10 @@ function SurveyComponent() {
   SurveyCore.Serializer.addProperty("survey", {
     name: "UrlParameters",
   });
+  SurveyCore.Serializer.addProperty("survey", {
+    name: "showTimerOnlyWhenLimit:boolean",
+    default: false,
+  });
 
   const survey = new Model(json);
   survey.participantID = MakeID(8);
@@ -271,6 +275,19 @@ function SurveyComponent() {
     // Set HTML markup to render
     options.html = str;
   });
+
+  // Timer only on pages with the time limit
+  if (survey.showTimerOnlyWhenLimit) {
+    survey.onCurrentPageChanging.add((sender, options) => {
+      if (options.newCurrentPage.timeLimit) {
+        survey.setPropertyValue("showTimer", true);
+        survey.startTimer();
+      } else {
+        survey.setPropertyValue("showTimer", false);
+        survey.stopTimer();
+      }
+    });
+  }
 
   // Input monitoring setup
   survey.onAfterRenderQuestion.add((sender, options) => {

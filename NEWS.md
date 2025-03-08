@@ -26,6 +26,7 @@
     * `rowsOrder` -> `rowOrder`
     * `UrlParameters` -> `urlParameters`
 * All the docs are now sorted properly.
+* Added `showTimerOnlyWhenLimit` to automatically hide the timer on pages that do not have a time limit.
 
 ## 0.4.1
 

@@ -852,13 +852,14 @@ class SurveyModel(BaseModel):
         showQuestionNumbers (bool | str): Whether to show the question numbers. Default is False. Can be True, 'on', False, 'off', 'onpage' (number each page anew).
         showTOC (bool): Whether to show the table of contents. Default is False. See `tocLocation`.
         showTimer (bool): Whether to show the timer. Default is False. If the timer is shown, it automatically starts measuring time. See `timerInfoMode`, `timerLocation`, `timeLimit`, and `timeLimitPerPage`.
+        showTimerOnlyWhenLimit (bool): Whether the timer should be shown only when there is a time limit on a page and disappear when the time is not limited (`True`) or be visible on all pages (`False`, default).
         showTitle (bool): Whether to show the survey title. Default is True.
         startSurveyText (str | None): Text for the 'Start' button if `firstPageIsStartPage=True`.
         storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
         textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
         themeFile (Path | str | None): The path to the theme file. If None, default is used. Use the [theme builder](https://surveyjs.io/create-free-survey) to create a theme file.
-        timeLimit (int | None): Maximum time in seconds to finish the survey.
-        timeLimitPerPage (int | None): Maximum time in seconds to finish the page. 0 means no limit.
+        timeLimit (int | None): Maximum time in seconds to finish the survey. Default is None (no limit). You probably want to set `showTimerOnlyWhenLimit` to False when using this option.
+        timeLimitPerPage (int | None): Maximum time in seconds to finish the page. 0 means no limit. You probably want to set `showTimerOnlyWhenLimit` to False when using this option.
         timerInfoMode (str): What times to show on the timer panel. Can be 'combined' (default), 'page', 'survey'. See `showTimer`.
         timerLocation (str): Where to show the timer if `showTimer` is True. Can be 'top` (default) or 'bottom'.
         title (str | None): The title of the survey.
@@ -933,6 +934,7 @@ class SurveyModel(BaseModel):
     showQuestionNumbers: bool | str = False
     showTOC: bool = False
     showTimer: bool = False
+    showTimerOnlyWhenLimit: bool = False
     showTitle: bool = True
     startSurveyText: str | None = None
     storeOthersAsComment: bool = True
