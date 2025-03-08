@@ -8,6 +8,24 @@
 * Changed the result structure, so the order of the answers is preserved.
 * Additional changes to the website template to change the structure of the files.
 * URL parameters added to the survey `UrlParameters` argument are now saved as variables before the survey is rendered.
+* Adapted Veles to work with SurveyJS 2.0.0:
+  * Technical changes
+  * Question numbers are now hidden by default. They can be shown again using the `showQuestionNumbers` option.
+  * Logo size is now `auto`x40px (instead of 300x200px) by default.
+  * Images in `imagePicker()` now have max width and height of 3000px (instead of 400x266px) by default.
+  * Renamed a series of arguments (see <https://surveyjs.io/stay-updated/release-notes/v2.0.0#obsolete-form-library-api>). Mainly:
+    * `firstPageIsStarted` -> `firstPageIsStartPage`
+    * `maxTimeToFinish` -> `timeLimit`
+    * `maxTimeToFinishPage` -> `timeLimitPerPage`
+    * `questionsOrder` -> `questionOrder`
+    * `showTimerPanel` -> split into `showTimer` and `timerLocation`
+    * `showTimerPanelMode` -> `timerInfoMode`
+    * `hideNumber` -> `showNumber` (but note that now they are hidden by default)
+    * `size` -> `inputSize`
+    * `isAllRowRequired` -> `eachRowRequired`
+    * `rowsOrder` -> `rowOrder`
+    * `UrlParameters` -> `urlParameters`
+* All the docs are now sorted properly.
 
 ## 0.4.1
 
