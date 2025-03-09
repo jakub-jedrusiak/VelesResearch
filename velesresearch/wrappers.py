@@ -71,13 +71,14 @@ def survey(
     showQuestionNumbers: bool | str = False,
     showTOC: bool = False,
     showTimer: bool = False,
+    showTimerOnlyWhenLimit: bool = False,
     showTitle: bool = True,
     startSurveyText: str | None = None,
     storeOthersAsComment: bool = True,
     textUpdateMode: str = "onBlur",
     themeFile: Path | str | None = None,
     timeLimit: int | None = None,
-    timeLimitPage: int | None = None,
+    timeLimitPerPage: int | None = None,
     timerInfoMode: str = "combined",
     timerLocation: str = "top",
     title: str | None = None,
@@ -155,13 +156,14 @@ def survey(
         showQuestionNumbers (bool | str): Whether to show the question numbers. Default is False. Can be True, 'on', False, 'off', 'onpage' (number each page anew).
         showTOC (bool): Whether to show the table of contents. Default is False. See `tocLocation`.
         showTimer (bool): Whether to show the timer. Default is False. If the timer is shown, it automatically starts measuring time. See `timerInfoMode`, `timerLocation`, `timeLimit`, and `timeLimitPerPage`.
+        showTimerOnlyWhenLimit (bool): Whether the timer should be shown only when there is a time limit on a page and disappear when the time is not limited (`True`) or be visible on all pages (`False`, default).
         showTitle (bool): Whether to show the survey title. Default is True.
         startSurveyText (str | None): Text for the 'Start' button if `firstPageIsStartPage=True`.
         storeOthersAsComment (bool): Whether to store the 'Other' answers in a separate column (True; see `commentSuffix`) or in the question column (False). Default is True.
         textUpdateMode (str): The mode of updating the text. Can be 'onBlur' (default; update after the field had been unclicked), 'onTyping' (update every key press). Can be overridden for individual questions.
         themeFile (Path | str | None): The path to the theme file. If None, default is used. Use the [theme builder](https://surveyjs.io/create-free-survey) to create a theme file.
-        timeLimit (int | None): Maximum time in seconds to finish the survey.
-        timeLimitPage (int | None): Maximum time in seconds to finish the page. 0 means no limit.
+        timeLimit (int | None): Maximum time in seconds to finish the survey. Default is None (no limit). You probably want to set `showTimerOnlyWhenLimit` to False when using this option.
+        timeLimitPerPage (int | None): Maximum time in seconds to finish the page. 0 means no limit. You probably want to set `showTimerOnlyWhenLimit` to False when using this option.
         timerInfoMode (str): What times to show on the timer panel. Can be 'all' (default), 'page', 'survey'. See `showTimer`.
         timerLocation (str): Where to show the timer if `showTimer` is True. Can be 'top` (default) or 'bottom'.
         title (str | None): The title of the survey.
@@ -206,7 +208,7 @@ def survey(
         "maxCommentLength": maxCommentLength,
         "maxTextLength": maxTextLength,
         "timeLimit": timeLimit,
-        "timeLimitPage": timeLimitPage,
+        "timeLimitPerPage": timeLimitPerPage,
         "mode": mode,
         "navigateToUrl": navigateToUrl,
         "navigateToUrlOnCondition": navigateToUrlOnCondition,
@@ -236,6 +238,7 @@ def survey(
         "showProgressBar": showProgressBar,
         "showQuestionNumbers": showQuestionNumbers,
         "showTimer": showTimer,
+        "showTimerOnlyWhenLimit": showTimerOnlyWhenLimit,
         "timerInfoMode": timerInfoMode,
         "timerLocation": timerLocation,
         "showTitle": showTitle,
@@ -282,6 +285,7 @@ def page(
     requiredIf: str | None = None,
     state: str = "default",
     timeLimit: int | None = None,
+    timeMinimum: int | None = None,
     title: str | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
@@ -313,6 +317,7 @@ def page(
         requiredIf (str | None): Expression to make the page required (at least one question must be answered).
         state (str): If the page should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         timeLimit (int | None): Maximum time in seconds to finish the page.
+        timeMinimum (int | None): Minimum time in seconds the user has to spend on the page. All navigation buttons are hidden during this period.
         title (str): The visible title of the page.
         visible (bool): Whether the page is visible.
         visibleIf (str | None): Expression to make the page visible.
@@ -325,6 +330,7 @@ def page(
         "id": id,
         "isRequired": isRequired,
         "timeLimit": timeLimit,
+        "timeMinimum": timeMinimum,
         "maxWidth": maxWidth,
         "minWidth": minWidth,
         "navigationButtonsVisibility": navigationButtonsVisibility,
