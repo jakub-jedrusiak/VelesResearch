@@ -1,6 +1,6 @@
 # Release notes
 
-## future release
+## 0.5.0
 
 * Added `imagePicker()` question type.
 * `getJS()` now does not crash when it encounters regex escape sequences (e.g. `\d`).
