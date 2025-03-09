@@ -285,6 +285,7 @@ def page(
     requiredIf: str | None = None,
     state: str = "default",
     timeLimit: int | None = None,
+    timeMinimum: int | None = None,
     title: str | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
@@ -316,6 +317,7 @@ def page(
         requiredIf (str | None): Expression to make the page required (at least one question must be answered).
         state (str): If the page should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         timeLimit (int | None): Maximum time in seconds to finish the page.
+        timeMinimum (int | None): Minimum time in seconds the user has to spend on the page. All navigation buttons are hidden during this period.
         title (str): The visible title of the page.
         visible (bool): Whether the page is visible.
         visibleIf (str | None): Expression to make the page visible.
@@ -328,6 +330,7 @@ def page(
         "id": id,
         "isRequired": isRequired,
         "timeLimit": timeLimit,
+        "timeMinimum": timeMinimum,
         "maxWidth": maxWidth,
         "minWidth": minWidth,
         "navigationButtonsVisibility": navigationButtonsVisibility,

@@ -27,6 +27,7 @@
     * `UrlParameters` -> `urlParameters`
 * All the docs are now sorted properly.
 * Added `showTimerOnlyWhenLimit` to automatically hide the timer on pages that do not have a time limit.
+* Added `timeMinimum` for pages to allow for minimum time the user has to spend.
 
 ## 0.4.1
 

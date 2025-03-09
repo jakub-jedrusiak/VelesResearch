@@ -202,6 +202,22 @@ function setupTracking(survey, questionName) {
   observeDOMChanges(); // Begin observing and setup tracking
 }
 
+function formatTime(timeInSeconds) {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = timeInSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function timerSubtraction(timerString) {
+  const [minutes, seconds] = timerString.split(":").map(Number);
+
+  const remainingSecondsTotal = minutes * 60 + seconds - 1;
+  if (remainingSecondsTotal <= 0) {
+    return "0:00";
+  }
+  return formatTime(remainingSecondsTotal);
+}
+
 // {% customFunctions %}
 
 // placeholder
@@ -226,6 +242,10 @@ function SurveyComponent() {
   SurveyCore.Serializer.addProperty("survey", {
     name: "showTimerOnlyWhenLimit:boolean",
     default: false,
+  });
+  SurveyCore.Serializer.addProperty("page", {
+    name: "timeMinimum:number",
+    default: 0,
   });
 
   const survey = new Model(json);
@@ -293,6 +313,42 @@ function SurveyComponent() {
   survey.onAfterRenderQuestion.add((sender, options) => {
     if (options.question.getPropertyValue("monitorInput", false))
       setupTracking(sender, options.question.name);
+  });
+
+  // Time minimum setup
+  let originalNextButtonText = "Next";
+  survey.onCurrentPageChanging.add(function (sender, options) {
+    if (options.newCurrentPage.timeMinimum) {
+      const nextButton =
+        options.newCurrentPage.name === survey.pages.at(-1).name
+          ? survey.navigationBar.getActionById("sv-nav-complete")
+          : survey.navigationBar.getActionById("sv-nav-next");
+      nextButton.innerCss += " override-opacity-for-time-minimum";
+      originalNextButtonText = nextButton.title;
+      nextButton.enabled = false;
+      nextButton.title = formatTime(options.newCurrentPage.timeMinimum);
+      survey.startTimer();
+    }
+  });
+
+  survey.onTimerTick.add(() => {
+    const nextButton = survey.isLastPage
+      ? survey.navigationBar.getActionById("sv-nav-complete")
+      : survey.navigationBar.getActionById("sv-nav-next");
+    if (
+      survey.currentPage?.timeMinimum &&
+      nextButton.title !== originalNextButtonText
+    ) {
+      nextButton.title = timerSubtraction(nextButton.title);
+      if (nextButton.title === "0:00") {
+        nextButton.title = originalNextButtonText;
+        nextButton.innerCss = nextButton.innerCss.replace(
+          " override-opacity-for-time-minimum",
+          ""
+        );
+        nextButton.enabled = true;
+      }
+    }
   });
 
   // {% customCode %}
