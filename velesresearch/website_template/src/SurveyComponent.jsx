@@ -108,6 +108,21 @@ async function handleResults(survey) {
       a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
     );
 
+  const customJsonReplacer = (key, value) => {
+    // Only modify the root object (when key is an empty string)
+    if (key === "") {
+      const ordered = {};
+      [...orderKeys, ...remainingKeys].forEach((k) => {
+        if (value.hasOwnProperty(k)) {
+          ordered[k] = value[k];
+        }
+      });
+      return ordered;
+    }
+    // For all other levels, return the value as is.
+    return value;
+  };
+
   // send data to Django backend
   const requestHeaders = {
     method: "POST",
@@ -117,7 +132,7 @@ async function handleResults(survey) {
       },
       CSRFToken()
     ),
-    body: JSON.stringify(result, [...orderKeys, ...remainingKeys]),
+    body: JSON.stringify(result, customJsonReplacer),
   };
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);

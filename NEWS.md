@@ -1,5 +1,9 @@
 # Release notes
 
+## future release
+
+* Fixed a bug where nested objects were not included in the result.
+
 ## 0.5.0
 
 * Added `imagePicker()` question type.
