@@ -252,7 +252,7 @@ function SurveyComponent() {
     default: 1,
   });
   SurveyCore.Serializer.addProperty("survey", {
-    name: "UrlParameters",
+    name: "urlParameters",
   });
   SurveyCore.Serializer.addProperty("survey", {
     name: "showTimerOnlyWhenLimit:boolean",
@@ -277,8 +277,8 @@ function SurveyComponent() {
   survey.setVariable("date_started", dateStarted.toISOString());
 
   const URLparams = new URLSearchParams(window.location.search);
-  if (survey.UrlParameters) {
-    survey.UrlParameters.forEach((param) => {
+  if (survey.urlParameters) {
+    survey.urlParameters.forEach((param) => {
       const value = URLparams.get(param);
       if (value !== null) {
         survey.setVariable(param, value);
