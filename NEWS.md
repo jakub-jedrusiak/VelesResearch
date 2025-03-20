@@ -1,6 +1,6 @@
 # Release notes
 
-## future release
+## 0.5.1
 
 * Fixed a bug where nested objects were not included in the result.
 * Fixed a bug causing `urlParameters` were not saved correctly.
