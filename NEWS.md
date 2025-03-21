@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.5.1.1
+
+* Hotfixed a bug where the order of the answers was wrong.
+
 ## 0.5.1
 
 * Fixed a bug where nested objects were not included in the result.

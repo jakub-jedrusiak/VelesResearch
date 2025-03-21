@@ -98,7 +98,10 @@ async function handleResults(survey) {
 
   const varNames = survey
     .getVariableNames()
-    .filter((x) => !firstColumns.includes(x));
+    .filter((x) => !firstColumns.includes(x))
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+    );
 
   const orderKeys = [...firstColumns, ...questionNames, ...varNames];
 
@@ -108,20 +111,12 @@ async function handleResults(survey) {
       a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
     );
 
-  const customJsonReplacer = (key, value) => {
-    // Only modify the root object (when key is an empty string)
-    if (key === "") {
-      const ordered = {};
-      [...orderKeys, ...remainingKeys].forEach((k) => {
-        if (value.hasOwnProperty(k)) {
-          ordered[k] = value[k];
-        }
-      });
-      return ordered;
+  const orderedResult = {};
+  [...orderKeys, ...remainingKeys].forEach((k) => {
+    if (result.hasOwnProperty(k)) {
+      orderedResult[k] = result[k];
     }
-    // For all other levels, return the value as is.
-    return value;
-  };
+  });
 
   // send data to Django backend
   const requestHeaders = {
@@ -132,7 +127,7 @@ async function handleResults(survey) {
       },
       CSRFToken()
     ),
-    body: JSON.stringify(result, customJsonReplacer),
+    body: JSON.stringify(orderedResult),
   };
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);
