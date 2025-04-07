@@ -1,5 +1,9 @@
 # Release notes
 
+## Future release
+
+* Added `clearInvisibleValues` property to the `Survey` class.
+
 ## 0.5.1.1
 
 * Hotfixed a bug where the order of the answers was wrong.

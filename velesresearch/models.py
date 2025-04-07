@@ -805,6 +805,7 @@ class SurveyModel(BaseModel):
         backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
         calculatedValues (list[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
         checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
+        clearInvisibleValues (str): What to do with the values of the invisible questions. By default, they are cleared on different moments. Can be "onComplete" (default), "onHidden", "onHiddenContainer" or "none" (no clearing).
         commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
         completeText (str | None): Text for the 'Complete' button.
         completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
@@ -887,6 +888,7 @@ class SurveyModel(BaseModel):
     backgroundOpacity: int = 1
     calculatedValues: list[dict] | None = None
     checkErrorsMode: str = "onNextPage"
+    clearInvisibleValues: str = "onComplete"
     commentAreaRows: int = 2
     completeText: str | None = None
     completedBeforeHtml: str | None = None
