@@ -7,12 +7,12 @@
     "@hyrious/esbuild-plugin-style": "^0.3.5",
     "@types/bun": "latest",
     "@types/mustache": "^4.2.5",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "@types/showdown": "^2.0.6",
     "chokidar": "^4.0.3",
     "esbuild": "^0.24.2",
-    "hono": "^4.7.4",
+    "hono": "^4.7.5",
     "loadjs": "^4.3.0",
     "mustache": "^4.2.0"
   },
@@ -27,7 +27,7 @@
     "showdown": "^2.1.0",
     "survey-core": "2.0.0",
     "survey-react-ui": "2.0.0",
-    "surveyjs-widgets": "^1.12.26"
+    "surveyjs-widgets": "^1.12.30"
   },
   "scripts": {
     "build": "bun run build.ts",
