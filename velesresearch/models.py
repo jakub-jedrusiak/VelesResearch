@@ -727,8 +727,6 @@ class PageModel(BaseModel):
         isRequired (bool): Whether the page is required (at least one question must be answered).
         maxWidth (str): Maximum width of the page in CSS units.
         minWidth (str): Minimum width of the page in CSS units.
-        navigationButtonsVisibility (str): The visibility of the navigation buttons. Can be 'inherit', 'show', 'hide'.
-        navigationDescription (str | None): Description for the page navigation.
         navigationTitle (str | None): Title for the page navigation.
         questionErrorLocation (str): The location of the error text for the questions. Can be 'default', 'top', 'bottom'.
         questionOrder (str): The order of the questions. Can be 'default', 'random'.
@@ -736,6 +734,7 @@ class PageModel(BaseModel):
         readOnly (bool): Whether the page is read-only.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the page required (at least one question must be answered).
+        showNavigationButtons (bool): Whether to show the navigation buttons.
         state (str): If the page should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         timeLimit (int | None): Maximum time in seconds to finish the page.
         timeMinimum (int | None): Minimum time in seconds the user has to spend on the page. All navigation buttons are hidden during this period.
@@ -757,8 +756,6 @@ class PageModel(BaseModel):
     isRequired: bool = False
     maxWidth: str = "100%"
     minWidth: str = "300px"
-    navigationButtonsVisibility: str = "inherit"
-    navigationDescription: str | None = None
     navigationTitle: str | None = None
     questionErrorLocation: str = "default"
     questionOrder: str = "default"
@@ -766,6 +763,7 @@ class PageModel(BaseModel):
     readOnly: bool = False
     requiredErrorText: str | None = None
     requiredIf: str | None = None
+    showNavigationButtons: bool = True
     state: str = "default"
     timeLimit: int | None = None
     timeMinimum: int | None = None
@@ -828,6 +826,7 @@ class SurveyModel(BaseModel):
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
         navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        navigationButtonsLocation (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'topBottom'.
         numberOfGroups (int): The number of groups in the survey. Default is 1.
         pageNextText (str | None): Text for the 'Next' button.
         pagePrevText (str | None): Text for the 'Previous' button.
@@ -846,7 +845,7 @@ class SurveyModel(BaseModel):
         requiredMark (str): The text denoting the required questions. Default is '*'.
         scoresSuffix (str): The suffix of the score column if `addScoreToResults=True`. Default is '_score'.
         showCompletePage (bool): Whether to show the completed page. Default is True.
-        showNavigationButtons (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'both', 'none'.
+        showNavigationButtons (bool): Whether to show the navigation buttons.
         showPageNumbers (bool | None): Whether to show the page numbers in the pages' titles.
         showPageTitles (bool): Whether to show the page titles. Default is True.
         showPrevButton (bool): Whether to show the 'Previous' button. Default is True.
@@ -911,6 +910,7 @@ class SurveyModel(BaseModel):
     mode: str = "edit"
     navigateToUrl: str | None = None
     navigateToUrlOnCondition: list[dict] | None = None
+    navigationButtonsLocation: str = "bottom"
     numberOfGroups: int = 1
     pageNextText: str | None = None
     pagePrevText: str | None = None
@@ -929,7 +929,7 @@ class SurveyModel(BaseModel):
     requiredMark: str = "*"
     scoresSuffix: str = "_score"
     showCompletePage: bool = True
-    showNavigationButtons: str = "bottom"
+    showNavigationButtons: bool = True
     showPageNumbers: bool | None = None
     showPageTitles: bool = True
     showPrevButton: bool = True
