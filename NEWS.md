@@ -4,6 +4,7 @@
 
 * Added `clearInvisibleValues` property to the `Survey` class.
 * Replaces deprecated `navigationButtonsVisibility` to current `showNavigationButtons` and `navigationButtonsLocation`.
+* Added `"initial"` as a value for `questionOrder` for panels to the documentation.
 
 ## 0.5.1.1
 

@@ -407,7 +407,7 @@ def panel(
         maxWidth (str): Maximum width of the panel in CSS units.
         minWidth (str): Minimum width of the panel in CSS units.
         questionErrorLocation (str): The location of the error text for the questions. Can be 'default', 'top', 'bottom'.
-        questionOrder (str): The order of the questions. Can be 'default', 'random'.
+        questionOrder (str): The order of the questions. Can be 'default', 'random', 'initial'.
         questionStartIndex (str | None): The number or letter with which the questions numbering should start.
         questionTitleLocation (str): The location of the title for the questions. Can be 'default', 'top', 'bottom'.
         questionTitleWidth (str | None): The width of the question title.
