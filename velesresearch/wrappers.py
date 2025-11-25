@@ -3110,6 +3110,7 @@ def surveyFromJson(
     jsonPath: Path | str,
     folderName: Path | str = "survey",
     path: Path | str = os.getcwd(),
+    **kwargs,
 ) -> None:
     """Create a survey from a JSON file
 
@@ -3117,6 +3118,7 @@ def surveyFromJson(
         jsonPath (Path | str): Full path to the JSON file created with the creator (<https://surveyjs.io/free-survey-tool>).
         folderName (Path | str): The name of the folder where the survey will be created. Defaults to "survey".
         path (Path | str): The path where the survey will be created. Defaults to the current working directory.
+        kwargs: Other arguments passed to the `Survey` class.
     """
     if isinstance(jsonPath, str):
         jsonPath = Path(jsonPath)
@@ -3130,7 +3132,8 @@ def surveyFromJson(
             PageModel(
                 name="temp", questions=[QuestionModel(name="temp", type="radiogroup")]
             )
-        ]
+        ],
+        **kwargs,
     )
 
     tempSurvey.build(path=path, folderName=folderName, pauseBuild=True)
