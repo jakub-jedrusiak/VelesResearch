@@ -17,6 +17,7 @@ from .wrappers import (
     matrix,
     matrixDropdown,
     matrixDynamic,
+    multipleText,
     slider,
     image,
     imagePicker,

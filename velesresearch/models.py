@@ -611,9 +611,12 @@ class QuestionMatrixDynamicModel(QuestionMatrixDropdownModelBase):
 class QuestionMultipleTextModel(QuestionModel):
     """A multiple text type question object model"""
 
+    colCount: int = 1
+    inputSize: int | None = None
+    itemErrorLocation: str = "default"
+    items: list
+    itemTitleWidth: str = ""
     type: str = Field(default="multipletext")
-
-    # TODO
 
 
 class QuestionNoUiSliderModel(QuestionModel):

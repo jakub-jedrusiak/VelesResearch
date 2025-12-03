@@ -3066,6 +3066,31 @@ def imagePicker(
     )
 
 
+def multipleText(  # TODO: complete
+    name: str, title: str | list[str] | None, *items: str | dict | list, **kwargs
+) -> QuestionMultipleTextModel | list[QuestionMultipleTextModel]:
+    """Create a multiple text question object
+
+    Args:
+        name (str): The label of the question.
+        title (str | None): The visible title of the question. If None, `name` is used.
+        items (str | dict | list): The items of the question. Use primitives or dictionaries `{"name": ..., "title": ..., "otherParameter": ...}`.
+        kwargs: Other arguments passed to `multipletext()`.
+    """
+    items = flatten(items)
+    if not isinstance(title, list):
+        title = [title]
+    title = flatten(title)
+    if len(title) != 1:
+        return [
+            QuestionMultipleTextModel(
+                name=f"{name}_{i+1}", title=t, items=items, **kwargs
+            )
+            for i, t in enumerate(title)
+        ]
+    return QuestionMultipleTextModel(name=name, title=title[0], items=items, **kwargs)
+
+
 def consent(
     title: str = "Do you consent to take part in the study?",
     error: str = "You can't continue without a consent",
