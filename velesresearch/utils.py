@@ -166,7 +166,7 @@ def getJS(*files: Path | str | list[Path | str]) -> str:
             contents.append(data)
 
     combined = "\n\n".join(contents)
-    safe_combined = combined.replace("\\", "\\\\\\\\")
+    safe_combined = combined.replace("\\", "\\\\")
     return safe_combined
 
 
