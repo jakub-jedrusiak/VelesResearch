@@ -1,6 +1,6 @@
 # Release notes
 
-## Future release
+## 0.6.0
 
 * Added `clearInvisibleValues` property to the `Survey` class.
 * Replaces deprecated `navigationButtonsVisibility` to current `showNavigationButtons` and `navigationButtonsLocation`.
