@@ -9,7 +9,7 @@ description = "Veles is a free and open source python survey tool for researcher
 readme = "README.md"
 license = "GPL-3.0-or-later"
 authors = [{name = "Jakub Jędrusiak", email = "kuba23031999@gmail.com"}]
-requires-python = "^3.11"
+requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2.0.0",
     "markdown>=3.4.3",

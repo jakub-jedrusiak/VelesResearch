@@ -1556,4 +1556,4 @@ dev = ["coverage", "ipykernel", "pre-commit", "pylint-pydantic", "pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "d7a4159b36aee11e955c136e23d9d566b93422f593304532fba8081129f02505"
+content-hash = "8f2d78ac39d6eb4358ab76a63c6d75ff3e7593159a23181aa90c222383e087ac"
