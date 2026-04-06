@@ -1,5 +1,7 @@
 """Classes for additional SurveyJS elements"""
 
+from __future__ import annotations
+
 import warnings
 from pydantic import BaseModel
 from pydantic.functional_validators import model_validator

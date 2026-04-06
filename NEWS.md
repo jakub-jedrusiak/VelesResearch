@@ -6,6 +6,7 @@
 * Replaces deprecated `navigationButtonsVisibility` to current `showNavigationButtons` and `navigationButtonsLocation`.
 * Added `"initial"` as a value for `questionOrder` for panels to the documentation.
 * Added `kwargs` to `surveyFromJson()` to allow passing extra arguments to the `Survey` class.
+* Fix for Python 3.14
 
 ## 0.5.1.1
 

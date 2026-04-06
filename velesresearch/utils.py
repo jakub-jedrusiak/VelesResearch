@@ -1,5 +1,8 @@
 """Additional utility functions for Veles"""
 
+from __future__ import annotations
+
+from typing import Dict, List
 import itertools
 import inspect
 import re
@@ -8,14 +11,14 @@ from base64 import b64encode
 from warnings import warn
 
 
-def flatten(args: tuple) -> list:
+def flatten(args: tuple) -> List:
     """Flatten a list of lists or touples"""
     args = [*args]
     args = [[arg] if not isinstance(arg, (list, tuple)) else arg for arg in args]
     return list(itertools.chain.from_iterable(args))
 
 
-def dict_without_defaults(self) -> dict:
+def dict_without_defaults(self) -> Dict:
     "Return a dictionary of the changed object's attributes"
     # Values that are set to their default values differently from the SurveyJS default values
     # "attribute": "default value in SurveyJS"
@@ -27,7 +30,7 @@ def dict_without_defaults(self) -> dict:
         if (custom_defaults.get(k) is not None and v != custom_defaults.get(k))
         or (
             k not in ["questions", "pages", "validators", "addCode", "columns", "rows"]
-            and v != self.model_fields[k].default
+            and v != type(self).model_fields[k].default
         )
         or (k == "type")
     }

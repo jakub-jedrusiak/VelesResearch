@@ -1,5 +1,7 @@
 "VelesResearch main functionality."
 
+from __future__ import annotations
+
 from .wrappers import (
     survey,
     page,

@@ -1,6 +1,9 @@
 """Functions creating objects for survey structure classes"""
 
+from __future__ import annotations
+
 from json import dumps, loads
+from typing import Dict, List
 from .models import *
 from .helperModels import ValidatorModel
 from .utils import flatten
@@ -8,8 +11,8 @@ from .validators import expressionValidator
 
 
 def survey(
-    *pages: PageModel | list[PageModel],
-    addCode: dict | None = None,
+    *pages: PageModel | List[PageModel],
+    addCode: Dict | None = None,
     addScoreToResults: bool = True,
     allowResizeComment: bool = True,
     autoAdvanceAllowComplete: bool = True,
@@ -20,14 +23,14 @@ def survey(
     backgroundImage: str | None = None,
     backgroundOpacity: int = 1,
     build: bool = True,
-    calculatedValues: list[dict] | None = None,
+    calculatedValues: List[dict] | None = None,
     checkErrorsMode: str = "onNextPage",
     clearInvisibleValues: str = "onComplete",
     commentAreaRows: int = 2,
     completeText: str | None = None,
     completedBeforeHtml: str | None = None,
     completedHtml: str | None = None,
-    completedHtmlOnCondition: list[dict] | None = None,
+    completedHtmlOnCondition: List[dict] | None = None,
     cookieName: str | None = None,
     editText: str | None = None,
     firstPageIsStartPage: bool | None = None,
@@ -43,7 +46,7 @@ def survey(
     maxTextLength: int = 0,
     mode: str = "edit",
     navigateToUrl: str | None = None,
-    navigateToUrlOnCondition: list[dict] | None = None,
+    navigateToUrlOnCondition: List[dict] | None = None,
     navigationButtonsLocation: str = "bottom",
     numberOfGroups: int = 1,
     pageNextText: str | None = None,
@@ -85,8 +88,8 @@ def survey(
     timerLocation: str = "top",
     title: str | None = None,
     tocLocation: str = "left",
-    triggers: list[dict] | None = None,
-    urlParameters: str | list[str] | None = None,
+    triggers: List[dict] | None = None,
+    urlParameters: str | List[str] | None = None,
     validateVisitedEmptyFields: bool = False,
     validationEnabled: bool = True,
     width: str | None = None,
@@ -96,9 +99,9 @@ def survey(
     """Create a survey object
 
     Args:
-        pages (list[PageModel]): The pages of the survey.
+        pages (List[PageModel]): The pages of the survey.
         build (bool): Whether to build the survey. Default is True.
-        addCode (dict | None): Additional code for the survey. Usually not necessary.
+        addCode (Dict | None): Additional code for the survey. Usually not necessary.
         addScoreToResults (bool): Whether to add the scores of the questions with `correctAnswer` to the results data. See `scoresSuffix`.
         allowResizeComment (bool): Whether to allow resizing the long questions input area. Default is True. Can be overridden for individual questions.
         autoAdvanceAllowComplete (bool): Whether the survey should complete automatically after all questions on the last page had been answered. Works only if `autoAdvanceEnabled=True`. Default is True.
@@ -108,14 +111,14 @@ def survey(
         autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
         backgroundImage (str | None): URL or base64 of the background image.
         backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
-        calculatedValues (list[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
+        calculatedValues (List[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
         checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
         clearInvisibleValues (str): What to do with the values of the invisible questions. By default, they are cleared on different moments. Can be "onComplete" (default), "onHidden", "onHiddenContainer" or "none" (no clearing).
         commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
         completeText (str | None): Text for the 'Complete' button.
         completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
         completedHtml (str | None): HTML content to show after the survey is completed.
-        completedHtmlOnCondition (list[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
+        completedHtmlOnCondition (List[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
         cookieName (str | None): The name of the cookie to store the information about the survey having been completed. See `completedBeforeHtml`.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
@@ -132,7 +135,7 @@ def survey(
         maxTextLength (int): The maximum length of the text in the textual questions. Default is 0 (no limit).
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
-        navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        navigateToUrlOnCondition (List[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
         navigationButtonsLocation (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'topBottom'.
         pageNextText (str | None): Text for the 'Next' button.
         pagePrevText (str | None): Text for the 'Previous' button.
@@ -173,7 +176,7 @@ def survey(
         title (str | None): The title of the survey.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
-        urlParameters (list[str] | None): The URL parameters to be expected and saved. Default is None.
+        urlParameters (List[str] | None): The URL parameters to be expected and saved. Default is None.
         validateVisitedEmptyFields (bool): Whether to validate empty fields that had been clicked, and unclicked empty. Default is False.
         validationEnabled (bool): Whether to validate the values of the questions. Default is True.
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
@@ -272,8 +275,8 @@ def survey(
 
 def page(
     name: str,
-    *questions: QuestionModel | list[QuestionModel],
-    addCode: dict | None = None,
+    *questions: QuestionModel | List[QuestionModel],
+    addCode: Dict | None = None,
     description: str | None = None,
     enableIf: str | None = None,
     id: str | None = None,
@@ -303,8 +306,8 @@ def page(
 
     Args:
         name (str): The label of the page.
-        questions (QuestionModel | list[QuestionModel]): The questions on the page.
-        addCode (dict | None): Additional code for the survey. Usually not necessary.
+        questions (QuestionModel | List[QuestionModel]): The questions on the page.
+        addCode (Dict | None): Additional code for the survey. Usually not necessary.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
         description (str | None): Optional subtitle or description of the page.
@@ -368,7 +371,7 @@ def page(
 
 def panel(
     name: str,
-    *questions: QuestionModel | list[QuestionModel],
+    *questions: QuestionModel | List[QuestionModel],
     description: str | None = None,
     enableIf: str | None = None,
     id: str | None = None,
@@ -398,7 +401,7 @@ def panel(
 
     Args:
         name (str): The label of the page.
-        questions (QuestionModel | list[QuestionModel]): The questions on the panel.
+        questions (QuestionModel | List[QuestionModel]): The questions on the panel.
         description (str | None): Optional subtitle or description of the panel.
         enableIf (str | None): Expression to enable the panel.
         id (str | None): HTML id attribute for the panel. Usually not necessary.
@@ -457,9 +460,9 @@ def panel(
 
 def dropdown(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
     choicesMax: int | None = None,
@@ -502,19 +505,19 @@ def dropdown(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionDropdownModel | list[QuestionDropdownModel]:
+) -> QuestionDropdownModel | List[QuestionDropdownModel]:
     """Create a single-select dropdown question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
         choicesMax (int | None): Maximum for automatically generated choices. Use with `choicesMin` and `choicesStep`.
@@ -559,7 +562,7 @@ def dropdown(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -631,8 +634,8 @@ def dropdown(
 
 def text(
     name: str,
-    *title: str | list[str] | None,
-    addCode: dict | None = None,
+    *title: str | List[str] | None,
+    addCode: Dict | None = None,
     autocomplete: str | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
@@ -673,7 +676,7 @@ def text(
     textUpdateMode: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
@@ -684,7 +687,7 @@ def text(
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         autocomplete (str | None): A value of `autocomplete` attribute for `<input>`. See MDN for a list: <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#token_list_tokens>.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
@@ -727,7 +730,7 @@ def text(
         textUpdateMode (str): The mode of updating the text. Can be 'default', 'onBlur' (update after the field had been unclicked), 'onTyping' (update every key press).
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -790,9 +793,9 @@ def text(
 
 def checkbox(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
     choicesOrder: str = "none",
@@ -837,19 +840,19 @@ def checkbox(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionCheckboxModel | list[QuestionCheckboxModel]:
+) -> QuestionCheckboxModel | List[QuestionCheckboxModel]:
     """Create a checkbox question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
         choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
@@ -896,7 +899,7 @@ def checkbox(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -970,9 +973,9 @@ def checkbox(
 
 def ranking(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
     choicesOrder: str = "none",
@@ -1022,19 +1025,19 @@ def ranking(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionRankingModel | list[QuestionRankingModel]:
+) -> QuestionRankingModel | List[QuestionRankingModel]:
     """Create a ranking question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
         choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
@@ -1086,7 +1089,7 @@ def ranking(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -1165,9 +1168,9 @@ def ranking(
 
 def radio(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     allowClear: bool = False,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
@@ -1208,19 +1211,19 @@ def radio(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionRadiogroupModel | list[QuestionRadiogroupModel]:
+) -> QuestionRadiogroupModel | List[QuestionRadiogroupModel]:
     """Create a radio question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         allowClear (bool): Show a button to clear the answer.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
@@ -1263,7 +1266,7 @@ def radio(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -1336,9 +1339,9 @@ def radio(
 
 def dropdownMultiple(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     allowClear: bool = True,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
@@ -1389,19 +1392,19 @@ def dropdownMultiple(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionTagboxModel | list[QuestionTagboxModel]:
+) -> QuestionTagboxModel | List[QuestionTagboxModel]:
     """Create a multiple dropdown question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         allowClear (str): Whether to show the 'Clear' button for each answer.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
@@ -1454,7 +1457,7 @@ def dropdownMultiple(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -1534,9 +1537,9 @@ def dropdownMultiple(
 
 def textLong(
     name: str,
-    *title: str | list[str] | None,
+    *title: str | List[str] | None,
     acceptCarriageReturn: bool = True,
-    addCode: dict | None = None,
+    addCode: Dict | None = None,
     allowResize: bool | None = None,
     autoGrow: bool | None = None,
     commentPlaceholder: str | None = None,
@@ -1567,19 +1570,19 @@ def textLong(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionCommentModel | list[QuestionCommentModel]:
+) -> QuestionCommentModel | List[QuestionCommentModel]:
     """Create a long text question object
 
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
         acceptCarriageReturn (bool): Whether to allow line breaks. Default is True.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         allowResize (bool): Whether to allow resizing the input field. Default is True.
         autoGrow (bool): Whether to automatically grow the input field. Default is False.
         commentPlaceholder (str | None): Placeholder text for the comment area.
@@ -1612,7 +1615,7 @@ def textLong(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -1666,8 +1669,8 @@ def textLong(
 
 def rating(
     name: str,
-    *title: str | list[str] | None,
-    addCode: dict | None = None,
+    *title: str | List[str] | None,
+    addCode: Dict | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
     correctAnswer: str | None = None,
@@ -1687,7 +1690,7 @@ def rating(
     rateMin: int = 1,
     rateStep: int = 1,
     rateType: str = "labels",
-    rateValues: list | None = None,
+    rateValues: List | None = None,
     readOnly: bool = False,
     requiredErrorText: str | None = None,
     requiredIf: str | None = None,
@@ -1702,18 +1705,18 @@ def rating(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionRatingModel | list[QuestionRatingModel]:
+) -> QuestionRatingModel | List[QuestionRatingModel]:
     """Create a rating question object
 
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
         correctAnswer (str | None): Correct answer for the question. Use for quizzes.
@@ -1735,7 +1738,7 @@ def rating(
         rateMin (int): Minimum rate. Works only if `rateValues` is not set.
         rateStep (int): Step for the rate. Works only if `rateValues` is not set.
         rateType (str): The type of the rate. Can be 'labels', 'stars', 'smileys'.
-        rateValues (list | None): Manually set rate values. Use a list of primitives and/or dictionaries `{"value": ..., "text": ...}`.
+        rateValues (List | None): Manually set rate values. Use a list of primitives and/or dictionaries `{"value": ..., "text": ...}`.
         readOnly (bool): Whether the question is read-only.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
@@ -1750,7 +1753,7 @@ def rating(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -1807,8 +1810,8 @@ def rating(
 
 def yesno(
     name: str,
-    *title: str | list[str] | None,
-    addCode: dict | None = None,
+    *title: str | List[str] | None,
+    addCode: Dict | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
     correctAnswer: str | None = None,
@@ -1838,20 +1841,20 @@ def yesno(
     swapOrder: bool = False,
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     valueFalse: bool | str = False,
     valueTrue: bool | str = True,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionBooleanModel | list[QuestionBooleanModel]:
+) -> QuestionBooleanModel | List[QuestionBooleanModel]:
     """Create a yes/no (boolean) question object
 
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
         correctAnswer (str | None): Correct answer for the question. Use for quizzes.
@@ -1883,7 +1886,7 @@ def yesno(
         swapOrder (bool): Whether to swap the default (no, yes) order of the labels.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         valueFalse (str): Value for the 'false' option.
         valueTrue (str): Value for the 'true' option.
         visible (bool): Whether the question is visible.
@@ -1939,8 +1942,8 @@ def yesno(
 
 def info(
     name: str,
-    *infoHTML: str | list[str],
-    addCode: dict | None = None,
+    *infoHTML: str | List[str],
+    addCode: Dict | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
     correctAnswer: str | None = None,
@@ -1967,12 +1970,12 @@ def info(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionHtmlModel | list[QuestionHtmlModel]:
+) -> QuestionHtmlModel | List[QuestionHtmlModel]:
     """Create an informational text object
 
     Args:
@@ -2007,11 +2010,11 @@ def info(
         title (str | None): The visible title of the question. If None, `name` is used.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
     """
     args = {
         "titleLocation": titleLocation,
@@ -2057,10 +2060,10 @@ def info(
 
 def matrix(
     name: str,
-    title: str | list[str] | None,
-    columns: list | dict,
-    *rows: list | dict,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    columns: List | Dict,
+    *rows: List | Dict,
+    addCode: Dict | None = None,
     alternateRows: bool | None = None,
     columnMinWidth: str | None = None,
     commentPlaceholder: str | None = None,
@@ -2096,21 +2099,21 @@ def matrix(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     verticalAlign: str = "middle",
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionMatrixModel | list[QuestionMatrixModel]:
+) -> QuestionMatrixModel | List[QuestionMatrixModel]:
     """Create a matrix question object
 
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
-        rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        columns (List | Dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
+        rows (List | Dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         alternateRows (bool | None): Whether to alternate the rows.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
         commentPlaceholder (str | None): Placeholder text for the comment area.
@@ -2148,7 +2151,7 @@ def matrix(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
@@ -2225,10 +2228,10 @@ def matrix(
 
 def matrixDropdown(
     name: str,
-    title: str | list[str],
-    columns: list | QuestionModel | dict,
-    *rows: list | dict,
-    addCode: dict | None = None,
+    title: str | List[str],
+    columns: List | QuestionModel | Dict,
+    *rows: List | Dict,
+    addCode: Dict | None = None,
     alternateRows: bool | None = None,
     cellErrorLocation: str = "default",
     cellType: str | None = None,
@@ -2267,7 +2270,7 @@ def matrixDropdown(
     transposeData: bool = False,
     useCaseSensitiveComparison: bool = False,
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     verticalAlign: str = "middle",
     visible: bool = True,
     visibleIf: str | None = None,
@@ -2279,13 +2282,13 @@ def matrixDropdown(
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        columns (list | QuestionModel | dict): The columns of the matrix. Use question objects or dictionaries.
-        rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        columns (List | QuestionModel | Dict): The columns of the matrix. Use question objects or dictionaries.
+        rows (List | Dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         alternateRows (bool | None): Whether to alternate the rows.
         cellErrorLocation (str): The location of the error text for the cells. Can be 'default', 'top', 'bottom'.
         cellType (str | None): The type of the matrix cells. Can be overridden for individual columns. Can be "dropdown" (default), "checkbox", "radiogroup", "tagbox", "text", "comment", "boolean", "expression", "rating".
-        choices (str | dict | list | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
+        choices (str | Dict | List | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
@@ -2321,7 +2324,7 @@ def matrixDropdown(
         transposeData (bool): Whether to show columns as rows. Default is False.
         useCaseSensitiveComparison (bool): Whether the case of the answer should be considered when checking for uniqueness. If `True`, "Kowalski" and "kowalski" will be considered different answers.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
@@ -2403,9 +2406,9 @@ def matrixDropdown(
 
 def matrixDynamic(
     name: str,
-    title: str | list[str] | None,
+    title: str | List[str] | None,
     *columns,
-    addCode: dict | None = None,
+    addCode: Dict | None = None,
     addRowButtonLocation: str = "default",
     addRowText: str | None = None,
     allowAddRows: bool = True,
@@ -2445,7 +2448,7 @@ def matrixDynamic(
     resetValueIf: str | None = None,
     rowCount: int = 2,
     rowTitleWidth: str | None = None,
-    rows: list | dict | None = None,
+    rows: List | Dict | None = None,
     setValueExpression: str | None = None,
     setValueIf: str | None = None,
     showCommentArea: bool = False,
@@ -2458,21 +2461,21 @@ def matrixDynamic(
     transposeData: bool = False,
     useCaseSensitiveComparison: bool = False,
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     verticalAlign: str = "middle",
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionMatrixDynamicModel | list[QuestionMatrixDynamicModel]:
+) -> QuestionMatrixDynamicModel | List[QuestionMatrixDynamicModel]:
     """Create a dynamic matrix question object
 
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
-        rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        columns (List | Dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
+        rows (List | Dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "otherParameter": ...}`.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         addRowButtonLocation (str): The location of the 'Add row' button. Can be 'default', 'top', 'bottom', 'topBottom' (both top and bottom).
         addRowText (str | None): Text for the 'Add row' button.
         allowAddRows (bool): Whether to allow adding rows.
@@ -2481,9 +2484,9 @@ def matrixDynamic(
         alternateRows (bool | None): Whether to alternate the rows.
         cellErrorLocation (str): The location of the error text for the cells. Can be 'default', 'top', 'bottom'.
         cellType (str | None): The type of the matrix cells. Can be overridden for individual columns. Can be "dropdown" (default), "checkbox", "radiogroup", "tagbox", "text", "comment", "boolean", "expression", "rating".
-        choices (str | dict | list): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
+        choices (str | Dict | List): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
-        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
+        columns (List | Dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
         confirmDelete (bool): Whether to prompt for confirmation before deleting a row. Default is False.
@@ -2516,7 +2519,7 @@ def matrixDynamic(
         resetValueIf (str | None): Expression to reset the value of the question.
         rowCount (int): The initial number of rows.
         rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
-        rows (list | dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ...}`.
+        rows (List | Dict): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ...}`.
         setValueExpression (str | None): Expression to decide on the value of the question to be set. Requires `setValueIf`.
         setValueIf (str | None): Expression with a condition to set the value of the question. Requires `setValueExpression`.
         showCommentArea (bool): Whether to show the comment area. Doesn't work with `showOtherItem`.
@@ -2529,7 +2532,7 @@ def matrixDynamic(
         transposeData (bool): Whether to show columns as rows. Default is False.
         useCaseSensitiveComparison (bool): Whether the case of the answer should be considered when checking for uniqueness. If `True`, "Kowalski" and "kowalski" will be considered different answers.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
@@ -2612,8 +2615,8 @@ def matrixDynamic(
 
 def slider(
     name: str,
-    *title: str | list[str] | None,
-    addCode: dict | None = None,
+    *title: str | List[str] | None,
+    addCode: Dict | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
     correctAnswer: str | None = None,
@@ -2650,18 +2653,18 @@ def slider(
     titleLocation: str = "default",
     tooltips: bool = True,
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionNoUiSliderModel | list[QuestionNoUiSliderModel]:
+) -> QuestionNoUiSliderModel | List[QuestionNoUiSliderModel]:
     """Create a slider question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
         direction (str): The direction of the slider. Can be 'ltr', 'rtl'.
@@ -2730,7 +2733,7 @@ def slider(
 def image(
     name: str,
     *imageLink: str,
-    addCode: dict | None = None,
+    addCode: Dict | None = None,
     altText: str | None = None,
     commentPlaceholder: str | None = None,
     commentText: str | None = None,
@@ -2762,18 +2765,18 @@ def image(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionImageModel | list[QuestionImageModel]:
+) -> QuestionImageModel | List[QuestionImageModel]:
     """An image or video question object
 
     Args:
         name (str): The label of the question.
         imageLink (str | None): The src property for <img> or video link.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         altText (str | None): The alt property for <img>.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
@@ -2808,7 +2811,7 @@ def image(
         title (str | None): The visible title of the question. If None, `name` is used.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -2865,9 +2868,9 @@ def image(
 
 def imagePicker(
     name: str,
-    title: str | list[str] | None,
-    *choices: str | dict | list,
-    addCode: dict | None = None,
+    title: str | List[str] | None,
+    *choices: str | Dict | List,
+    addCode: Dict | None = None,
     choicesFromQuestion: str | None = None,
     choicesFromQuestionMode: str = "all",
     choicesOrder: str = "none",
@@ -2919,19 +2922,19 @@ def imagePicker(
     state: str = "default",
     titleLocation: str = "default",
     useDisplayValuesInDynamicTexts: bool = True,
-    validators: ValidatorModel | list[ValidatorModel] | None = None,
+    validators: ValidatorModel | List[ValidatorModel] | None = None,
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
     **kwargs,
-) -> QuestionImagePickerModel | list[QuestionImagePickerModel]:
+) -> QuestionImagePickerModel | List[QuestionImagePickerModel]:
     """Image Picker question object. Use `imageLink` property in the choices' dict to set the image.
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        choices (str | dict | list): The choices of the question. Use primitives or dictionaries `{"value": ..., "text": ..., "imageLink": ..., "otherParameter": ...}`.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        choices (str | Dict | List): The choices of the question. Use primitives or dictionaries `{"value": ..., "text": ..., "imageLink": ..., "otherParameter": ...}`.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
         choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
@@ -2983,7 +2986,7 @@ def imagePicker(
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units."""
@@ -3067,14 +3070,14 @@ def imagePicker(
 
 
 def multipleText(  # TODO: complete
-    name: str, title: str | list[str] | None, *items: str | dict | list, **kwargs
-) -> QuestionMultipleTextModel | list[QuestionMultipleTextModel]:
+    name: str, title: str | List[str] | None, *items: str | Dict | List, **kwargs
+) -> QuestionMultipleTextModel | List[QuestionMultipleTextModel]:
     """Create a multiple text question object
 
     Args:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        items (str | dict | list): The items of the question. Use primitives or dictionaries `{"name": ..., "title": ..., "otherParameter": ...}`.
+        items (str | Dict | List): The items of the question. Use primitives or dictionaries `{"name": ..., "title": ..., "otherParameter": ...}`.
         kwargs: Other arguments passed to `multipletext()`.
     """
     items = flatten(items)

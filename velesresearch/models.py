@@ -1,5 +1,7 @@
 """Classes for basic structural elements for SurveyJS"""
 
+from __future__ import annotations
+
 import json
 import os
 import shutil
@@ -7,6 +9,7 @@ import subprocess
 import re
 from pathlib import Path
 from importlib.resources import files
+from typing import Dict, List
 from markdown import markdown
 from pydantic import BaseModel, model_validator, Field
 from .validators import ValidatorModel
@@ -19,7 +22,7 @@ class QuestionModel(BaseModel):
     Attributes:
         name (str): The label of the question.
         title (str | None): The visible title of the question. If None, `name` is used.
-        addCode (dict | None): Additional code for the question. Usually not necessary.
+        addCode (Dict | None): Additional code for the question. Usually not necessary.
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
         correctAnswer (str | None): Correct answer for the question. Use for quizzes.
@@ -48,7 +51,7 @@ class QuestionModel(BaseModel):
         state (str | None): If the question should be collapsed or expanded. Can be 'default', 'collapsed', 'expanded'.
         titleLocation (str): The location of the title. Can be 'default', 'top', 'bottom', 'left', 'hidden'.
         useDisplayValuesInDynamicTexts (bool): Whether to use display names for question values in placeholders.
-        validators (ValidatorModel | list[ValidatorModel] | None): Validator(s) for the question.
+        validators (ValidatorModel | List[ValidatorModel] | None): Validator(s) for the question.
         visible (bool): Whether the question is visible.
         visibleIf (str | None): Expression to make the question visible.
         width (str): Width of the question in CSS units.
@@ -57,7 +60,7 @@ class QuestionModel(BaseModel):
     name: str
     title: str | None = None
     type: str
-    addCode: dict | None = None
+    addCode: Dict | None = None
     commentPlaceholder: str | None = None
     commentText: str | None = None
     correctAnswer: str | None = None
@@ -86,7 +89,7 @@ class QuestionModel(BaseModel):
     state: str = "default"
     titleLocation: str = "default"
     useDisplayValuesInDynamicTexts: bool = True
-    validators: ValidatorModel | list[ValidatorModel] | None = None
+    validators: ValidatorModel | List[ValidatorModel] | None = None
     visible: bool = True
     visibleIf: str | None = None
     width: str = ""
@@ -94,7 +97,7 @@ class QuestionModel(BaseModel):
     def __str__(self) -> str:
         return f"  {self.name} ({self.type}): {self.title}"
 
-    def dict(self) -> dict:
+    def dict(self) -> Dict:
         if self.name in ["id", "date_started", "date_completed", "group"]:
             raise ValueError(
                 "Questions cannot be named as one of these: ['id', 'date_started', 'date_completed', 'group']"
@@ -120,7 +123,7 @@ class QuestionSelectBase(QuestionModel):
     """Base class for select type question object models
 
     Attributes:
-        choices (str | dict | list): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
+        choices (str | Dict | List): The choices for the question. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ...}`. You can also add `visibleIf`, `enableIf`, and `requiredIf` to the dictionary.
         choicesFromQuestion (str | None): The name of the question to get the choices from if the are to be copied. Use with `choicesFromQuestionMode`.
         choicesFromQuestionMode (str): The mode of copying choices. Can be 'all', 'selected', 'unselected'.
         choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
@@ -136,7 +139,7 @@ class QuestionSelectBase(QuestionModel):
         showRefuseItem: bool = False
     """
 
-    choices: str | dict | list
+    choices: str | Dict | List
     choicesFromQuestion: str | None = None
     choicesFromQuestionMode: str = "all"
     choicesOrder: str = "none"
@@ -333,7 +336,7 @@ class QuestionRatingModel(QuestionModel):
         rateMin (int): Minimum rate. Works only if `rateValues` is not set.
         rateStep (int): Step for the rate. Works only if `rateValues` is not set.
         rateType (str): The type of the rate. Can be 'labels', 'stars', 'smileys'.
-        rateValues (list | None): Manually set rate values. Use a list of primitives and/or dictionaries `{"value": ..., "text": ...}`.
+        rateValues (List | None): Manually set rate values. Use a list of primitives and/or dictionaries `{"value": ..., "text": ...}`.
         scaleColorMode (str): The color mode of the scale if `rateType='smileys'`. Can be 'monochrome', 'colored'.
     """
 
@@ -343,7 +346,7 @@ class QuestionRatingModel(QuestionModel):
     rateMin: int = 1
     rateStep: int = 1
     rateType: str = "labels"
-    rateValues: list | None = None
+    rateValues: List | None = None
     scaleColorMode: str = "monochrome"
     type: str = Field(default="rating")
 
@@ -468,20 +471,20 @@ class QuestionMatrixBaseModel(QuestionModel):
     Attributes:
         alternateRows (bool | None): Whether to alternate the rows.
         columnMinWidth (str | None): Minimum width of the column in CSS units.
-        columns (list | dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
+        columns (List | Dict): The columns of the matrix. Use primitives or dictionaries `{"text": ..., "value": ..., "type": ..., "otherParameter": ...}`.
         displayMode (str): The display mode of the matrix. Can be 'auto', 'list', 'table'.
         rowTitleWidth (str | None): Width of the row title in CSS units. If you want to make the row title bigger compared to the answer columns, also set `columnMinWidth` to a smaller value in px or percentage.
-        rows (list | dict | None): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ...}`.
+        rows (List | Dict | None): The rows of the matrix. Use primitives or dictionaries `{"text": ..., "value": ...}`.
         showHeader (bool): Whether to show the header of the table.
         verticalAlign (str): The vertical alignment of the content. Can be 'top', 'middle'.
     """
 
     alternateRows: bool | None = None
     columnMinWidth: str | None = None
-    columns: list | dict
+    columns: List | Dict
     displayMode: str = "auto"
     rowTitleWidth: str | None = None
-    rows: list | dict | None = None
+    rows: List | Dict | None = None
     showHeader: bool = True
     verticalAlign: str = "middle"
 
@@ -530,7 +533,7 @@ class QuestionMatrixDropdownModelBase(QuestionMatrixBaseModel):
     Attributes:
         cellErrorLocation (str): The location of the error text for the cells. Can be 'default', 'top', 'bottom'.
         cellType (str | None): The type of the matrix cells. Can be overridden for individual columns. Can be "dropdown" (default), "checkbox", "radiogroup", "tagbox", "text", "comment", "boolean", "expression", "rating".
-        choices (str | dict | list | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
+        choices (str | Dict | List | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
         placeHolder (str | None): Placeholder text for the cells.
         transposeData (bool): Whether to show columns as rows. Default is False.
         useCaseSensitiveComparison (bool): Whether the case of the answer should be considered when checking for uniqueness. If `True`, "Kowalski" and "kowalski" will be considered different answers.
@@ -538,7 +541,7 @@ class QuestionMatrixDropdownModelBase(QuestionMatrixBaseModel):
 
     cellErrorLocation: str = "default"
     cellType: str | None = None
-    choices: str | dict | list | None = None
+    choices: str | Dict | List | None = None
     placeHolder: str | None = None
     transposeData: bool = False
     useCaseSensitiveComparison: bool = False
@@ -665,7 +668,7 @@ class PanelModel(BaseModel):
         questionStartIndex (str | None): The start index of the questions' numbers. Can include prefixes and suffixes. Default is '1.'.
         questionTitleLocation (str): The location of the title for the questions. Can be 'default', 'top', 'bottom'.
         questionTitleWidth (str | None): The width of the question title in CSS units. Only if `questionTitleLocation='left'`.
-        questions (QuestionModel | list): The questions on the panel.
+        questions (QuestionModel | List): The questions on the panel.
         readOnly (bool): Whether the panel is read-only.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the panel required.
@@ -680,7 +683,7 @@ class PanelModel(BaseModel):
     """
 
     name: str
-    questions: QuestionModel | list
+    questions: QuestionModel | List
     description: str | None = None
     enableIf: str | None = None
     id: str | None = None
@@ -705,7 +708,7 @@ class PanelModel(BaseModel):
     visibleIf: str | None = None
     width: str = ""
 
-    def dict(self) -> dict:
+    def dict(self) -> Dict:
         return dict_without_defaults(self) | {
             "type": "panel",
             "elements": [question.dict() for question in self.questions],
@@ -720,8 +723,8 @@ class PageModel(BaseModel):
 
     Attributes:
         name (str): The label of the page.
-        questions (QuestionModel | list[QuestionModel]): The questions on the page.
-        addCode (dict | None): Additional code for the page. Usually not necessary.
+        questions (QuestionModel | List[QuestionModel]): The questions on the page.
+        addCode (Dict | None): Additional code for the page. Usually not necessary.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
         description (str | None): Optional subtitle or description of the page.
@@ -749,8 +752,8 @@ class PageModel(BaseModel):
     """
 
     name: str
-    questions: QuestionModel | list
-    addCode: dict | None = None
+    questions: QuestionModel | List
+    addCode: Dict | None = None
     customCode: str | None = None
     customFunctions: str | None = None
     description: str | None = None
@@ -780,7 +783,7 @@ class PageModel(BaseModel):
             [str(question) for question in self.questions]
         )
 
-    def dict(self) -> dict:
+    def dict(self) -> Dict:
         return dict_without_defaults(self) | {
             "elements": [question.dict() for question in self.questions]
         }
@@ -793,8 +796,8 @@ class SurveyModel(BaseModel):
     """Object model for survey data
 
     Attributes:
-        pages (list[PageModel]): The pages of the survey.
-        addCode (dict | None): Additional code for the survey. Usually not necessary.
+        pages (List[PageModel]): The pages of the survey.
+        addCode (Dict | None): Additional code for the survey. Usually not necessary.
         addScoreToResults (bool): Whether to add the scores of the questions with `correctAnswer` to the results data. See `scoresSuffix`.
         allowResizeComment (bool): Whether to allow resizing the long questions input area. Default is True. Can be overridden for individual questions.
         autoAdvanceAllowComplete (bool): Whether the survey should complete automatically after all questions on the last page had been answered. Works only if `autoAdvanceEnabled=True`. Default is True.
@@ -804,14 +807,14 @@ class SurveyModel(BaseModel):
         autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
         backgroundImage (str | None): URL or base64 of the background image.
         backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
-        calculatedValues (list[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
+        calculatedValues (List[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
         checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
         clearInvisibleValues (str): What to do with the values of the invisible questions. By default, they are cleared on different moments. Can be "onComplete" (default), "onHidden", "onHiddenContainer" or "none" (no clearing).
         commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
         completeText (str | None): Text for the 'Complete' button.
         completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
         completedHtml (str | None): HTML content to show after the survey is completed.
-        completedHtmlOnCondition (list[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
+        completedHtmlOnCondition (List[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
         cookieName (str | None): The name of the cookie to store the information about the survey having been completed. See `completedBeforeHtml`.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
@@ -828,7 +831,7 @@ class SurveyModel(BaseModel):
         maxTextLength (int): The maximum length of the text in the textual questions. Default is 0 (no limit).
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
-        navigateToUrlOnCondition (list[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        navigateToUrlOnCondition (List[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
         navigationButtonsLocation (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'topBottom'.
         numberOfGroups (int): The number of groups in the survey. Default is 1.
         pageNextText (str | None): Text for the 'Next' button.
@@ -870,15 +873,15 @@ class SurveyModel(BaseModel):
         title (str | None): The title of the survey.
         tocLocation (str): The location of the table of contents. Can be 'left' (default), 'right'. See `showTOC`.
         triggers (str | None): Triggers for the survey. Usually not necessary. See <https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-survey-logic-triggers>.
-        urlParameters (list[str] | None): The URL parameters to be expected and saved. Default is None.
+        urlParameters (List[str] | None): The URL parameters to be expected and saved. Default is None.
         validateVisitedEmptyFields (bool): Whether to validate empty fields that had been clicked, and unclicked empty. Default is False.
         validationEnabled (bool): Whether to validate the values of the questions. Default is True.
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
     """
 
-    pages: list[PageModel]
-    addCode: dict | None = None
+    pages: List[PageModel]
+    addCode: Dict | None = None
     addScoreToResults: bool = True
     allowResizeComment: bool = True
     autoAdvanceAllowComplete: bool = True
@@ -888,14 +891,14 @@ class SurveyModel(BaseModel):
     autoGrowComment: bool = False
     backgroundImage: str | None = None
     backgroundOpacity: int = 1
-    calculatedValues: list[dict] | None = None
+    calculatedValues: List[dict] | None = None
     checkErrorsMode: str = "onNextPage"
     clearInvisibleValues: str = "onComplete"
     commentAreaRows: int = 2
     completeText: str | None = None
     completedBeforeHtml: str | None = None
     completedHtml: str | None = None
-    completedHtmlOnCondition: list[dict] | None = None
+    completedHtmlOnCondition: List[dict] | None = None
     cookieName: str | None = None
     customCode: str | None = None
     customFunctions: str | None = None
@@ -912,7 +915,7 @@ class SurveyModel(BaseModel):
     maxTextLength: int = 0
     mode: str = "edit"
     navigateToUrl: str | None = None
-    navigateToUrlOnCondition: list[dict] | None = None
+    navigateToUrlOnCondition: List[dict] | None = None
     navigationButtonsLocation: str = "bottom"
     numberOfGroups: int = 1
     pageNextText: str | None = None
@@ -953,8 +956,8 @@ class SurveyModel(BaseModel):
     timerLocation: str = "top"
     title: str | None = None
     tocLocation: str = "left"
-    triggers: list[dict] | None = None
-    urlParameters: list[str] | None = None
+    triggers: List[dict] | None = None
+    urlParameters: List[str] | None = None
     validateVisitedEmptyFields: bool = False
     validationEnabled: bool = True
     width: str | None = None
@@ -973,7 +976,7 @@ class SurveyModel(BaseModel):
     def __iter__(self):
         return iter(self.pages)
 
-    def dict(self) -> dict:
+    def dict(self) -> Dict:
         dictionary = dict_without_defaults(self) | {
             "pages": [page.dict() for page in self.pages]
         }

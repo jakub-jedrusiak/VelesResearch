@@ -1,5 +1,7 @@
 """Functions creating validators"""
 
+from __future__ import annotations
+
 from .helperModels import ValidatorModel
 
 
