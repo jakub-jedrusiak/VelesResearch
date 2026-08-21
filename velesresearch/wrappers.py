@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import re
+from html import escape as html_escape
 from json import dumps, loads
 from typing import Dict, List
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from .models import *
 from .helperModels import ValidatorModel
 from .utils import flatten
@@ -2056,6 +2059,126 @@ def info(
             for i, html in enumerate(infoHTML)
         ]
     return QuestionHtmlModel(name=name, html=infoHTML[0], **args, **kwargs)
+
+
+def psyframe(
+    name: str,
+    url: str,
+    *,
+    title: str | None = None,
+    description: str | None = None,
+    height: str = "700px",
+    width: str = "100%",
+    sandbox: str | None = "allow-scripts allow-same-origin",
+    allowFullscreen: bool = True,
+    visible: bool = True,
+    visibleIf: str | None = None,
+    enableIf: str | None = None,
+    id: str | None = None,
+    **kwargs,
+) -> PageModel:
+    """Embed a psyFrames-compatible test (<https://github.com/jakub-jedrusiak/psyFrames>) as an iframe on its own page.
+
+    Navigation buttons on the page are always hidden. When the embedded test posts a
+    `{type: "psyframe_result", data: ...}` message, its `data` is saved as a survey
+    variable named `name`, the iframe is hidden, and the survey automatically advances
+    to the next page (or completes, if it is the last page). An optional
+    `{type: "psyframe_resize", height: ...}` message is honored to resize the iframe.
+
+    Args:
+        name (str): The label of the page and of the result variable the test's data is saved under.
+        url (str): The URL of the psyFrames-compatible test.
+        title (str | None): Title shown above the embedded test.
+        description (str | None): Description shown above the embedded test.
+        height (str): Height of the iframe in CSS units.
+        width (str): Width of the iframe in CSS units.
+        sandbox (str | None): The `sandbox` attribute of the iframe. Set to `None` to omit it.
+        allowFullscreen (bool): Whether to allow the iframe to request fullscreen.
+        visible (bool): Whether the page is visible.
+        visibleIf (str | None): Expression to make the page visible.
+        enableIf (str | None): Expression to enable the page.
+        id (str | None): HTML id attribute for the embedded question. Usually not necessary.
+        **kwargs: Added as query parameters to `url` (booleans become `"true"`/`"false"`).
+    """
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    for key, value in kwargs.items():
+        query[key] = (
+            "true" if value is True else "false" if value is False else str(value)
+        )
+    full_url = urlunsplit(parts._replace(query=urlencode(query)))
+    allowed_origin = f"{parts.scheme}://{parts.netloc}"
+
+    dom_id = "psyframe-" + re.sub(r"[^A-Za-z0-9_-]", "-", name)
+    frame_question_name = f"{name}_frame"
+
+    attrs = [
+        f'id="{html_escape(dom_id, quote=True)}"',
+        f'src="{html_escape(full_url, quote=True)}"',
+        f'width="{html_escape(str(width), quote=True)}"',
+        f'height="{html_escape(str(height), quote=True)}"',
+        'style="border:0"',
+        'referrerpolicy="no-referrer"',
+    ]
+    if sandbox:
+        attrs.append(f'sandbox="{html_escape(sandbox, quote=True)}"')
+    if allowFullscreen:
+        attrs.append('allow="fullscreen"')
+    iframe_html = f"<iframe {' '.join(attrs)}></iframe>"
+
+    # `addCode["html"]` overrides the markdown-processed placeholder, so the raw iframe markup survives untouched
+    frame_question = QuestionHtmlModel(
+        name=frame_question_name,
+        html="Loading…",
+        title=title,
+        description=description,
+        visible=visible,
+        visibleIf=visibleIf,
+        enableIf=enableIf,
+        id=id,
+        addCode={"html": iframe_html},
+    )
+
+    js = f"""
+(function () {{
+  var frameId = {dumps(dom_id)};
+  var allowedOrigin = {dumps(allowed_origin)};
+  var frameQuestionName = {dumps(frame_question_name)};
+  var resultName = {dumps(name)};
+  var pageName = {dumps(name)};
+
+  window.addEventListener("message", function (event) {{
+    var iframeEl = document.getElementById(frameId);
+    if (!iframeEl || event.source !== iframeEl.contentWindow) return;
+    if (event.origin !== allowedOrigin) return;
+
+    var message = event.data;
+    if (!message || typeof message !== "object") return;
+
+    if (message.type === "psyframe_resize" && Number.isFinite(message.height)) {{
+      iframeEl.style.height = Math.max(100, Math.round(message.height)) + "px";
+      return;
+    }}
+
+    if (message.type !== "psyframe_result") return;
+
+    survey.setVariable(resultName, message.data);
+
+    var frameQuestion = survey.getQuestionByName(frameQuestionName);
+    if (frameQuestion) frameQuestion.visible = false;
+
+    if (survey.currentPage && survey.currentPage.name === pageName) {{
+      if (survey.isLastPage) {{
+        survey.completeLastPage();
+      }} else {{
+        survey.nextPage();
+      }}
+    }}
+  }});
+}})();
+"""
+
+    return page(name, frame_question, showNavigationButtons=False, customCode=js)
 
 
 def matrix(

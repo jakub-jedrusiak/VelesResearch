@@ -1,5 +1,9 @@
 # Release notes
 
+## Future
+
+* Added `psyframe()` function to embed PsyFrame-compatible tests.
+
 ## 0.6.0
 
 * Added `clearInvisibleValues` property to the `Survey` class.

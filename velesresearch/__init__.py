@@ -24,6 +24,7 @@ from .wrappers import (
     image,
     imagePicker,
     consent,
+    psyframe,
     surveyFromJson,
 )
 from .validators import (
