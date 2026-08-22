@@ -5,11 +5,21 @@ from __future__ import annotations
 from typing import Dict, List
 import itertools
 import inspect
+import os
 import re
 from functools import wraps
 from pathlib import Path
 from base64 import b64encode
 from warnings import warn
+
+
+def default_is_required() -> bool:
+    "Read the default `isRequired` value from the `veles.isRequired` env variable, useful for testing"
+    return os.environ.get("veles.isRequired", "False").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+    )
 
 
 def merge_runtime_kwargs(self):

@@ -68,3 +68,34 @@ powershell -c "irm bun.sh/install.ps1|iex"
 ```
 
 If everything went well, command `bun --version` should return a version number. See [Getting started](getting-started.qmd) if you get any errors.
+
+# Environment variables
+
+## `veles.isRequired`
+
+By default, questions, pages and panels are not required (`isRequired=False`). You can change this default
+for the whole script by setting the `veles.isRequired` environment variable to `true` (or `1`/`yes`) instead
+of passing `isRequired=True` to every single element. This is especially useful for testing, where you often
+want to force every question to be required so you can quickly click through a survey and check that
+validation works, without editing your survey definition:
+
+``` bash
+veles.isRequired=true python my_survey.py
+```
+
+``` python
+import os
+
+os.environ["veles.isRequired"] = "true"
+
+import velesresearch as vls
+
+# every question below is required, without passing isRequired=True explicitly
+survey = vls.survey(
+    vls.page("p1", vls.text("q1", "What's your name?")),
+)
+```
+
+An explicit `isRequired` passed to a single question, page or panel always takes precedence over the
+environment variable.
+

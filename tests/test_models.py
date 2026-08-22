@@ -61,3 +61,21 @@ def test_question_kwargs_are_injected_as_addcode():
         data = vls.info("i", "hello", foo="bar").dict()
     assert data["foo"] == "bar"
     assert not any(issubclass(w.category, DeprecationWarning) for w in caught)
+
+
+def test_isRequired_defaults_to_false_without_env_var(monkeypatch):
+    "Without `veles.isRequired` set, isRequired must default to False"
+    monkeypatch.delenv("veles.isRequired", raising=False)
+    assert vls.text("q1", "Question?").isRequired is False
+
+
+def test_isRequired_reads_env_var(monkeypatch):
+    "With `veles.isRequired` set to a truthy value, isRequired must default to True"
+    monkeypatch.setenv("veles.isRequired", "true")
+    assert vls.text("q1", "Question?").isRequired is True
+
+
+def test_isRequired_explicit_value_takes_precedence(monkeypatch):
+    "An explicit isRequired must override the `veles.isRequired` env variable"
+    monkeypatch.setenv("veles.isRequired", "true")
+    assert vls.text("q1", "Question?", isRequired=False).isRequired is False

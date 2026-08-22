@@ -13,7 +13,7 @@ from typing import Dict, List
 from markdown import markdown
 from pydantic import BaseModel, model_validator, Field, ConfigDict
 from .validators import ValidatorModel
-from .utils import dict_without_defaults, merge_runtime_kwargs
+from .utils import dict_without_defaults, merge_runtime_kwargs, default_is_required
 
 
 class QuestionModel(BaseModel):
@@ -75,7 +75,7 @@ class QuestionModel(BaseModel):
     enableIf: str | None = None
     errorLocation: str = "default"
     id: str | None = None
-    isRequired: bool = False
+    isRequired: bool = Field(default_factory=default_is_required)
     maxWidth: str = "100%"
     minWidth: str = "300px"
     readOnly: bool = False
@@ -698,7 +698,7 @@ class PanelModel(BaseModel):
     enableIf: str | None = None
     id: str | None = None
     innerIndent: int | None = None
-    isRequired: bool = False
+    isRequired: bool = Field(default_factory=default_is_required)
     maxWidth: str = "100%"
     minWidth: str = "300px"
     questionErrorLocation: str = "default"
@@ -785,7 +785,7 @@ class PageModel(BaseModel):
     description: str | None = None
     enableIf: str | None = None
     id: str | None = None
-    isRequired: bool = False
+    isRequired: bool = Field(default_factory=default_is_required)
     maxWidth: str = "100%"
     minWidth: str = "300px"
     navigationButtonsLocation: str = "bottom"
