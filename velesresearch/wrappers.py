@@ -27,14 +27,14 @@ def survey(
     backgroundImage: str | None = None,
     backgroundOpacity: int = 1,
     build: bool = True,
-    calculatedValues: List[dict] | None = None,
+    calculatedValues: List[Dict] | None = None,
     checkErrorsMode: str = "onNextPage",
     clearInvisibleValues: str = "onComplete",
     commentAreaRows: int = 2,
     completeText: str | None = None,
     completedBeforeHtml: str | None = None,
     completedHtml: str | None = None,
-    completedHtmlOnCondition: List[dict] | None = None,
+    completedHtmlOnCondition: List[Dict] | None = None,
     cookieName: str | None = None,
     editText: str | None = None,
     firstPageIsStartPage: bool | None = None,
@@ -50,7 +50,7 @@ def survey(
     maxTextLength: int = 0,
     mode: str = "edit",
     navigateToUrl: str | None = None,
-    navigateToUrlOnCondition: List[dict] | None = None,
+    navigateToUrlOnCondition: List[Dict] | None = None,
     navigationButtonsLocation: str = "bottom",
     numberOfGroups: int = 1,
     pageNextText: str | None = None,
@@ -92,7 +92,7 @@ def survey(
     timerLocation: str = "top",
     title: str | None = None,
     tocLocation: str = "left",
-    triggers: List[dict] | None = None,
+    triggers: List[Dict] | None = None,
     urlParameters: str | List[str] | None = None,
     validateVisitedEmptyFields: bool = False,
     validationEnabled: bool = True,
@@ -115,14 +115,14 @@ def survey(
         autoGrowComment (bool): Whether to automatically grow the long questions input area. Default is False. Can be overridden for individual questions.
         backgroundImage (str | None): URL or base64 of the background image.
         backgroundOpacity (int): The opacity of the background image. 0 is transparent, 1 is opaque.
-        calculatedValues (List[dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
+        calculatedValues (List[Dict] | None): The calculated values for the survey. List of dictionaries with keys `name`, `expression` and optionally `includeIntoResult` (bool) to save the value in the db.
         checkErrorsMode (str): The mode of checking errors. Can be 'onNextPage', 'onValueChanged', 'onComplete'.
         clearInvisibleValues (str): What to do with the values of the invisible questions. By default, they are cleared on different moments. Can be "onComplete" (default), "onHidden", "onHiddenContainer" or "none" (no clearing).
         commentAreaRows (int): The number of rows for the comment area of the questions with `showCommentArea` or `showOtherItem` set to True. Default is 2. Can be overridden for individual questions.
         completeText (str | None): Text for the 'Complete' button.
         completedBeforeHtml (str | None): HTML content to show if the survey had been completed before. Use with `cookieName`.
         completedHtml (str | None): HTML content to show after the survey is completed.
-        completedHtmlOnCondition (List[dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
+        completedHtmlOnCondition (List[Dict] | None): HTML content to show after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `html` keys.
         cookieName (str | None): The name of the cookie to store the information about the survey having been completed. See `completedBeforeHtml`.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
@@ -139,7 +139,7 @@ def survey(
         maxTextLength (int): The maximum length of the text in the textual questions. Default is 0 (no limit).
         mode (str): The mode of the survey. Can be 'edit' (can be filled), 'display' (read-only).
         navigateToUrl (str | None): URL to navigate to after the survey is completed.
-        navigateToUrlOnCondition (List[dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
+        navigateToUrlOnCondition (List[Dict] | None): URL to navigate to after the survey is completed if the condition is met. List of dictionaries with keys `expression` and `url` keys.
         navigationButtonsLocation (str): The location of the navigation buttons. Can be 'bottom' (default), 'top', 'topBottom'.
         pageNextText (str | None): Text for the 'Next' button.
         pagePrevText (str | None): Text for the 'Previous' button.

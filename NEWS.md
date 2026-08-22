@@ -6,6 +6,7 @@
 * Inject custom args to the JSON survey structure instead of `addCode`.
 * Add a custom message if a question have been provided where a name should be.
 * `isRequired` now defaults to the `veles.isRequired` environment variable (useful for testing), falling back to `False` if unset. An explicit `isRequired` still takes precedence. Only applies to real questions, not `page()`, `panel()` or `info()`.
+* Fixed a bug where `SurveyModel`'s own `dict()` method shadowed the builtin `dict` type, breaking validation of `triggers`, `completedHtmlOnCondition`, `navigateToUrlOnCondition` and `calculatedValues`.
 
 ## 0.6.0
 

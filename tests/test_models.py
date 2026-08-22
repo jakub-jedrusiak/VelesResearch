@@ -2,6 +2,25 @@ import warnings
 import velesresearch as vls
 
 
+def test_survey_list_dict_fields_validate():
+    "SurveyModel's own dict() method must not shadow the builtin dict type for List[dict]-like fields"
+    s = vls.survey(
+        vls.page("p1", vls.text("q1", "Q?")),
+        build=False,
+        triggers=[{"type": "complete", "expression": "{q1} notempty"}],
+        completedHtmlOnCondition=[{"expression": "{q1} notempty", "html": "done"}],
+        navigateToUrlOnCondition=[
+            {"expression": "{q1} notempty", "url": "https://example.com"}
+        ],
+        calculatedValues=[{"name": "foo", "expression": "{q1}"}],
+    )
+    data = s.dict()
+    assert data["triggers"][0]["type"] == "complete"
+    assert data["completedHtmlOnCondition"][0]["html"] == "done"
+    assert data["navigateToUrlOnCondition"][0]["url"] == "https://example.com"
+    assert data["calculatedValues"][0]["name"] == "foo"
+
+
 def test_page_addcode_is_injected():
     "PageModel.dict() must merge addCode, like QuestionModel.dict() already does"
     with warnings.catch_warnings():
