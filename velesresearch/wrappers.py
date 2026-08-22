@@ -339,6 +339,13 @@ def page(
         visibleIndex (int | None): The index at which the page should be visible.
         width (str): Width of the page
     """
+    if isinstance(name, QuestionModel) or (
+        isinstance(name, (list, tuple))
+        and any(isinstance(q, QuestionModel) for q in name)
+    ):
+        raise TypeError(
+            "Perhaps you forgot to add a name and added a question instead."
+        )
     args = {
         "description": description,
         "enableIf": enableIf,
@@ -433,6 +440,13 @@ def panel(
         width (str): Width of the panel.
         addCode (Dict | None): Additional code for the panel. Usually not necessary.
     """
+    if isinstance(name, QuestionModel) or (
+        isinstance(name, (list, tuple))
+        and any(isinstance(q, QuestionModel) for q in name)
+    ):
+        raise TypeError(
+            "Perhaps you forgot to add a name and added a question instead."
+        )
     args = {
         "description": description,
         "enableIf": enableIf,

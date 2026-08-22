@@ -4,6 +4,7 @@
 
 * Added `psyframe()` function to embed PsyFrame-compatible tests.
 * Inject custom args to the JSON survey structure instead of `addCode`.
+* Add a custom message if a question have been provided where a name should be.
 
 ## 0.6.0
 
