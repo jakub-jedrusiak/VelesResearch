@@ -6,9 +6,41 @@ from typing import Dict, List
 import itertools
 import inspect
 import re
+from functools import wraps
 from pathlib import Path
 from base64 import b64encode
 from warnings import warn
+
+
+def merge_runtime_kwargs(self):
+    "Merge unrecognized keyword arguments (Pydantic's 'extra' fields) into addCode, noting the injection"
+    extra = self.model_extra
+    if extra:
+        for key in extra:
+            warn(
+                f"`{key}` is not a predefined argument, adding it to `addCode` at runtime."
+            )
+        self.addCode = {**(self.addCode or {}), **dict(extra)}
+        self.__pydantic_extra__.clear()
+    return self
+
+
+def warn_addCode_deprecated(func):
+    "Decorator warning when the deprecated `addCode` argument is passed explicitly to a wrapper function"
+    sig = inspect.signature(func)
+
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        bound = sig.bind_partial(*args, **kwargs)
+        if bound.arguments.get("addCode") is not None:
+            warn(
+                "`addCode` is deprecated, pass its keys directly as keyword arguments instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+        return func(*args, **kwargs)
+
+    return wrapped
 
 
 def flatten(args: tuple) -> List:

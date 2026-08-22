@@ -3,6 +3,7 @@
 ## Future
 
 * Added `psyframe()` function to embed PsyFrame-compatible tests.
+* Inject custom args to the JSON survey structure instead of `addCode`.
 
 ## 0.6.0
 

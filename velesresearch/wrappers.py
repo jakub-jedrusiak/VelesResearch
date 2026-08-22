@@ -9,10 +9,11 @@ from typing import Dict, List
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from .models import *
 from .helperModels import ValidatorModel
-from .utils import flatten
+from .utils import flatten, warn_addCode_deprecated
 from .validators import expressionValidator
 
 
+@warn_addCode_deprecated
 def survey(
     *pages: PageModel | List[PageModel],
     addCode: Dict | None = None,
@@ -276,6 +277,7 @@ def survey(
     return surveyObject
 
 
+@warn_addCode_deprecated
 def page(
     name: str,
     *questions: QuestionModel | List[QuestionModel],
@@ -372,6 +374,7 @@ def page(
     )
 
 
+@warn_addCode_deprecated
 def panel(
     name: str,
     *questions: QuestionModel | List[QuestionModel],
@@ -397,6 +400,7 @@ def panel(
     visible: bool = True,
     visibleIf: str | None = None,
     width: str = "",
+    addCode: Dict | None = None,
     **kwargs,
 ) -> PanelModel:
     """
@@ -427,6 +431,7 @@ def panel(
         visible (bool): Whether the panel is visible.
         visibleIf (str | None): Expression to make the panel visible.
         width (str): Width of the panel.
+        addCode (Dict | None): Additional code for the panel. Usually not necessary.
     """
     args = {
         "description": description,
@@ -451,6 +456,7 @@ def panel(
         "visible": visible,
         "visibleIf": visibleIf,
         "width": width,
+        "addCode": addCode,
     }
     questions = flatten(questions)
     return PanelModel(
@@ -461,6 +467,7 @@ def panel(
     )
 
 
+@warn_addCode_deprecated
 def dropdown(
     name: str,
     title: str | List[str] | None,
@@ -635,6 +642,7 @@ def dropdown(
         )
 
 
+@warn_addCode_deprecated
 def text(
     name: str,
     *title: str | List[str] | None,
@@ -794,6 +802,7 @@ def text(
     return QuestionTextModel(name=name, title=title[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def checkbox(
     name: str,
     title: str | List[str] | None,
@@ -974,6 +983,7 @@ def checkbox(
         )
 
 
+@warn_addCode_deprecated
 def ranking(
     name: str,
     title: str | List[str] | None,
@@ -1169,6 +1179,7 @@ def ranking(
         )
 
 
+@warn_addCode_deprecated
 def radio(
     name: str,
     title: str | List[str] | None,
@@ -1340,6 +1351,7 @@ def radio(
         )
 
 
+@warn_addCode_deprecated
 def dropdownMultiple(
     name: str,
     title: str | List[str] | None,
@@ -1538,6 +1550,7 @@ def dropdownMultiple(
         )
 
 
+@warn_addCode_deprecated
 def textLong(
     name: str,
     *title: str | List[str] | None,
@@ -1670,6 +1683,7 @@ def textLong(
     return QuestionCommentModel(name=name, title=title[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def rating(
     name: str,
     *title: str | List[str] | None,
@@ -1811,6 +1825,7 @@ def rating(
     return QuestionRatingModel(name=name, title=title[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def yesno(
     name: str,
     *title: str | List[str] | None,
@@ -1943,6 +1958,7 @@ def yesno(
     return QuestionBooleanModel(name=name, title=title[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def info(
     name: str,
     *infoHTML: str | List[str],
@@ -2181,6 +2197,7 @@ def psyframe(
     return page(name, frame_question, showNavigationButtons=False, customCode=js)
 
 
+@warn_addCode_deprecated
 def matrix(
     name: str,
     title: str | List[str] | None,
@@ -2349,6 +2366,7 @@ def matrix(
     )
 
 
+@warn_addCode_deprecated
 def matrixDropdown(
     name: str,
     title: str | List[str],
@@ -2527,6 +2545,7 @@ def matrixDropdown(
     )
 
 
+@warn_addCode_deprecated
 def matrixDynamic(
     name: str,
     title: str | List[str] | None,
@@ -2736,6 +2755,7 @@ def matrixDynamic(
     )
 
 
+@warn_addCode_deprecated
 def slider(
     name: str,
     *title: str | List[str] | None,
@@ -2853,6 +2873,7 @@ def slider(
     return QuestionNoUiSliderModel(name=name, title=title[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def image(
     name: str,
     *imageLink: str,
@@ -2989,6 +3010,7 @@ def image(
     return QuestionImageModel(name=name, imageLink=imageLink[0], **args, **kwargs)
 
 
+@warn_addCode_deprecated
 def imagePicker(
     name: str,
     title: str | List[str] | None,

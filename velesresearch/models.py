@@ -11,9 +11,9 @@ from pathlib import Path
 from importlib.resources import files
 from typing import Dict, List
 from markdown import markdown
-from pydantic import BaseModel, model_validator, Field
+from pydantic import BaseModel, model_validator, Field, ConfigDict
 from .validators import ValidatorModel
-from .utils import dict_without_defaults
+from .utils import dict_without_defaults, merge_runtime_kwargs
 
 
 class QuestionModel(BaseModel):
@@ -57,6 +57,8 @@ class QuestionModel(BaseModel):
         width (str): Width of the question in CSS units.
     """
 
+    model_config = ConfigDict(extra="allow")
+
     name: str
     title: str | None = None
     type: str
@@ -93,6 +95,10 @@ class QuestionModel(BaseModel):
     visible: bool = True
     visibleIf: str | None = None
     width: str = ""
+
+    @model_validator(mode="after")
+    def _merge_runtime_kwargs(self):
+        return merge_runtime_kwargs(self)
 
     def __str__(self) -> str:
         return f"  {self.name} ({self.type}): {self.title}"
@@ -680,10 +686,14 @@ class PanelModel(BaseModel):
         visible (bool): Whether the panel is visible.
         visibleIf (str | None): Expression to make the panel visible.
         width (str): Width of the panel in CSS units.
+        addCode (Dict | None): Additional code for the panel. Usually not necessary.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     name: str
     questions: QuestionModel | List
+    addCode: Dict | None = None
     description: str | None = None
     enableIf: str | None = None
     id: str | None = None
@@ -709,10 +719,22 @@ class PanelModel(BaseModel):
     width: str = ""
 
     def dict(self) -> Dict:
-        return dict_without_defaults(self) | {
-            "type": "panel",
-            "elements": [question.dict() for question in self.questions],
-        }
+        if self.addCode is not None:
+            addCode = self.addCode
+        else:
+            addCode = {}
+        return (
+            dict_without_defaults(self)
+            | {
+                "type": "panel",
+                "elements": [question.dict() for question in self.questions],
+            }
+            | addCode
+        )
+
+    @model_validator(mode="after")
+    def _merge_runtime_kwargs(self):
+        return merge_runtime_kwargs(self)
 
     def __iter__(self):
         return iter(self.questions)
@@ -733,6 +755,8 @@ class PageModel(BaseModel):
         isRequired (bool): Whether the page is required (at least one question must be answered).
         maxWidth (str): Maximum width of the page in CSS units.
         minWidth (str): Minimum width of the page in CSS units.
+        navigationButtonsLocation (str): The location of the navigation buttons. Can be 'default', 'top', 'bottom', 'both'.
+        navigationDescription (str | None): Description for the page navigation.
         navigationTitle (str | None): Title for the page navigation.
         questionErrorLocation (str): The location of the error text for the questions. Can be 'default', 'top', 'bottom'.
         questionOrder (str): The order of the questions. Can be 'default', 'random'.
@@ -751,6 +775,8 @@ class PageModel(BaseModel):
         width (str): Width of the page
     """
 
+    model_config = ConfigDict(extra="allow")
+
     name: str
     questions: QuestionModel | List
     addCode: Dict | None = None
@@ -762,6 +788,8 @@ class PageModel(BaseModel):
     isRequired: bool = False
     maxWidth: str = "100%"
     minWidth: str = "300px"
+    navigationButtonsLocation: str = "bottom"
+    navigationDescription: str | None = None
     navigationTitle: str | None = None
     questionErrorLocation: str = "default"
     questionOrder: str = "default"
@@ -783,10 +811,20 @@ class PageModel(BaseModel):
             [str(question) for question in self.questions]
         )
 
+    @model_validator(mode="after")
+    def _merge_runtime_kwargs(self):
+        return merge_runtime_kwargs(self)
+
     def dict(self) -> Dict:
-        return dict_without_defaults(self) | {
-            "elements": [question.dict() for question in self.questions]
-        }
+        if self.addCode is not None:
+            addCode = self.addCode
+        else:
+            addCode = {}
+        return (
+            dict_without_defaults(self)
+            | {"elements": [question.dict() for question in self.questions]}
+            | addCode
+        )
 
     def __iter__(self):
         return iter(self.questions)
@@ -879,6 +917,8 @@ class SurveyModel(BaseModel):
         width (str | None): Width of the survey in CSS units. Default is None (inherit from the container).
         widthMode (str): The mode of the width. Can be 'auto' (default; the width is set by the content), 'static', 'responsive'.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     pages: List[PageModel]
     addCode: Dict | None = None
@@ -976,10 +1016,20 @@ class SurveyModel(BaseModel):
     def __iter__(self):
         return iter(self.pages)
 
+    @model_validator(mode="after")
+    def _merge_runtime_kwargs(self):
+        return merge_runtime_kwargs(self)
+
     def dict(self) -> Dict:
-        dictionary = dict_without_defaults(self) | {
-            "pages": [page.dict() for page in self.pages]
-        }
+        if self.addCode is not None:
+            addCode = self.addCode
+        else:
+            addCode = {}
+        dictionary = (
+            dict_without_defaults(self)
+            | {"pages": [page.dict() for page in self.pages]}
+            | addCode
+        )
         dictionary.pop("themeFile", None)
         return dictionary
 
