@@ -44,4 +44,4 @@ def test_psyframe_custom_code_references_expected_names():
     assert "psyframe_resize" in code
     assert "survey.setVariable" in code
     assert "survey.nextPage" in code
-    assert "survey.completeLastPage" in code
+    assert "survey.tryComplete" in code

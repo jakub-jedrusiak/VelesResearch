@@ -2196,7 +2196,7 @@ def psyframe(
 
     if (survey.currentPage && survey.currentPage.name === pageName) {{
       if (survey.isLastPage) {{
-        survey.completeLastPage();
+        survey.tryComplete();
       }} else {{
         survey.nextPage();
       }}
