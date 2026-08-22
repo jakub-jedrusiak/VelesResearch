@@ -435,6 +435,9 @@ class QuestionHtmlModel(QuestionModel):
 
     html: str
     type: str = Field(default="html")
+    isRequired: bool = (
+        False  # info boxes are never answerable, so they can't be required
+    )
 
     @model_validator(mode="before")
     def process_html(cls, values):
@@ -698,7 +701,7 @@ class PanelModel(BaseModel):
     enableIf: str | None = None
     id: str | None = None
     innerIndent: int | None = None
-    isRequired: bool = Field(default_factory=default_is_required)
+    isRequired: bool = False
     maxWidth: str = "100%"
     minWidth: str = "300px"
     questionErrorLocation: str = "default"
@@ -785,7 +788,7 @@ class PageModel(BaseModel):
     description: str | None = None
     enableIf: str | None = None
     id: str | None = None
-    isRequired: bool = Field(default_factory=default_is_required)
+    isRequired: bool = False
     maxWidth: str = "100%"
     minWidth: str = "300px"
     navigationButtonsLocation: str = "bottom"

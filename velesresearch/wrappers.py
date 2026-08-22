@@ -285,7 +285,7 @@ def page(
     description: str | None = None,
     enableIf: str | None = None,
     id: str | None = None,
-    isRequired: bool | None = None,
+    isRequired: bool = False,
     maxWidth: str = "100%",
     minWidth: str = "300px",
     navigationButtonsLocation: str = "bottom",
@@ -350,7 +350,7 @@ def page(
         "description": description,
         "enableIf": enableIf,
         "id": id,
-        "isRequired": isRequired if isRequired is not None else default_is_required(),
+        "isRequired": isRequired,
         "timeLimit": timeLimit,
         "timeMinimum": timeMinimum,
         "maxWidth": maxWidth,
@@ -389,7 +389,7 @@ def panel(
     enableIf: str | None = None,
     id: str | None = None,
     innerIndent: int | None = None,
-    isRequired: bool | None = None,
+    isRequired: bool = False,
     maxWidth: str = "100%",
     minWidth: str = "300px",
     questionErrorLocation: str = "default",
@@ -452,7 +452,7 @@ def panel(
         "enableIf": enableIf,
         "id": id,
         "innerIndent": innerIndent,
-        "isRequired": isRequired if isRequired is not None else default_is_required(),
+        "isRequired": isRequired,
         "maxWidth": maxWidth,
         "minWidth": minWidth,
         "questionErrorLocation": questionErrorLocation,
@@ -1987,7 +1987,6 @@ def info(
     enableIf: str | None = None,
     errorLocation: str = "default",
     id: str | None = None,
-    isRequired: bool | None = None,
     maxWidth: str = "100%",
     minWidth: str = "300px",
     readOnly: bool = False,
@@ -2026,7 +2025,6 @@ def info(
         enableIf (str | None): Expression to enable the question.
         errorLocation (str | None): Location of the error text. Can be 'default' 'top', 'bottom'.
         id (str | None): HTML id attribute for the question. Usually not necessary.
-        isRequired (bool): Whether the question is required.
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
         readOnly (bool): Whether the question is read-only.
@@ -2053,7 +2051,6 @@ def info(
         "titleLocation": titleLocation,
         "description": description,
         "descriptionLocation": descriptionLocation,
-        "isRequired": isRequired if isRequired is not None else default_is_required(),
         "readOnly": readOnly,
         "visible": visible,
         "requiredIf": requiredIf,

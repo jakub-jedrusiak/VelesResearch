@@ -79,3 +79,11 @@ def test_isRequired_explicit_value_takes_precedence(monkeypatch):
     "An explicit isRequired must override the `veles.isRequired` env variable"
     monkeypatch.setenv("veles.isRequired", "true")
     assert vls.text("q1", "Question?", isRequired=False).isRequired is False
+
+
+def test_isRequired_env_var_does_not_apply_to_info_page_or_panel(monkeypatch):
+    "The `veles.isRequired` env variable must only affect real questions, not info boxes, pages or panels"
+    monkeypatch.setenv("veles.isRequired", "true")
+    assert vls.info("i1", "hello").isRequired is False
+    assert vls.page("p1", vls.info("i2", "hello")).isRequired is False
+    assert vls.panel("pan1", vls.info("i3", "hello")).isRequired is False
