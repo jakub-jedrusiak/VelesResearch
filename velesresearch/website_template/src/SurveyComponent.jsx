@@ -31,7 +31,6 @@ function groupNumber(max) {
 }
 
 function createResults(survey) {
-  // Create results object
   if (!survey.getVariable("date_completed")) {
     const dateCompleted = new Date();
     survey.setVariable("date_completed", dateCompleted.toISOString());
@@ -44,20 +43,39 @@ function createResults(survey) {
         // Skip calculatedValues that are not included into results
         (dict) =>
           (dict.name === variable || dict.name?.toLowerCase() === variable) &&
-          dict.includeIntoResult === false
+          dict.includeIntoResult === false,
       )
     )
       continue;
     variables[variable] = survey.getVariable(variable);
   }
 
-  return Object.assign(
-    {
-      id: survey.participantID,
-    },
-    survey.data,
-    variables
-  );
+  const standard = [
+    "id",
+    "date_started",
+    "date_completed",
+    "g_recaptcha_score",
+    "group",
+  ];
+  const questionNames = survey
+    .getAllQuestions(false, false, true)
+    .map((question) => question?.name)
+    .filter((name) => name);
+
+  const result = { id: survey.participantID };
+  ["date_started", "date_completed", "group"].forEach((name) => {
+    const value = survey.getVariable(name);
+    if (value !== undefined) result[name] = value;
+  });
+  Object.assign(result, variables, survey.data);
+  result._labelStructure = {
+    standard,
+    variables: Object.keys(variables).filter(
+      (name) => !standard.includes(name),
+    ),
+    questions: questionNames,
+  };
+  return result;
 }
 
 async function handleResults(survey) {
@@ -67,15 +85,18 @@ async function handleResults(survey) {
   if (survey.addScoreToResults === undefined || survey.addScoreToResults) {
     for (const question of survey.getAllQuestions()) {
       if (question.correctAnswer && question.selectedItem) {
-        result[question.name + (survey.scoresSuffix || "_score")] =
+        const scoreName = question.name + (survey.scoresSuffix || "_score");
+        result[scoreName] =
           question.selectedItem.value === question.correctAnswer ? 1 : 0;
+        if (!result._labelStructure.questions.includes(scoreName))
+          result._labelStructure.questions.push(scoreName);
       }
     }
   }
 
   // Wait for reCAPTCHA to be ready and get token
   let siteKey = new URL(
-    document.getElementById("recaptchaScript").src
+    document.getElementById("recaptchaScript").src,
   ).searchParams.get("render");
   let recaptchaToken;
   if (siteKey) {
@@ -88,36 +109,6 @@ async function handleResults(survey) {
   }
   Object.assign(result, { "g-recaptcha-token": recaptchaToken });
 
-  // Gather keys for ordering
-  const firstColumns = ["id", "date_started", "date_completed", "group"];
-
-  const questionNames = survey
-    .getAllQuestions(false, false, true)
-    .map((x) => x?.name || null)
-    .filter((x) => x !== null);
-
-  const varNames = survey
-    .getVariableNames()
-    .filter((x) => !firstColumns.includes(x))
-    .sort((a, b) =>
-      a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
-    );
-
-  const orderKeys = [...firstColumns, ...questionNames, ...varNames];
-
-  const remainingKeys = Object.keys(result)
-    .filter((x) => !orderKeys.includes(x))
-    .sort((a, b) =>
-      a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
-    );
-
-  const orderedResult = {};
-  [...orderKeys, ...remainingKeys].forEach((k) => {
-    if (result.hasOwnProperty(k)) {
-      orderedResult[k] = result[k];
-    }
-  });
-
   // send data to Django backend
   const requestHeaders = {
     method: "POST",
@@ -125,9 +116,9 @@ async function handleResults(survey) {
       {
         "Content-Type": "application/json",
       },
-      CSRFToken()
+      CSRFToken(),
     ),
-    body: JSON.stringify(orderedResult),
+    body: JSON.stringify(result),
   };
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);
@@ -159,7 +150,7 @@ function setupTracking(survey, questionName) {
           const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
           survey.setVariable(
             `${questionName}_time`,
-            totalFocusedTime + elapsedTime
+            totalFocusedTime + elapsedTime,
           );
         }, 1000); // Update every second
       }
@@ -287,7 +278,7 @@ function SurveyComponent() {
       .style.getPropertyValue("--sjs-general-backcolor-dim");
     document.body.style.setProperty(
       "--sjs-general-backcolor-dim",
-      backgroundColor
+      backgroundColor,
     );
     document
       .querySelector("footer")
@@ -354,7 +345,7 @@ function SurveyComponent() {
         nextButton.title = originalNextButtonText;
         nextButton.innerCss = nextButton.innerCss.replace(
           " override-opacity-for-time-minimum",
-          ""
+          "",
         );
         nextButton.enabled = true;
       }

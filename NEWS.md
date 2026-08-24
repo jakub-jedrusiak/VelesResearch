@@ -9,6 +9,8 @@
 * Fixed a bug where `SurveyModel`'s own `dict()` method shadowed the builtin `dict` type, breaking validation of `triggers`, `completedHtmlOnCondition`, `navigateToUrlOnCondition` and `calculatedValues`.
 * Custom functions and code do not appear in the final JSON structure anymore.
 * Updated SurveyJS 3.0.1 property names: `progressBarShowPageTitles` is now `progressBarShowNavigationText`; `progressBarNavigationTextLocation` controls its text placement.
+* Survey results now carry an internal `_labelStructure` used to keep downloaded CSV and JSON columns stable across survey versions. Downloads omit this metadata and use the order `id`, dates, reCAPTCHA score, group, variables, then question answers. Newer responses have priority when schemas conflict.
+* Added per-survey column ordering controls with natural sorting, selected-column grouping, default restoration, and manual-order handling for newly appearing columns.
 
 ## 0.6.0
 
