@@ -1,6 +1,9 @@
 "Test json file"
 
+import json
 import os
+import shutil
+from importlib.resources import files
 from pathlib import Path
 from shutil import rmtree
 from velesresearch import survey, page, radio
@@ -46,3 +49,42 @@ def test_creation():
         assert os.path.exists(wd / "RSES" / file)
 
     rmtree(wd)
+
+
+def test_custom_javascript_is_written_to_component(tmp_path):
+    "custom JavaScript belongs in SurveyComponent.jsx, not survey.js"
+    target = tmp_path / "generated"
+    shutil.copytree(
+        Path(str(files("velesresearch.website_template"))),
+        target,
+        ignore=shutil.ignore_patterns("__pycache__", "__init__.py"),
+    )
+    (target / "node_modules").mkdir()
+
+    survey_object = survey(
+        page(
+            "custom_page",
+            radio(
+                "custom_question",
+                ["Yes", "No"],
+                customCode="question code",
+                customFunctions="function questionFunction() {}",
+            ),
+            customCode="page code",
+            customFunctions="function pageFunction() {}",
+        ),
+        build=False,
+    )
+    survey_object.build(path=tmp_path, folderName="generated", pauseBuild=True)
+
+    survey_js = (target / "src" / "survey.js").read_text(encoding="utf-8")
+    survey_data = json.loads(survey_js[len("export const json = ") : -1])
+    component = (target / "src" / "SurveyComponent.jsx").read_text(encoding="utf-8")
+
+    assert "customCode" not in survey_js
+    assert "customFunctions" not in survey_js
+    assert "page code" in component
+    assert "question code" in component
+    assert "pageFunction" in component
+    assert "questionFunction" in component
+    assert survey_data["pages"][0]["name"] == "custom_page"

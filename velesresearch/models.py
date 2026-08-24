@@ -1098,8 +1098,19 @@ class SurveyModel(BaseModel):
             subprocess.run("bun install", cwd=path, shell=True, check=False)
 
         # survey.js
+        survey_json = self.dict()
+        stack = [survey_json]
+        while stack:
+            current = stack.pop()
+            if isinstance(current, dict):
+                current.pop("customCode", None)
+                current.pop("customFunctions", None)
+                stack.extend(current.values())
+            elif isinstance(current, list):
+                stack.extend(current)
+
         with open(path / "src" / "survey.js", "w", encoding="utf-8") as survey_js:
-            survey_js.write("export const json = " + self.json() + ";")
+            survey_js.write("export const json = " + json.dumps(survey_json) + ";")
 
         # customCode
         with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:
