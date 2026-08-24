@@ -44,4 +44,24 @@ def test_psyframe_custom_code_references_expected_names():
     assert "psyframe_resize" in code
     assert "survey.setVariable" in code
     assert "survey.nextPage" in code
-    assert "survey.tryComplete" in code
+
+
+def test_psyframe_result_hides_frame_before_advancing():
+    "a result on a non-final psyframe page hides the frame before advancing"
+    code = vls.psyframe("middle", "https://example.com/").dict()["customCode"]
+    advance = code.index("survey.nextPage();")
+    hide_frame = code.index("frameQuestion.visible = false;")
+
+    assert "survey.setVariable(resultName, message.data);" in code
+    assert hide_frame < advance
+
+
+def test_psyframe_result_completes_final_page_before_hiding_frame():
+    "a result on the final psyframe page completes without hiding the frame"
+    code = vls.psyframe("final", "https://example.com/").dict()["customCode"]
+    complete = code.index("survey.doComplete();")
+    hide_frame = code.index("frameQuestion.visible = false;")
+
+    assert "survey.tryComplete" not in code
+    assert complete < hide_frame
+    assert complete < code.index("return;", complete) < hide_frame

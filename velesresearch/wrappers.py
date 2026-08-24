@@ -2108,8 +2108,8 @@ def psyframe(
 
     Navigation buttons on the page are always hidden. When the embedded test posts a
     `{type: "psyframe_result", data: ...}` message, its `data` is saved as a survey
-    variable named `name`, the iframe is hidden, and the survey automatically advances
-    to the next page (or completes, if it is the last page). An optional
+    variable named `name`, and the survey automatically advances to the next page (or
+    completes, if it is the last page). An optional
     `{type: "psyframe_resize", height: ...}` message is honored to resize the iframe.
 
     Args:
@@ -2191,15 +2191,15 @@ def psyframe(
 
     survey.setVariable(resultName, message.data);
 
-    var frameQuestion = survey.getQuestionByName(frameQuestionName);
-    if (frameQuestion) frameQuestion.visible = false;
-
     if (survey.currentPage && survey.currentPage.name === pageName) {{
       if (survey.isLastPage) {{
-        survey.tryComplete();
-      }} else {{
-        survey.nextPage();
+                survey.doComplete();
+                return;
       }}
+
+            var frameQuestion = survey.getQuestionByName(frameQuestionName);
+            if (frameQuestion) frameQuestion.visible = false;
+            survey.nextPage();
     }}
   }});
 }})();
