@@ -59,7 +59,8 @@ def survey(
     previewText: str | None = None,
     progressBarInheritWidthFrom: str = "container",
     progressBarShowPageNumbers: bool = False,
-    progressBarShowPageTitles: bool = False,
+    progressBarShowNavigationText: bool = False,
+    progressBarNavigationTextLocation: str = "top",
     progressBarType: str = "pages",
     questionDescriptionLocation: str = "underTitle",
     questionErrorLocation: str = "top",
@@ -146,7 +147,8 @@ def survey(
         previewText (str | None): Text for the 'Preview' button if `showPreviewBeforeComplete=True`.
         progressBarInheritWidthFrom (str): The element from which the progress bar should inherit the width. Can be 'container', 'survey'.
         progressBarShowPageNumbers (bool): Whether to show the page numbers on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
-        progressBarShowPageTitles (bool): Whether to show the page titles on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
+        progressBarShowNavigationText (bool): Whether to show navigation titles and descriptions on the progress bar. Only if `progressBarType="pages"`. See `showProgressBar`.
+        progressBarNavigationTextLocation (str): Where to place navigation text on the progress bar.
         progressBarType (str): The type of the progress bar. Can be 'pages' (default), 'questions', 'requiredQuestions', 'correctQuestions'.
         questionDescriptionLocation (str): The location of the description for the questions. Can be 'underTitle' (default), 'underInput'. Can be overridden for individual questions.
         questionErrorLocation (str): The location of the error text for the questions. Can be 'top' (default), 'bottom'. Can be overridden for individual questions.
@@ -231,7 +233,8 @@ def survey(
         "previewText": previewText,
         "progressBarInheritWidthFrom": progressBarInheritWidthFrom,
         "progressBarShowPageNumbers": progressBarShowPageNumbers,
-        "progressBarShowPageTitles": progressBarShowPageTitles,
+        "progressBarShowNavigationText": progressBarShowNavigationText,
+        "progressBarNavigationTextLocation": progressBarNavigationTextLocation,
         "progressBarType": progressBarType,
         "questionDescriptionLocation": questionDescriptionLocation,
         "questionErrorLocation": questionErrorLocation,
@@ -2404,7 +2407,7 @@ def matrixDropdown(
     isRequired: bool | None = None,
     maxWidth: str = "100%",
     minWidth: str = "300px",
-    placeHolder: str | None = None,
+    placeholder: str | None = None,
     readOnly: bool = False,
     requiredErrorText: str | None = None,
     requiredIf: str | None = None,
@@ -2458,7 +2461,7 @@ def matrixDropdown(
         isRequired (bool): Whether the question is required.
         maxWidth (str): Maximum width of the question in CSS units.
         minWidth (str): Minimum width of the question in CSS units.
-        placeHolder (str | None): Placeholder text for the cells.
+        placeholder (str | None): Placeholder text for the cells.
         readOnly (bool): Whether the question is read-only.
         requiredErrorText (str | None): Error text if the required condition is not met.
         requiredIf (str | None): Expression to make the question required.
@@ -2525,7 +2528,7 @@ def matrixDropdown(
         "cellErrorLocation": cellErrorLocation,
         "cellType": cellType,
         "useCaseSensitiveComparison": useCaseSensitiveComparison,
-        "placeHolder": placeHolder,
+        "placeholder": placeholder,
         "transposeData": transposeData,
     }
     rows = flatten(rows)
@@ -2593,7 +2596,7 @@ def matrixDynamic(
     minRowCount: int = 0,
     minWidth: str = "300px",
     noRowsText: str | None = None,
-    placeHolder: str | None = None,
+    placeholder: str | None = None,
     readOnly: bool = False,
     removeRowText: str | None = None,
     requiredErrorText: str | None = None,
@@ -2664,7 +2667,7 @@ def matrixDynamic(
         minRowCount (int): Minimum number of rows.
         minWidth (str): Minimum width of the question in CSS units.
         noRowsText (str | None): Text to display when there are no rows if `hideColumnsIfEmpty` is True.
-        placeHolder (str | None): Placeholder text for the cells.
+        placeholder (str | None): Placeholder text for the cells.
         readOnly (bool): Whether the question is read-only.
         removeRowText (str | None): Text for the 'Remove row' button.
         requiredErrorText (str | None): Error text if the required condition is not met.
@@ -2733,7 +2736,7 @@ def matrixDynamic(
         "cellErrorLocation": cellErrorLocation,
         "cellType": cellType,
         "useCaseSensitiveComparison": useCaseSensitiveComparison,
-        "placeHolder": placeHolder,
+        "placeholder": placeholder,
         "transposeData": transposeData,
         "addRowButtonLocation": addRowButtonLocation,
         "addRowText": addRowText,

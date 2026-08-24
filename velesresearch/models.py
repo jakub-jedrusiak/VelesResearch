@@ -26,6 +26,8 @@ class QuestionModel(BaseModel):
         commentPlaceholder (str | None): Placeholder text for the comment area.
         commentText (str | None): Text for the comment area.
         correctAnswer (str | None): Correct answer for the question. Use for quizzes.
+        clearIfInvisible (str): When to clear the question value if it becomes invisible.
+        colSpan (int | None): Number of grid columns occupied by the question.
         customCode (str | None): Custom JS commands to be added to the survey.
         customFunctions (str | None): Custom JS functions definitions to be added to the survey. To be used with `customCode`.
         defaultValue (str | None): Default value for the question.
@@ -75,6 +77,9 @@ class QuestionModel(BaseModel):
     enableIf: str | None = None
     errorLocation: str = "default"
     id: str | None = None
+    clearIfInvisible: str = "default"
+    colSpan: int | None = None
+    indent: int = 0
     isRequired: bool = Field(default_factory=default_is_required)
     maxWidth: str = "100%"
     minWidth: str = "300px"
@@ -91,6 +96,10 @@ class QuestionModel(BaseModel):
     state: str = "default"
     titleLocation: str = "default"
     useDisplayValuesInDynamicTexts: bool = True
+    valueName: str | None = None
+    bindings: str | None = None
+    randomize: bool | None = None
+    randomizeCategory: str | None = None
     validators: ValidatorModel | List[ValidatorModel] | None = None
     visible: bool = True
     visibleIf: str | None = None
@@ -135,6 +144,8 @@ class QuestionSelectBase(QuestionModel):
         choicesOrder (str): The order of the choices. Can be 'none', 'asc', 'desc', 'random'.
         dontKnowText: str | None = None
         hideIfChoicesEmpty: bool | None = None
+        otherPlaceholder (str | None): Placeholder for the Other choice comment area.
+        separateSpecialChoices (bool | None): Whether special choices use separate rows.
         noneText: str | None = None
         otherErrorText: str | None = None
         otherText: str | None = None
@@ -151,6 +162,7 @@ class QuestionSelectBase(QuestionModel):
     choicesOrder: str = "none"
     dontKnowText: str | None = None
     hideIfChoicesEmpty: bool | None = None
+    otherPlaceholder: str | None = None
     noneText: str | None = None
     otherErrorText: str | None = None
     otherText: str | None = None
@@ -159,6 +171,7 @@ class QuestionSelectBase(QuestionModel):
     showNoneItem: bool = False
     showOtherItem: bool = False
     showRefuseItem: bool = False
+    separateSpecialChoices: bool | None = None
 
 
 class QuestionDropdownModel(QuestionSelectBase):
@@ -174,6 +187,14 @@ class QuestionDropdownModel(QuestionSelectBase):
     choicesMax: int | None = None
     choicesMin: int | None = None
     choicesStep: int | None = None
+    allowClear: bool = True
+    allowCustomChoices: bool = False
+    createCustomChoiceText: str | None = None
+    choicesLazyLoadEnabled: bool = False
+    choicesLazyLoadPageSize: int = 25
+    searchEnabled: bool = True
+    searchMode: str = "contains"
+    textWrapEnabled: bool = True
     placeholder: str | None = None
     type: str = Field(default="dropdown")
 
@@ -219,6 +240,7 @@ class QuestionTextModel(QuestionTextBase):
     minValueExpression: str | None = None
     placeholder: str | None = None
     step: str | None = None
+    stepErrorText: str | None = None
     textUpdateMode: str = "default"
     type: str = Field(default="text")
 
@@ -249,6 +271,8 @@ class QuestionCheckboxModel(QuestionCheckboxBase):
     minSelectedChoices: int = 0
     selectAllText: str | None = None
     showSelectAllItem: bool | None = None
+    valuePropertyName: str | None = None
+    itemComponent: str | None = None
     type: str = Field(default="checkbox")
 
 
@@ -329,6 +353,7 @@ class QuestionCommentModel(QuestionTextBase):
     allowResize: bool | None = None
     autoGrow: bool | None = None
     rows: int = 4
+    placeholder: str | None = None
     type: str = Field(default="comment")
 
 
@@ -382,6 +407,7 @@ class QuestionImagePickerModel(QuestionCheckboxBase):
     minImageHeight: int | str = 133
     minImageWidth: int | str = 200
     multiSelect: bool = False
+    placeholder: str | None = None
     showLabel: bool = False
     type: str = Field(default="imagepicker")
 
@@ -402,6 +428,8 @@ class QuestionBooleanModel(QuestionModel):
     swapOrder: bool = False
     valueFalse: bool | str = False
     valueTrue: bool | str = True
+    displayMode: str = "segmented"
+    useTitleAsLabel: bool = True
     type: str = Field(default="boolean")
 
 
@@ -543,7 +571,7 @@ class QuestionMatrixDropdownModelBase(QuestionMatrixBaseModel):
         cellErrorLocation (str): The location of the error text for the cells. Can be 'default', 'top', 'bottom'.
         cellType (str | None): The type of the matrix cells. Can be overridden for individual columns. Can be "dropdown" (default), "checkbox", "radiogroup", "tagbox", "text", "comment", "boolean", "expression", "rating".
         choices (str | Dict | List | None): The default choices for all select questions. Can be overridden for individual columns. Can be string(s) or dictionary(-ies) with structure `{"value": ..., "text": ..., "otherParameter": ...}`.
-        placeHolder (str | None): Placeholder text for the cells.
+        placeholder (str | None): Placeholder text for the cells.
         transposeData (bool): Whether to show columns as rows. Default is False.
         useCaseSensitiveComparison (bool): Whether the case of the answer should be considered when checking for uniqueness. If `True`, "Kowalski" and "kowalski" will be considered different answers.
     """
@@ -551,7 +579,8 @@ class QuestionMatrixDropdownModelBase(QuestionMatrixBaseModel):
     cellErrorLocation: str = "default"
     cellType: str | None = None
     choices: str | Dict | List | None = None
-    placeHolder: str | None = None
+    placeholder: str | None = None
+    singleInputTitleTemplate: str | None = None
     transposeData: bool = False
     useCaseSensitiveComparison: bool = False
 
@@ -709,6 +738,7 @@ class PanelModel(BaseModel):
     questionStartIndex: str | None = None
     questionTitleLocation: str = "default"
     questionTitleWidth: str | None = None
+    gridLayoutColumns: List[Dict] | None = None
     readOnly: bool = False
     requiredErrorText: str | None = None
     requiredIf: str | None = None
@@ -794,6 +824,7 @@ class PageModel(BaseModel):
     navigationButtonsLocation: str = "bottom"
     navigationDescription: str | None = None
     navigationTitle: str | None = None
+    questionStartIndex: str | None = None
     questionErrorLocation: str = "default"
     questionOrder: str = "default"
     questionTitleLocation: str = "default"
@@ -880,7 +911,8 @@ class SurveyModel(BaseModel):
         previewText (str | None): Text for the 'Preview' button if `showPreviewBeforeComplete=True`.
         progressBarInheritWidthFrom (str): The element from which the progress bar should inherit the width. Can be 'container', 'survey'.
         progressBarShowPageNumbers (bool): Whether to show the page numbers on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
-        progressBarShowPageTitles (bool): Whether to show the page titles on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
+        progressBarShowNavigationText (bool): Whether to show navigation titles and descriptions on the progress bar. Only if `progressBarType="pages"`. See `showProgressBar`.
+        progressBarNavigationTextLocation (str): Where to place progress bar navigation text.
         progressBarType (str): The type of the progress bar. Can be 'pages' (default), 'questions', 'requiredQuestions', 'correctQuestions'.
         questionDescriptionLocation (str): The location of the description for the questions. Can be 'underTitle' (default), 'underInput'. Can be overridden for individual questions.
         questionErrorLocation (str): The location of the error text for the questions. Can be 'top' (default), 'bottom'. Can be overridden for individual questions.
@@ -966,7 +998,8 @@ class SurveyModel(BaseModel):
     previewText: str | None = None
     progressBarInheritWidthFrom: str = "container"
     progressBarShowPageNumbers: bool = False
-    progressBarShowPageTitles: bool = False
+    progressBarShowNavigationText: bool = False
+    progressBarNavigationTextLocation: str = "top"
     progressBarType: str = "pages"
     questionDescriptionLocation: str = "underTitle"
     questionErrorLocation: str = "top"

@@ -106,3 +106,53 @@ def test_isRequired_env_var_does_not_apply_to_info_page_or_panel(monkeypatch):
     assert vls.info("i1", "hello").isRequired is False
     assert vls.page("p1", vls.info("i2", "hello")).isRequired is False
     assert vls.panel("pan1", vls.info("i3", "hello")).isRequired is False
+
+
+def test_surveyjs_v3_question_page_panel_properties_are_serialized():
+    "New SurveyJS 3 properties are emitted under their current JSON names"
+    question = vls.dropdown(
+        "q1",
+        "Question?",
+        ["A", "B"],
+        clearIfInvisible="onHidden",
+        colSpan=2,
+        indent=1,
+        valueName="answer",
+        allowCustomChoices=True,
+        choicesLazyLoadEnabled=True,
+    )
+    page = vls.page(
+        "p1",
+        question,
+        questionStartIndex="A.",
+    )
+    page_data = page.dict()
+    question_data = page_data["elements"][0]
+
+    assert question_data["clearIfInvisible"] == "onHidden"
+    assert question_data["colSpan"] == 2
+    assert question_data["indent"] == 1
+    assert question_data["valueName"] == "answer"
+    assert question_data["allowCustomChoices"] is True
+    assert question_data["choicesLazyLoadEnabled"] is True
+    assert page_data["questionStartIndex"] == "A."
+
+    panel_data = vls.panel(
+        "panel1",
+        vls.text("q2", "Question?"),
+        gridLayoutColumns=[{"width": "1fr"}],
+    ).dict()
+    assert panel_data["gridLayoutColumns"] == [{"width": "1fr"}]
+
+
+def test_surveyjs_v3_survey_progress_bar_properties_are_serialized():
+    data = vls.survey(
+        vls.page("p1", vls.text("q1", "Question?")),
+        build=False,
+        progressBarShowNavigationText=True,
+        progressBarNavigationTextLocation="bottom",
+    ).dict()
+
+    assert data["progressBarShowNavigationText"] is True
+    assert data["progressBarNavigationTextLocation"] == "bottom"
+    assert "progressBarShowPageTitles" not in data

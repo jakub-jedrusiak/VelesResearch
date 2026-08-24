@@ -8,6 +8,7 @@
 * `isRequired` now defaults to the `veles.isRequired` environment variable (useful for testing), falling back to `False` if unset. An explicit `isRequired` still takes precedence. Only applies to real questions, not `page()`, `panel()` or `info()`.
 * Fixed a bug where `SurveyModel`'s own `dict()` method shadowed the builtin `dict` type, breaking validation of `triggers`, `completedHtmlOnCondition`, `navigateToUrlOnCondition` and `calculatedValues`.
 * Custom functions and code do not appear in the final JSON structure anymore.
+* Updated SurveyJS 3.0.1 property names: `progressBarShowPageTitles` is now `progressBarShowNavigationText`; `progressBarNavigationTextLocation` controls its text placement.
 
 ## 0.6.0
 
