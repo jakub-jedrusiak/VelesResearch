@@ -15,5 +15,6 @@
 /* despite the buttons being disabled */
 .override-opacity-for-time-minimum {
   --sjs-primary-forecolor-light: var(--sjs-primary-forecolor);
+  --sd-action-disabled-title-color: var(--sd-action-title-color) !important;
   opacity: 1 !important;
 }
