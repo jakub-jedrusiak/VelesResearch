@@ -317,38 +317,49 @@ function SurveyComponent() {
   });
 
   // Time minimum setup
-  let originalNextButtonText = "Next";
+  // survey-core 3.x renders nav button labels from locTitle (bound to pageNextText/completeText),
+  // not from Action.title - setting .title directly is silently ignored by the UI
+  let originalNextButtonText = null;
   survey.onCurrentPageChanging.add(function (sender, options) {
     if (options.newCurrentPage.timeMinimum) {
-      const nextButton =
-        options.newCurrentPage.name === survey.pages.at(-1).name
-          ? survey.navigationBar.getActionById("sv-nav-complete")
-          : survey.navigationBar.getActionById("sv-nav-next");
+      const isLastPage =
+        options.newCurrentPage.name === survey.pages.at(-1).name;
+      const nextButton = isLastPage
+        ? survey.navigationBar.getActionById("sv-nav-complete")
+        : survey.navigationBar.getActionById("sv-nav-next");
       nextButton.innerCss += " override-opacity-for-time-minimum";
-      originalNextButtonText = nextButton.title;
+      originalNextButtonText = isLastPage
+        ? survey.completeText
+        : survey.pageNextText;
       nextButton.enabled = false;
-      nextButton.title = formatTime(options.newCurrentPage.timeMinimum);
+      const countdownText = formatTime(options.newCurrentPage.timeMinimum);
+      if (isLastPage) survey.completeText = countdownText;
+      else survey.pageNextText = countdownText;
       survey.startTimer();
     }
   });
 
   survey.onTimerTick.add(() => {
-    const nextButton = survey.isLastPage
+    if (!survey.currentPage?.timeMinimum || originalNextButtonText === null)
+      return;
+    const isLastPage = survey.isLastPage;
+    const nextButton = isLastPage
       ? survey.navigationBar.getActionById("sv-nav-complete")
       : survey.navigationBar.getActionById("sv-nav-next");
-    if (
-      survey.currentPage?.timeMinimum &&
-      nextButton.title !== originalNextButtonText
-    ) {
-      nextButton.title = timerSubtraction(nextButton.title);
-      if (nextButton.title === "0:00") {
-        nextButton.title = originalNextButtonText;
-        nextButton.innerCss = nextButton.innerCss.replace(
-          " override-opacity-for-time-minimum",
-          "",
-        );
-        nextButton.enabled = true;
-      }
+    const currentText = isLastPage ? survey.completeText : survey.pageNextText;
+    if (currentText === originalNextButtonText) return;
+    const updatedText = timerSubtraction(currentText);
+    if (isLastPage) survey.completeText = updatedText;
+    else survey.pageNextText = updatedText;
+    if (updatedText === "0:00") {
+      if (isLastPage) survey.completeText = originalNextButtonText;
+      else survey.pageNextText = originalNextButtonText;
+      nextButton.innerCss = nextButton.innerCss.replace(
+        " override-opacity-for-time-minimum",
+        "",
+      );
+      nextButton.enabled = true;
+      originalNextButtonText = null;
     }
   });
 
