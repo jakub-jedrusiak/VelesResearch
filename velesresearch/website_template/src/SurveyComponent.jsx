@@ -94,20 +94,27 @@ async function handleResults(survey) {
     }
   }
 
-  // Wait for reCAPTCHA to be ready and get token
-  let siteKey = new URL(
-    document.getElementById("recaptchaScript").src,
-  ).searchParams.get("render");
-  let recaptchaToken;
-  if (siteKey) {
-    await new Promise((resolve) => window.grecaptcha.ready(resolve));
-    recaptchaToken = await window.grecaptcha.execute(siteKey, {
-      action: "submit",
-    });
-  } else {
-    recaptchaToken = NaN;
+  // reCAPTCHA is optional: never block or reject an otherwise valid response.
+  const recaptchaScript = document.getElementById("recaptchaScript");
+  const siteKey = recaptchaScript
+    ? new URL(recaptchaScript.src).searchParams.get("render")
+    : null;
+  if (siteKey && window.grecaptcha) {
+    try {
+      const recaptchaToken = await Promise.race([
+        (async () => {
+          await new Promise((resolve) => window.grecaptcha.ready(resolve));
+          return window.grecaptcha.execute(siteKey, { action: "submit" });
+        })(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("reCAPTCHA timed out")), 5000),
+        ),
+      ]);
+      Object.assign(result, { "g-recaptcha-token": recaptchaToken });
+    } catch (error) {
+      console.warn("reCAPTCHA failed; submitting without a token", error);
+    }
   }
-  Object.assign(result, { "g-recaptcha-token": recaptchaToken });
 
   // send data to Django backend
   const requestHeaders = {
@@ -122,8 +129,10 @@ async function handleResults(survey) {
   };
   const url = window.location.pathname + "submit/";
   const response = await fetch(url, requestHeaders);
+  const responseData = await response.json().catch(() => null);
 
-  return response.ok;
+  // Only redirect after the server explicitly confirms a committed save.
+  return response.ok && responseData?.saved === true;
 }
 
 // Input monitoring function
@@ -371,8 +380,13 @@ function SurveyComponent() {
 
   survey.onComplete.add(async (sender, options) => {
     options.showSaveInProgress();
-    const responseOK = await handleResults(sender);
-    responseOK ? options.showSaveSuccess() : options.showSaveError();
+    try {
+      const responseOK = await handleResults(sender);
+      responseOK ? options.showSaveSuccess() : options.showSaveError();
+    } catch (error) {
+      console.error("Could not save survey response", error);
+      options.showSaveError();
+    }
   });
   return <Survey model={survey} />;
 }
