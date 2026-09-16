@@ -18,3 +18,9 @@
   --sd-action-disabled-title-color: var(--sd-action-title-color) !important;
   opacity: 1 !important;
 }
+
+/* Center the body content and set a maximum width */
+.sd-body {
+  max-width: 1200px !important;
+  margin: 0px auto;
+}
