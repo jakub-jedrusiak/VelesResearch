@@ -25,6 +25,8 @@ from .wrappers import (
     imagePicker,
     consent,
     psyframe,
+    pageShuffleStart,
+    pageShuffleEnd,
     surveyFromJson,
 )
 from .validators import (

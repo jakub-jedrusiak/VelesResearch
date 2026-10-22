@@ -3,9 +3,19 @@
 from __future__ import annotations
 
 import warnings
+from typing import Literal
 from pydantic import BaseModel
 from pydantic.functional_validators import model_validator
 from .utils import dict_without_defaults
+
+
+class PageShuffleMarker(BaseModel):
+    """Marker placed between pages in `survey()` to delimit a page shuffling block.
+
+    Use `pageShuffleStart()` and `pageShuffleEnd()` instead of creating it directly.
+    """
+
+    kind: Literal["start", "end"]
 
 
 class ValidatorModel(BaseModel):

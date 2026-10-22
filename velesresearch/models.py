@@ -13,7 +13,39 @@ from typing import Dict, List
 from markdown import markdown
 from pydantic import BaseModel, model_validator, Field, ConfigDict
 from .validators import ValidatorModel
+from .helperModels import PageShuffleMarker
 from .utils import dict_without_defaults, merge_runtime_kwargs, default_is_required
+
+# Runs inside SurveyComponent() after `const survey = new Model(json)`; must not
+# contain backslashes because it is inserted via a plain-string re.sub replacement.
+PAGE_SHUFFLE_JS = """(function () {
+  var blocks = __BLOCKS__;
+  blocks.forEach(function (names, blockIndex) {
+    var pages = names.map(function (name) {
+      var page = survey.getPageByName(name);
+      if (!page) throw new Error("pageShuffle: page not found: " + name);
+      return page;
+    });
+    var positions = pages.map(function (page) {
+      return survey.pages.indexOf(page);
+    });
+    for (var i = pages.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = pages[i];
+      pages[i] = pages[j];
+      pages[j] = tmp;
+    }
+    positions.forEach(function (position, i) {
+      survey.pages[position] = pages[i];
+    });
+    survey.setVariable(
+      "pageShuffle_" + (blockIndex + 1),
+      pages.map(function (page) { return page.name; }).join(", "),
+    );
+  });
+  survey.updateVisibleIndexes();
+  survey.currentPageNo = 0;
+})();"""
 
 
 class QuestionModel(BaseModel):
@@ -908,6 +940,7 @@ class SurveyModel(BaseModel):
         numberOfGroups (int): The number of groups in the survey. Default is 1.
         pageNextText (str | None): Text for the 'Next' button.
         pagePrevText (str | None): Text for the 'Previous' button.
+        pageShuffleBlocks (List[List[str]] | None): Groups of page names shown in a random order per participant. Usually filled automatically from `pageShuffleStart()`/`pageShuffleEnd()` markers passed to `survey()`. The realised order of the n-th block is saved as the `pageShuffle_<n>` variable.
         previewText (str | None): Text for the 'Preview' button if `showPreviewBeforeComplete=True`.
         progressBarInheritWidthFrom (str): The element from which the progress bar should inherit the width. Can be 'container', 'survey'.
         progressBarShowPageNumbers (bool): Whether to show the page numbers on the progress bar. Only if `progressBarType="pages"`. Default is False. See `showProgressBar`.
@@ -995,6 +1028,7 @@ class SurveyModel(BaseModel):
     numberOfGroups: int = 1
     pageNextText: str | None = None
     pagePrevText: str | None = None
+    pageShuffleBlocks: List[List[str]] | None = None
     previewText: str | None = None
     progressBarInheritWidthFrom: str = "container"
     progressBarShowPageNumbers: bool = False
@@ -1052,6 +1086,47 @@ class SurveyModel(BaseModel):
     def __iter__(self):
         return iter(self.pages)
 
+    @model_validator(mode="before")
+    @classmethod
+    def _extract_page_shuffle_blocks(cls, values):
+        if not isinstance(values, dict) or not isinstance(values.get("pages"), list):
+            return values
+        pages = []
+        blocks = []
+        current = None
+        for item in values["pages"]:
+            if not isinstance(item, PageShuffleMarker):
+                pages.append(item)
+                if current is not None:
+                    current.append(item.name)
+                continue
+            if item.kind == "start":
+                if current is not None:
+                    raise ValueError(
+                        "pageShuffleStart() found inside an open page shuffling block; blocks cannot be nested."
+                    )
+                current = []
+            else:
+                if current is None:
+                    raise ValueError(
+                        "pageShuffleEnd() found without a preceding pageShuffleStart()."
+                    )
+                if not current:
+                    raise ValueError("A page shuffling block contains no pages.")
+                blocks.append(current)
+                current = None
+        if current is not None:
+            raise ValueError(
+                "pageShuffleStart() is missing a matching pageShuffleEnd()."
+            )
+        if blocks:
+            values = dict(values)
+            values["pages"] = pages
+            values["pageShuffleBlocks"] = (
+                list(values.get("pageShuffleBlocks") or []) + blocks
+            )
+        return values
+
     @model_validator(mode="after")
     def _merge_runtime_kwargs(self):
         return merge_runtime_kwargs(self)
@@ -1067,10 +1142,17 @@ class SurveyModel(BaseModel):
             | addCode
         )
         dictionary.pop("themeFile", None)
+        dictionary.pop("pageShuffleBlocks", None)
         return dictionary
 
     def json(self) -> str:
         return json.dumps(self.dict())
+
+    def pageShuffleCode(self) -> str:
+        "JS shuffling the pages of each block; empty string if there are no blocks"
+        if not self.pageShuffleBlocks:
+            return ""
+        return PAGE_SHUFFLE_JS.replace("__BLOCKS__", json.dumps(self.pageShuffleBlocks))
 
     def extractKey(self, keyName) -> str:
         "Extracts the data with a specified key from self.dict()"
@@ -1149,9 +1231,16 @@ class SurveyModel(BaseModel):
         with open(path / "src" / "SurveyComponent.jsx", "r", encoding="UTF-8") as file:
             surveyComponentData = file.read()
 
+        customCode = self.extractKey("customCode")
+        shuffleCode = self.pageShuffleCode()
+        if shuffleCode:
+            customCode = shuffleCode + (
+                "" if customCode == r"// placeholder" else "\n\n" + customCode
+            )
+
         surveyComponentData = re.sub(
             r"(?<=  \/\/ \{% customCode %\}\n\n).+(?=\n\n  \/\/ \{% end customCode %\})",
-            self.extractKey("customCode"),
+            customCode,
             surveyComponentData,
             flags=re.M | re.S,
         )

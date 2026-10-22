@@ -8,14 +8,14 @@ from json import dumps, loads
 from typing import Dict, List
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from .models import *
-from .helperModels import ValidatorModel
+from .helperModels import ValidatorModel, PageShuffleMarker
 from .utils import flatten, warn_addCode_deprecated, default_is_required
 from .validators import expressionValidator
 
 
 @warn_addCode_deprecated
 def survey(
-    *pages: PageModel | List[PageModel],
+    *pages: PageModel | PageShuffleMarker | List[PageModel | PageShuffleMarker],
     addCode: Dict | None = None,
     addScoreToResults: bool = True,
     allowResizeComment: bool = True,
@@ -104,7 +104,7 @@ def survey(
     """Create a survey object
 
     Args:
-        pages (List[PageModel]): The pages of the survey.
+        pages (List[PageModel]): The pages of the survey. Wrap a run of pages in `pageShuffleStart()` and `pageShuffleEnd()` to show them in a random order.
         build (bool): Whether to build the survey. Default is True.
         addCode (Dict | None): Additional code for the survey. Usually not necessary.
         addScoreToResults (bool): Whether to add the scores of the questions with `correctAnswer` to the results data. See `scoresSuffix`.
@@ -2209,6 +2209,22 @@ def psyframe(
 """
 
     return page(name, frame_question, showNavigationButtons=False, customCode=js)
+
+
+def pageShuffleStart() -> PageShuffleMarker:
+    """Open a page shuffling block inside `survey()`.
+
+    All pages between this marker and the matching `pageShuffleEnd()` are shown
+    in a random order, drawn separately for every participant. Blocks cannot be
+    nested, but a survey may contain any number of them. The realised order of
+    the n-th block is saved in the results as the `pageShuffle_<n>` variable.
+    """
+    return PageShuffleMarker(kind="start")
+
+
+def pageShuffleEnd() -> PageShuffleMarker:
+    """Close a page shuffling block opened with `pageShuffleStart()`."""
+    return PageShuffleMarker(kind="end")
 
 
 @warn_addCode_deprecated
